@@ -1,4 +1,4 @@
-# 🏥 AarogyaVani (आरोग्यवाणी)
+# 🏥 Medico
 ### Hospital AI Patient Case-Taking, Triage & ABDM Clinical Workstation
 
 [![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
@@ -9,7 +9,7 @@
 [![ABDM](https://img.shields.io/badge/ABDM-M1%20%26%20M2%20Compliant-orange.svg)](https://abdm.gov.in/)
 [![FHIR](https://img.shields.io/badge/HL7-FHIR%20R4%20(NRCeS)-red.svg)](https://nrces.in/)
 
-**AarogyaVani** is an AI-powered multilingual patient case-taking and triage web platform built for high-volume public hospital Outpatient Departments (OPDs). It addresses long wait lines, language barriers, and low literacy by providing an accessible, voice-guided touchscreen kiosk for patients, paired with a real-time clinical workstation for doctors linked with the **Ayushman Bharat Digital Mission (ABDM)** and **Hospital Information System (HIS)**.
+**Medico** is an AI-powered multilingual patient case-taking and triage web platform built for high-volume public hospital Outpatient Departments (OPDs). It addresses long wait lines, language barriers, and low literacy by providing an accessible, voice-guided touchscreen kiosk for patients, paired with a real-time clinical workstation for doctors linked with the **Ayushman Bharat Digital Mission (ABDM)** and **Hospital Information System (HIS)**.
 
 ---
 

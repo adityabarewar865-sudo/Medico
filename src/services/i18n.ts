@@ -19,7 +19,7 @@ export const SUPPORTED_LANGUAGES: LanguageInfo[] = [
 
 export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   hi: {
-    appName: 'आरोग्यवाणी',
+    appName: 'Medico (मेदिको)',
     appTagline: 'अस्पताल एआई केस-टेकिंग और ओपीडी ट्रायज प्रणाली',
     kioskMode: 'रोगी कियोस्क (Patient Kiosk)',
     doctorStation: 'डॉक्टर स्टेशन (Doctor Station)',
@@ -108,7 +108,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     newPatientBtn: 'नया मरीज दर्ज करें (New Intake)',
   },
   en: {
-    appName: 'AarogyaVani',
+    appName: 'Medico',
     appTagline: 'Hospital AI Clinical Case-Taking & OPD Triage System',
     kioskMode: 'Patient Kiosk',
     doctorStation: 'Doctor Station',
@@ -191,7 +191,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     newPatientBtn: 'Intake Next Patient',
   },
   bn: {
-    appName: 'আরোগ্যবাণী',
+    appName: 'Medico (মেডিকো)',
     appTagline: 'হাসপাতাল এআই কেস-টেকিং ও ওপিডি ট্রায়াজ ব্যবস্থা',
     kioskMode: 'রোগী কিয়স্ক (Patient Kiosk)',
     doctorStation: 'ডাক্তার স্টেশন (Doctor Station)',
@@ -268,7 +268,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     newPatientBtn: 'পরবর্তী রোগী',
   },
   mr: {
-    appName: 'आरोग्यवाणी',
+    appName: 'Medico (मेदिको)',
     appTagline: 'रुग्णालय एआय केस-टेकिंग व ओपीडी ट्रायज प्रणाली',
     kioskMode: 'रुग्ण किऑस्क',
     doctorStation: 'डॉक्टर स्टेशन',
@@ -345,7 +345,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     newPatientBtn: 'पुढील रुग्ण',
   },
   te: {
-    appName: 'ఆరోగ్యవాణి',
+    appName: 'Medico (మెడికో)',
     appTagline: 'హాస్పిటల్ AI పేషెంట్ కేస్-టేకింగ్ & OPD ట్రయాజ్ సిస్టమ్',
     kioskMode: 'రోగి కియోస్క్ (Patient Kiosk)',
     doctorStation: 'డాక్టర్ స్టేషన్ (Doctor Station)',
@@ -422,7 +422,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     newPatientBtn: 'తదుపరి రోగి',
   },
   ta: {
-    appName: 'ஆரோக்யவாணி',
+    appName: 'Medico (மெடிகோ)',
     appTagline: 'மருத்துவமனை AI நோயாளி விவரப் பதிவு & OPD அவசரப் பிரிவு அமைப்பு',
     kioskMode: 'நோயாளி கியோஸ்க் (Patient Kiosk)',
     doctorStation: 'மருத்துவர் நிலையம் (Doctor Station)',

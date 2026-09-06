@@ -12,7 +12,7 @@ router.get('/health', (_req: Request, res: Response): void => {
   res.json({
     status: 'online',
     version: '2.0.0',
-    service: 'AarogyaVani Clinical Backend & Gateway',
+    service: 'Medico Clinical Backend & Gateway',
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.floor(process.uptime()),
     activeSseConnections: sse.getActiveClientCount(),
