@@ -1,0 +1,1119 @@
+[
+  {
+    "id": "enc_1788701715666",
+    "opdToken": "OPD-MED-970",
+    "opdRoom": "Room 1 (Emergency Resus / Med)",
+    "specialty": "Internal Medicine",
+    "createdAt": "2026-09-06T13:35:15.666Z",
+    "demographics": {
+      "id": "pat_1788701671462",
+      "fullName": "sunil",
+      "age": 45,
+      "gender": "male",
+      "phone": "3738282",
+      "abha": {
+        "abhaNumber": "27472274722",
+        "abhaAddress": "27472274722",
+        "status": "pending",
+        "kycStatus": "SELF_DECLARED"
+      },
+      "preferredLanguage": "en"
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-06T13:35:15.666Z",
+      "method": "biometric_touch",
+      "languageUsed": "en",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "chest_pain",
+      "title": "Chest Pain / Heaviness",
+      "description": "Patient reported acute symptoms",
+      "onsetDuration": "7/10 severity",
+      "voiceInputTranscript": ""
+    },
+    "adaptiveAnswers": [
+      {
+        "questionId": "cp_duration",
+        "questionText": "When did the chest pain start?",
+        "answerText": "Within the last 1-4 hours (Sudden onset)",
+        "answerValue": "acute_hours",
+        "category": "duration",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_character",
+        "questionText": "How would you describe the chest pain?",
+        "answerText": "Crushing heavy pressure / tight squeezing sensation",
+        "answerValue": "crushing_pressure",
+        "category": "character",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_radiation",
+        "questionText": "Does the pain spread or radiate anywhere else?",
+        "answerText": "Yes, radiates to Left Arm, Jaw, Neck or Back",
+        "answerValue": "rad_left_arm_jaw",
+        "category": "radiation",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_associated",
+        "questionText": "What other symptoms are you experiencing together with it?",
+        "answerText": "Profuse cold sweating (Diaphoresis)",
+        "answerValue": [
+          "assoc_cold_sweats"
+        ],
+        "category": "associated",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "pain_severity_scale",
+        "questionText": "Pain / Discomfort Intensity (1-10)",
+        "answerText": "7 / 10 (Severe)",
+        "answerValue": 7,
+        "category": "severity",
+        "isRedFlagIndicator": false
+      }
+    ],
+    "documents": [],
+    "timeline": [],
+    "triagePriority": "emergency",
+    "triageRationale": "High suspicion of Acute Myocardial Infarction / Unstable Angina. High suspicion of Acute Myocardial Infarction / Unstable Angina.",
+    "redFlags": [
+      {
+        "id": "rf_cp_character",
+        "title": "Suspected Acute Coronary Syndrome (ACS / MI)",
+        "severity": "critical",
+        "description": "Patient reports: Crushing heavy pressure / tight squeezing sensation. Retrosternal pressure radiating to left arm/jaw with diaphoresis.",
+        "clinicalActionNeeded": "Perform 12-lead ECG within 10 minutes. Establish IV access, monitor vitals, notify cardiology team."
+      },
+      {
+        "id": "rf_cp_radiation",
+        "title": "Suspected Acute Coronary Syndrome (ACS / MI)",
+        "severity": "critical",
+        "description": "Patient reports: Yes, radiates to Left Arm, Jaw, Neck or Back. Retrosternal pressure radiating to left arm/jaw with diaphoresis.",
+        "clinicalActionNeeded": "Perform 12-lead ECG within 10 minutes. Establish IV access, monitor vitals, notify cardiology team."
+      }
+    ],
+    "clinicalSummary": {
+      "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: sunil, 45Y/MALE)",
+      "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: When did the chest pain start?: Within the last 1-4 hours (Sudden onset); How would you describe the chest pain?: Crushing heavy pressure / tight squeezing sensation; Does the pain spread or radiate anywhere else?: Yes, radiates to Left Arm, Jaw, Neck or Back; What other symptoms are you experiencing together with it?: Profuse cold sweating (Diaphoresis); Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
+      "pastMedicalHistory": [
+        "None explicitly documented in uploaded records"
+      ],
+      "activeMedications": [],
+      "allergies": [
+        {
+          "allergen": "Penicillin / Amoxicillin",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        },
+        {
+          "allergen": "NSAIDs (Brufen/Diclofenac)",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        }
+      ],
+      "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated."
+    },
+    "doctorReview": {
+      "verified": true,
+      "status": "verified",
+      "verifiedBy": "Dr. S. K. Verma, MD",
+      "verifiedAt": "2026-09-06T13:35:49.979Z",
+      "finalImpression": "",
+      "doctorNotes": "",
+      "prescribedMedications": []
+    },
+    "savedToHis": true,
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-OPD-MED-970",
+    "hisSyncTimestamp": "2026-09-06T13:35:49.991Z"
+  },
+  {
+    "id": "enc_test_1788700912198",
+    "opdRoom": "Room 2",
+    "specialty": "Internal Medicine",
+    "triagePriority": "urgent",
+    "demographics": {
+      "id": "pat_test",
+      "fullName": "Asha Sharma",
+      "age": 45,
+      "gender": "female",
+      "phone": "9812345678",
+      "abha": {
+        "abhaNumber": "91-1122-3344-5566",
+        "abhaAddress": "asha.sharma@abdm",
+        "status": "verified",
+        "kycStatus": "KYC_VERIFIED",
+        "linkedCareContextsCount": 1
+      },
+      "address": "Ward 4, Civil Line",
+      "preferredLanguage": "hi"
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-06T13:21:52.198Z",
+      "method": "audio_verbal",
+      "languageUsed": "hi",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "fever",
+      "title": "High Grade Fever",
+      "description": "Fever with chills for 3 days",
+      "onsetDuration": "3 days"
+    },
+    "adaptiveAnswers": [],
+    "documents": [],
+    "timeline": [],
+    "clinicalSummary": {
+      "historyOfPresentIllness": "Patient presents with 3 days of high-grade fever accompanied by severe chills.",
+      "pastMedicalHistory": [],
+      "activeMedications": [],
+      "allergies": [
+        "Sulfa drugs"
+      ],
+      "redFlagSymptoms": []
+    },
+    "doctorReview": {
+      "verified": false,
+      "verifiedBy": "",
+      "verifiedAt": "",
+      "clinicalImpression": "",
+      "differentialDiagnosis": [],
+      "prescribedMedications": [],
+      "doctorNotes": "",
+      "followUpAdvice": ""
+    },
+    "savedToHis": false,
+    "opdToken": "OPD-MED-043",
+    "createdAt": "2026-09-06T13:21:52.914Z"
+  },
+  {
+    "id": "enc_ramesh_kumar",
+    "opdToken": "OPD-MED-042",
+    "opdRoom": "Room 4 (General Medicine / Emergency)",
+    "specialty": "Internal Medicine",
+    "createdAt": "2026-09-06T13:04:17.849Z",
+    "demographics": {
+      "id": "pat_ramesh",
+      "fullName": "Ramesh Kumar",
+      "age": 58,
+      "gender": "male",
+      "phone": "9876543210",
+      "abha": {
+        "abhaNumber": "91-4521-8890-1234",
+        "abhaAddress": "ramesh.kumar@abdm",
+        "status": "verified",
+        "kycStatus": "KYC_VERIFIED",
+        "linkedCareContextsCount": 3
+      },
+      "address": "Village Shahpur, Block 3, District Hospital Catchment",
+      "preferredLanguage": "hi",
+      "emergencyContact": "Suresh Kumar (Son) - 9876543211"
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-06T13:05:17.850Z",
+      "method": "audio_verbal",
+      "languageUsed": "hi",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "chest_pain",
+      "title": "सीने में भारीपन व पसीना (Acute Chest Heaviness)",
+      "description": "पिछले 2 घंटों से सीने में अचानक भारी दबाव महसूस हो रहा है, जो बाएं हाथ तक जा रहा है और ठंडा पसीना आ रहा है।",
+      "onsetDuration": "2 hours",
+      "voiceInputTranscript": "डॉक्टर साहब, दो घंटे से छाती में बहुत तेज भारीपन है, जैसे पत्थर रखा हो। दर्द बाएं कंधे और हाथ में भी जा रहा है और बहुत ठंडा पसीना छूट रहा है।"
+    },
+    "adaptiveAnswers": [
+      {
+        "questionId": "cp_duration",
+        "questionText": "When did the chest pain start?",
+        "answerText": "Within the last 1-4 hours (Sudden onset)",
+        "category": "duration",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_character",
+        "questionText": "How would you describe the chest pain?",
+        "answerText": "Crushing heavy pressure / tight squeezing sensation",
+        "category": "character",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_radiation",
+        "questionText": "Does the pain spread anywhere else?",
+        "answerText": "Yes, radiates to Left Arm, Jaw, Neck or Back",
+        "category": "radiation",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_associated",
+        "questionText": "Associated symptoms:",
+        "answerText": "Profuse cold sweating (Diaphoresis), Breathlessness",
+        "category": "associated",
+        "isRedFlagIndicator": true
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc_sample_prescription",
+        "name": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "type": "prescription",
+        "uploadTimestamp": "2025-11-14T10:30:00Z",
+        "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23fffdfa;font-family:sans-serif;\">\n  <!-- Hospital Header -->\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"110\" fill=\"%230f766e\"/>\n  <text x=\"300\" y=\"42\" font-size=\"20\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">DISTRICT CIVIL HOSPITAL &amp; MEDICAL COLLEGE</text>\n  <text x=\"300\" y=\"68\" font-size=\"13\" fill=\"%23ccfbef\" text-anchor=\"middle\">Government of India - National Health Mission</text>\n  <text x=\"300\" y=\"90\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">OPD Outpatient Clinical Record | ABHA Enabled</text>\n\n  <!-- Patient Details Line -->\n  <rect x=\"20\" y=\"125\" width=\"560\" height=\"60\" fill=\"%23f8fafc\" stroke=\"%23cbd5e1\" rx=\"4\"/>\n  <text x=\"35\" y=\"148\" font-size=\"13\" font-weight=\"bold\" fill=\"%231e293b\">Dr. S. K. Verma, MD (Internal Medicine)</text>\n  <text x=\"400\" y=\"148\" font-size=\"12\" fill=\"%2364748b\">Reg No: MCI-28491</text>\n  <text x=\"35\" y=\"170\" font-size=\"12\" fill=\"%23334155\">Date: 14/11/2025 | BP: 154/96 mmHg | Pulse: 82/min | Wt: 74 kg</text>\n\n  <!-- Rx Symbol -->\n  <text x=\"35\" y=\"235\" font-size=\"36\" font-style=\"italic\" font-weight=\"bold\" fill=\"%230f766e\">℞</text>\n\n  <!-- Diagnoses box -->\n  <rect x=\"35\" y=\"255\" width=\"530\" height=\"80\" fill=\"%23eff6ff\" stroke=\"%23bfdbfe\" rx=\"4\"/>\n  <text x=\"50\" y=\"280\" font-size=\"13\" font-weight=\"bold\" fill=\"%231e40af\">CLINICAL DIAGNOSES / PROVISIONAL ASSESSMENT:</text>\n  <text x=\"50\" y=\"302\" font-size=\"13\" fill=\"%231e3a8a\">• Type-2 Diabetes Mellitus (Uncontrolled - HbA1c 8.8%)</text>\n  <text x=\"50\" y=\"322\" font-size=\"13\" fill=\"%231e3a8a\">• Essential Hypertension (Stage 2) &amp; Mixed Dyslipidemia</text>\n\n  <!-- Medications table -->\n  <text x=\"35\" y=\"365\" font-size=\"14\" font-weight=\"bold\" fill=\"%230f766e\">PRESCRIPTION / MEDICATIONS:</text>\n  <line x1=\"35\" y1=\"375\" x2=\"565\" y2=\"375\" stroke=\"%230f766e\" stroke-width=\"2\"/>\n  \n  <text x=\"45\" y=\"405\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">1. Tab Metformin 500 mg</text>\n  <text x=\"350\" y=\"405\" font-size=\"13\" fill=\"%23475569\">1 - 0 - 1 (After meals)</text>\n  <text x=\"45\" y=\"425\" font-size=\"11\" fill=\"%2364748b\">   Continue for 60 days</text>\n\n  <text x=\"45\" y=\"455\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">2. Tab Telmisartan 40 mg</text>\n  <text x=\"350\" y=\"455\" font-size=\"13\" fill=\"%23475569\">1 - 0 - 0 (Morning empty stomach)</text>\n  <text x=\"45\" y=\"475\" font-size=\"11\" fill=\"%2364748b\">   Daily for BP control</text>\n\n  <text x=\"45\" y=\"505\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">3. Tab Atorvastatin 20 mg</text>\n  <text x=\"350\" y=\"505\" font-size=\"13\" fill=\"%23475569\">0 - 0 - 1 (At Bedtime / HS)</text>\n  <text x=\"45\" y=\"525\" font-size=\"11\" fill=\"%2364748b\">   For high cholesterol</text>\n\n  <text x=\"45\" y=\"555\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">4. Tab Aspirin 75 mg EC</text>\n  <text x=\"350\" y=\"555\" font-size=\"13\" fill=\"%23475569\">0 - 1 - 0 (Post lunch)</text>\n\n  <!-- Lab instructions -->\n  <rect x=\"35\" y=\"595\" width=\"530\" height=\"90\" fill=\"%23fef3c7\" stroke=\"%23fde68a\" rx=\"4\"/>\n  <text x=\"50\" y=\"620\" font-size=\"12\" font-weight=\"bold\" fill=\"%2392400e\">ADVICE &amp; INVESTIGATIONS ORDERED:</text>\n  <text x=\"50\" y=\"640\" font-size=\"12\" fill=\"%2378350f\">• Repeat Fasting Blood Sugar (FBS), Serum Creatinine, Lipid Profile in 1 month</text>\n  <text x=\"50\" y=\"660\" font-size=\"12\" fill=\"%2378350f\">• Salt restricted diet &lt; 5g/day, brisk walking 30 mins daily</text>\n  <text x=\"50\" y=\"675\" font-size=\"12\" fill=\"%23b45309\">• Warning: Report immediately if chest heaviness or sudden shortness of breath occurs</text>\n\n  <!-- Hospital Stamp & Signature -->\n  <circle cx=\"480\" cy=\"730\" r=\"35\" fill=\"none\" stroke=\"%23dc2626\" stroke-width=\"2\" stroke-dasharray=\"4,2\"/>\n  <text x=\"480\" y=\"730\" font-size=\"9\" fill=\"%23dc2626\" text-anchor=\"middle\" font-weight=\"bold\">CIVIL HOSPITAL OPD</text>\n  <text x=\"480\" y=\"742\" font-size=\"8\" fill=\"%23dc2626\" text-anchor=\"middle\">VERIFIED 14-NOV-2025</text>\n  <path d=\"M 430 710 Q 450 690 480 720 T 520 705\" stroke=\"%231e40af\" stroke-width=\"2\" fill=\"none\"/>\n  <text x=\"475\" y=\"775\" font-size=\"11\" fill=\"%23334155\" text-anchor=\"middle\">Dr. S. K. Verma</text>\n</svg>",
+        "doctorName": "Dr. S. K. Verma, MD (Internal Medicine)",
+        "facilityName": "District Civil Hospital & Medical College",
+        "documentDate": "2025-11-14",
+        "isSamplePreset": true,
+        "ocrRawText": "DISTRICT CIVIL HOSPITAL OPD RECORD\nDate: 14/11/2025\nDr. S. K. Verma, MD (Internal Medicine)\nReg No: MCI-28491\nPatient: Ramesh Kumar, 58/M\nBP: 154/96 mmHg, Pulse: 82/min\nDiagnoses:\n- Type-2 Diabetes Mellitus (Uncontrolled - HbA1c 8.8%)\n- Essential Hypertension (Stage 2) & Mixed Dyslipidemia\nRx:\n1. Tab Metformin 500 mg - 1-0-1 (after meals)\n2. Tab Telmisartan 40 mg - 1-0-0 (morning)\n3. Tab Atorvastatin 20 mg - 0-0-1 (bedtime)\n4. Tab Aspirin 75 mg EC - 0-1-0 (post lunch)\nAdvice: Repeat FBS, Serum Creatinine in 1 month. Salt restricted diet.",
+        "extractedDiagnoses": [
+          {
+            "id": "diag_1",
+            "condition": "Type 2 Diabetes Mellitus",
+            "date": "2025-11-14",
+            "icd10Estimate": "E11.9",
+            "confidence": 0.96,
+            "status": "active"
+          },
+          {
+            "id": "diag_2",
+            "condition": "Essential Hypertension (Stage 2)",
+            "date": "2025-11-14",
+            "icd10Estimate": "I10",
+            "confidence": 0.94,
+            "status": "active"
+          },
+          {
+            "id": "diag_3",
+            "condition": "Mixed Dyslipidemia",
+            "date": "2025-11-14",
+            "icd10Estimate": "E78.2",
+            "confidence": 0.89,
+            "status": "active"
+          }
+        ],
+        "extractedMedications": [
+          {
+            "id": "med_1",
+            "name": "Metformin",
+            "dosage": "500 mg",
+            "frequency": "1-0-1 (Twice daily after meals)",
+            "duration": "60 days",
+            "purpose": "Glycemic Control (Diabetes)",
+            "confidence": 0.98,
+            "sourceDocName": "District Civil Hospital Prescription"
+          },
+          {
+            "id": "med_2",
+            "name": "Telmisartan",
+            "dosage": "40 mg",
+            "frequency": "1-0-0 (Once daily morning)",
+            "duration": "Continuous",
+            "purpose": "Blood Pressure Control (HTN)",
+            "confidence": 0.97,
+            "sourceDocName": "District Civil Hospital Prescription"
+          },
+          {
+            "id": "med_3",
+            "name": "Atorvastatin",
+            "dosage": "20 mg",
+            "frequency": "0-0-1 (Once daily at bedtime)",
+            "duration": "Continuous",
+            "purpose": "Lipid Lowering / Plaque Stabilization",
+            "confidence": 0.95,
+            "sourceDocName": "District Civil Hospital Prescription"
+          },
+          {
+            "id": "med_4",
+            "name": "Aspirin (Enteric Coated)",
+            "dosage": "75 mg",
+            "frequency": "0-1-0 (Once daily after lunch)",
+            "duration": "Continuous",
+            "purpose": "Antiplatelet Cardiovascular Prophylaxis",
+            "confidence": 0.93,
+            "sourceDocName": "District Civil Hospital Prescription"
+          }
+        ],
+        "extractedLabValues": [
+          {
+            "id": "lab_1",
+            "testName": "Blood Pressure (Clinic SBP/DBP)",
+            "value": "154/96",
+            "unit": "mmHg",
+            "referenceRange": "< 120/80",
+            "status": "abnormal",
+            "confidence": 0.96,
+            "date": "2025-11-14"
+          },
+          {
+            "id": "lab_2",
+            "testName": "HbA1c (Historical in note)",
+            "value": "8.8",
+            "unit": "%",
+            "referenceRange": "< 5.7",
+            "status": "abnormal",
+            "confidence": 0.91,
+            "date": "2025-11-14"
+          }
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "id": "ev_visit_doc_sample_prescription",
+        "date": "2025-11-14",
+        "title": "OPD Prescription",
+        "category": "opd_visit",
+        "details": "District Civil Hospital & Medical College (Dr. S. K. Verma, MD (Internal Medicine))",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "confidenceScore": 0.95
+      },
+      {
+        "id": "ev_diag_diag_1",
+        "date": "2025-11-14",
+        "title": "Diagnosis: Type 2 Diabetes Mellitus",
+        "category": "diagnosis",
+        "details": "Identified with 96% clinical confidence. Status: ACTIVE",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "confidenceScore": 0.96
+      },
+      {
+        "id": "ev_diag_diag_2",
+        "date": "2025-11-14",
+        "title": "Diagnosis: Essential Hypertension (Stage 2)",
+        "category": "diagnosis",
+        "details": "Identified with 94% clinical confidence. Status: ACTIVE",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "confidenceScore": 0.94
+      },
+      {
+        "id": "ev_diag_diag_3",
+        "date": "2025-11-14",
+        "title": "Diagnosis: Mixed Dyslipidemia",
+        "category": "diagnosis",
+        "details": "Identified with 89% clinical confidence. Status: ACTIVE",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "confidenceScore": 0.89
+      },
+      {
+        "id": "ev_lab_lab_1",
+        "date": "2025-11-14",
+        "title": "Blood Pressure (Clinic SBP/DBP): 154/96 mmHg",
+        "category": "lab_result",
+        "details": "Ref: < 120/80 | Evaluated Status: ABNORMAL",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "criticalFlag": false,
+        "confidenceScore": 0.96
+      },
+      {
+        "id": "ev_lab_lab_2",
+        "date": "2025-11-14",
+        "title": "HbA1c (Historical in note): 8.8 %",
+        "category": "lab_result",
+        "details": "Ref: < 5.7 | Evaluated Status: ABNORMAL",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "criticalFlag": false,
+        "confidenceScore": 0.91
+      },
+      {
+        "id": "ev_meds_doc_sample_prescription",
+        "date": "2025-11-14",
+        "title": "Medication Regimen (4 drugs)",
+        "category": "medication",
+        "details": "Metformin 500 mg (1-0-1 (Twice daily after meals)), Telmisartan 40 mg (1-0-0 (Once daily morning)), Atorvastatin 20 mg (0-0-1 (Once daily at bedtime)), Aspirin (Enteric Coated) 75 mg (0-1-0 (Once daily after lunch))",
+        "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+        "confidenceScore": 0.92
+      }
+    ],
+    "triagePriority": "emergency",
+    "triageRationale": "RED FLAG: High suspicion of Acute Coronary Syndrome (Inferior/Anterior STEMI) with diaphoresis and radiation to left arm in a known Diabetic/Hypertensive patient.",
+    "redFlags": [
+      {
+        "id": "rf_1",
+        "title": "Suspected Acute Myocardial Infarction / ACS",
+        "severity": "critical",
+        "description": "Crushing retrosternal chest pain of acute onset radiating to left arm with profuse cold diaphoresis.",
+        "clinicalActionNeeded": "Perform urgent 12-lead ECG immediately. Stat loading dose (Aspirin 300mg + Clopidogrel 300mg + Atorvastatin 80mg) if indicated. Keep oxygen and IV line ready."
+      },
+      {
+        "id": "rf_2",
+        "title": "High Vascular Risk Profile",
+        "severity": "warning",
+        "description": "History of Uncontrolled Type 2 Diabetes (HbA1c 8.8%) and Essential Hypertension (BP 154/96).",
+        "clinicalActionNeeded": "Bedside capillary blood sugar and cardiac enzymes (Troponin-I stat)."
+      }
+    ],
+    "clinicalSummary": {
+      "chiefComplaintFormatted": "Acute retrosternal chest pressure radiating to left arm with diaphoresis (2 hours)",
+      "historyOfPresentIllness": "58-year-old male, known diabetic and hypertensive, presents with sudden onset crushing retrosternal chest heaviness since 2 hours. Pain radiates to left arm and shoulder, associated with severe cold sweating (diaphoresis) and mild dyspnea. Prior records confirm ongoing treatment with Metformin 500mg BD, Telmisartan 40mg OD, Atorvastatin 20mg HS.",
+      "pastMedicalHistory": [
+        "Type 2 Diabetes Mellitus (Uncontrolled)",
+        "Essential Hypertension (Stage 2)",
+        "Mixed Dyslipidemia"
+      ],
+      "activeMedications": [
+        {
+          "id": "med_1",
+          "name": "Metformin",
+          "dosage": "500 mg",
+          "frequency": "1-0-1 (Twice daily after meals)",
+          "duration": "60 days",
+          "purpose": "Glycemic Control (Diabetes)",
+          "confidence": 0.98,
+          "sourceDocName": "District Civil Hospital Prescription"
+        },
+        {
+          "id": "med_2",
+          "name": "Telmisartan",
+          "dosage": "40 mg",
+          "frequency": "1-0-0 (Once daily morning)",
+          "duration": "Continuous",
+          "purpose": "Blood Pressure Control (HTN)",
+          "confidence": 0.97,
+          "sourceDocName": "District Civil Hospital Prescription"
+        },
+        {
+          "id": "med_3",
+          "name": "Atorvastatin",
+          "dosage": "20 mg",
+          "frequency": "0-0-1 (Once daily at bedtime)",
+          "duration": "Continuous",
+          "purpose": "Lipid Lowering / Plaque Stabilization",
+          "confidence": 0.95,
+          "sourceDocName": "District Civil Hospital Prescription"
+        },
+        {
+          "id": "med_4",
+          "name": "Aspirin (Enteric Coated)",
+          "dosage": "75 mg",
+          "frequency": "0-1-0 (Once daily after lunch)",
+          "duration": "Continuous",
+          "purpose": "Antiplatelet Cardiovascular Prophylaxis",
+          "confidence": 0.93,
+          "sourceDocName": "District Civil Hospital Prescription"
+        }
+      ],
+      "allergies": [
+        {
+          "allergen": "Penicillin",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        }
+      ],
+      "investigationsSummary": "BP recorded at 154/96 mmHg in previous visit. HbA1c 8.8% documented in Nov 2025."
+    },
+    "doctorReview": {
+      "verified": false,
+      "status": "pending",
+      "doctorNotes": "",
+      "differentialDiagnosis": [
+        "Acute ST-Elevation Myocardial Infarction (STEMI)",
+        "Unstable Angina",
+        "Acute Aortic Dissection"
+      ],
+      "prescribedMedications": [
+        {
+          "name": "Tab Sorbitrate (Sublingual)",
+          "dosage": "5 mg",
+          "frequency": "SOS",
+          "duration": "Stat",
+          "instructions": "Dissolve under tongue if chest pain persists"
+        },
+        {
+          "name": "Tab Ecosprin (Dispersible)",
+          "dosage": "300 mg",
+          "frequency": "Stat",
+          "duration": "1 day",
+          "instructions": "Chew immediately"
+        },
+        {
+          "name": "Tab Clopidogrel",
+          "dosage": "300 mg",
+          "frequency": "Stat",
+          "duration": "1 day",
+          "instructions": "Take with water stat"
+        },
+        {
+          "name": "Tab Atorvastatin",
+          "dosage": "80 mg",
+          "frequency": "Stat",
+          "duration": "1 day",
+          "instructions": "Bedtime stat"
+        }
+      ],
+      "recommendedTests": [
+        "12-Lead Electrocardiogram (ECG) Stat",
+        "Serum Troponin-I Rapid Card",
+        "Blood Glucose Random (CBG)"
+      ]
+    },
+    "savedToHis": true,
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-OPD-MED-042",
+    "hisSyncTimestamp": "2026-09-06T13:22:12.207Z"
+  },
+  {
+    "id": "enc_sunita_devi",
+    "opdToken": "OPD-MED-043",
+    "opdRoom": "Room 4 (General Medicine)",
+    "specialty": "Internal Medicine",
+    "createdAt": "2026-09-06T12:44:17.867Z",
+    "demographics": {
+      "id": "pat_sunita",
+      "fullName": "Sunita Devi",
+      "age": 42,
+      "gender": "female",
+      "phone": "9845123670",
+      "abha": {
+        "abhaNumber": "91-3312-7740-9981",
+        "abhaAddress": "sunita.devi42@abdm",
+        "status": "verified",
+        "kycStatus": "KYC_VERIFIED",
+        "linkedCareContextsCount": 1
+      },
+      "address": "Ward 12, Rampur Nagar",
+      "preferredLanguage": "hi"
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-06T12:45:17.867Z",
+      "method": "audio_verbal",
+      "languageUsed": "hi",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "fever",
+      "title": "5 दिनों से तेज बुखार व कंपकंपी (High Grade Fever with Chills)",
+      "description": "5 दिनों से तेज बुखार आ रहा है, आंखों के पीछे दर्द है और आज सुबह नाक से थोड़ा खून आया था।",
+      "onsetDuration": "5 days",
+      "voiceInputTranscript": "पांच दिन से बहुत तेज बुखार और बदन में असहनीय दर्द है। आज सुबह ब्रश करते समय मसूड़े से खून आ रहा था।"
+    },
+    "adaptiveAnswers": [
+      {
+        "questionId": "fv_duration",
+        "questionText": "How many days have you had the fever?",
+        "answerText": "3 to 7 days (High continuous fever)",
+        "category": "duration",
+        "isRedFlagIndicator": false
+      },
+      {
+        "questionId": "fv_chills",
+        "questionText": "Shaking chills or bone breaking pain?",
+        "answerText": "Yes, severe chills, rigors and pain behind eyes / joints",
+        "category": "character",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "fv_warning_signs",
+        "questionText": "Critical warning signs:",
+        "answerText": "Bleeding from gums/nose or tiny red skin spots (Petechiae)",
+        "category": "red_flag",
+        "isRedFlagIndicator": true
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc_sample_lab_report",
+        "name": "National_Lab_Hematology_Feb2026.pdf",
+        "type": "lab_report",
+        "uploadTimestamp": "2026-02-18T14:15:00Z",
+        "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23ffffff;font-family:sans-serif;\">\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"100\" fill=\"%231e3a8a\"/>\n  <text x=\"300\" y=\"40\" font-size=\"20\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">NATIONAL CLINICAL REFERENCE LAB</text>\n  <text x=\"300\" y=\"65\" font-size=\"12\" fill=\"%2393c5fd\" text-anchor=\"middle\">NABL ACCREDITED &amp; ICMR APPROVED TESTING FACILITY</text>\n  <text x=\"300\" y=\"85\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">Automated Hematology &amp; Biochemistry Report</text>\n\n  <!-- Patient banner -->\n  <rect x=\"25\" y=\"115\" width=\"550\" height=\"65\" fill=\"%23f1f5f9\" stroke=\"%23cbd5e1\" rx=\"4\"/>\n  <text x=\"40\" y=\"138\" font-size=\"12\" fill=\"%23334155\">Patient ID: <tspan font-weight=\"bold\">NC-2026-8941</tspan> | Age: <tspan font-weight=\"bold\">42 Yrs / Female</tspan></text>\n  <text x=\"40\" y=\"160\" font-size=\"12\" fill=\"%23334155\">Date: <tspan font-weight=\"bold\">18-Feb-2026</tspan> | Ref Doctor: <tspan font-weight=\"bold\">Dr. R. K. Mukherjee</tspan></text>\n\n  <!-- Table Header -->\n  <rect x=\"25\" y=\"195\" width=\"550\" height=\"30\" fill=\"%23e2e8f0\"/>\n  <text x=\"40\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">TEST PARAMETER</text>\n  <text x=\"260\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">OBSERVED VALUE</text>\n  <text x=\"390\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">REFERENCE RANGE</text>\n  <text x=\"520\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">STATUS</text>\n\n  <!-- Row 1: Platelets CRITICAL LOW -->\n  <rect x=\"25\" y=\"235\" width=\"550\" height=\"42\" fill=\"%23fef2f2\"/>\n  <text x=\"40\" y=\"260\" font-size=\"13\" font-weight=\"bold\" fill=\"%23991b1b\">Platelet Count (PLT)</text>\n  <text x=\"260\" y=\"260\" font-size=\"14\" font-weight=\"bold\" fill=\"%23dc2626\">58,000 /uL</text>\n  <text x=\"390\" y=\"260\" font-size=\"12\" fill=\"%2364748b\">150,000 - 450,000</text>\n  <rect x=\"505\" y=\"244\" width=\"60\" height=\"24\" fill=\"%23dc2626\" rx=\"3\"/>\n  <text x=\"535\" y=\"260\" font-size=\"10\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">CRITICAL</text>\n\n  <!-- Row 2: Dengue NS1 -->\n  <rect x=\"25\" y=\"280\" width=\"550\" height=\"38\" fill=\"%23fff1f2\"/>\n  <text x=\"40\" y=\"304\" font-size=\"13\" font-weight=\"bold\" fill=\"%239f1239\">Dengue NS1 Antigen</text>\n  <text x=\"260\" y=\"304\" font-size=\"14\" font-weight=\"bold\" fill=\"%23e11d48\">POSITIVE (Reactive)</text>\n  <text x=\"390\" y=\"304\" font-size=\"12\" fill=\"%2364748b\">Non-Reactive</text>\n  <text x=\"520\" y=\"304\" font-size=\"12\" font-weight=\"bold\" fill=\"%23e11d48\">POSITIVE</text>\n\n  <!-- Row 3: Total WBC -->\n  <rect x=\"25\" y=\"322\" width=\"550\" height=\"38\" fill=\"%23f8fafc\"/>\n  <text x=\"40\" y=\"346\" font-size=\"12\" fill=\"%231e293b\">Total Leukocyte Count (TLC)</text>\n  <text x=\"260\" y=\"346\" font-size=\"13\" font-weight=\"bold\" fill=\"%23b45309\">3,200 /uL</text>\n  <text x=\"390\" y=\"346\" font-size=\"12\" fill=\"%2364748b\">4,000 - 11,000</text>\n  <text x=\"520\" y=\"346\" font-size=\"11\" font-weight=\"bold\" fill=\"%23d97706\">LOW (Leukopenia)</text>\n\n  <!-- Row 4: Hemoglobin -->\n  <rect x=\"25\" y=\"364\" width=\"550\" height=\"38\" fill=\"%23ffffff\"/>\n  <text x=\"40\" y=\"388\" font-size=\"12\" fill=\"%231e293b\">Hemoglobin (Hb)</text>\n  <text x=\"260\" y=\"388\" font-size=\"13\" fill=\"%231e293b\">11.4 g/dL</text>\n  <text x=\"390\" y=\"388\" font-size=\"12\" fill=\"%2364748b\">12.0 - 15.5</text>\n  <text x=\"520\" y=\"388\" font-size=\"11\" fill=\"%2364748b\">Mild Low</text>\n\n  <!-- Row 5: Fasting Blood Sugar -->\n  <rect x=\"25\" y=\"406\" width=\"550\" height=\"38\" fill=\"%23f8fafc\"/>\n  <text x=\"40\" y=\"430\" font-size=\"12\" fill=\"%231e293b\">Fasting Blood Glucose</text>\n  <text x=\"260\" y=\"430\" font-size=\"13\" font-weight=\"bold\" fill=\"%23b45309\">184 mg/dL</text>\n  <text x=\"390\" y=\"430\" font-size=\"12\" fill=\"%2364748b\">70 - 100</text>\n  <text x=\"520\" y=\"430\" font-size=\"11\" font-weight=\"bold\" fill=\"%23d97706\">HIGH</text>\n\n  <!-- Row 6: HbA1c -->\n  <rect x=\"25\" y=\"448\" width=\"550\" height=\"38\" fill=\"%23ffffff\"/>\n  <text x=\"40\" y=\"472\" font-size=\"12\" fill=\"%231e293b\">Glycated Hemoglobin (HbA1c)</text>\n  <text x=\"260\" y=\"472\" font-size=\"13\" font-weight=\"bold\" fill=\"%23b45309\">9.2 %</text>\n  <text x=\"390\" y=\"472\" font-size=\"12\" fill=\"%2364748b\">&lt; 5.7 (Good control)</text>\n  <text x=\"520\" y=\"472\" font-size=\"11\" font-weight=\"bold\" fill=\"%23d97706\">UNCONTROLLED</text>\n\n  <!-- Row 7: Creatinine -->\n  <rect x=\"25\" y=\"490\" width=\"550\" height=\"38\" fill=\"%23f8fafc\"/>\n  <text x=\"40\" y=\"514\" font-size=\"12\" fill=\"%231e293b\">Serum Creatinine</text>\n  <text x=\"260\" y=\"514\" font-size=\"13\" fill=\"%231e293b\">1.0 mg/dL</text>\n  <text x=\"390\" y=\"514\" font-size=\"12\" fill=\"%2364748b\">0.6 - 1.2</text>\n  <text x=\"520\" y=\"514\" font-size=\"11\" fill=\"%2316a34a\">NORMAL</text>\n\n  <!-- Pathologist Critical Note -->\n  <rect x=\"25\" y=\"555\" width=\"550\" height=\"85\" fill=\"%23fef2f2\" stroke=\"%23fca5a5\" rx=\"4\"/>\n  <text x=\"40\" y=\"580\" font-size=\"12\" font-weight=\"bold\" fill=\"%23991b1b\">CRITICAL ALERT (PANIC VALUE TELEPHONED):</text>\n  <text x=\"40\" y=\"602\" font-size=\"12\" fill=\"%237f1d1d\">Platelet count 58,000 /uL with Dengue NS1 Reactive. High risk of bleeding diathesis.</text>\n  <text x=\"40\" y=\"622\" font-size=\"12\" fill=\"%237f1d1d\">Immediate clinical correlation &amp; daily platelet monitoring advised.</text>\n\n  <text x=\"450\" y=\"740\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">Dr. A. Sen, MD</text>\n  <text x=\"450\" y=\"756\" font-size=\"11\" fill=\"%2364748b\">Consultant Pathologist</text>\n</svg>",
+        "doctorName": "Dr. A. Sen, MD (Pathologist)",
+        "facilityName": "National Clinical Reference Lab",
+        "documentDate": "2026-02-18",
+        "isSamplePreset": true,
+        "ocrRawText": "NATIONAL CLINICAL REFERENCE LAB\nPatient: Sunita Devi, 42/F\nDate: 18-Feb-2026\nPlatelet Count (PLT): 58,000 /uL (Reference: 150,000 - 450,000) [CRITICAL LOW]\nDengue NS1 Antigen: POSITIVE (Reactive)\nTotal Leukocyte Count: 3,200 /uL (Low Leukopenia)\nHemoglobin: 11.4 g/dL (Mild Anemia)\nFasting Blood Glucose: 184 mg/dL (High)\nHbA1c: 9.2 % (Uncontrolled Diabetes)\nSerum Creatinine: 1.0 mg/dL (Normal)\nCritical alert: Platelet count 58,000 /uL. Risk of hemorrhage. Immediate clinical review required.",
+        "extractedDiagnoses": [
+          {
+            "id": "diag_4",
+            "condition": "Dengue Viral Fever with Thrombocytopenia",
+            "date": "2026-02-18",
+            "icd10Estimate": "A97.0",
+            "confidence": 0.98,
+            "status": "active"
+          }
+        ],
+        "extractedMedications": [],
+        "extractedLabValues": [
+          {
+            "id": "lab_3",
+            "testName": "Platelet Count",
+            "value": "58,000",
+            "unit": "/uL",
+            "referenceRange": "150,000 - 450,000",
+            "status": "critical",
+            "confidence": 0.99,
+            "date": "2026-02-18"
+          },
+          {
+            "id": "lab_4",
+            "testName": "Dengue NS1 Antigen",
+            "value": "POSITIVE",
+            "unit": "Qualitative",
+            "referenceRange": "Negative / Non-Reactive",
+            "status": "critical",
+            "confidence": 0.99,
+            "date": "2026-02-18"
+          },
+          {
+            "id": "lab_5",
+            "testName": "Total WBC Count (TLC)",
+            "value": "3,200",
+            "unit": "/uL",
+            "referenceRange": "4,000 - 11,000",
+            "status": "abnormal",
+            "confidence": 0.95,
+            "date": "2026-02-18"
+          },
+          {
+            "id": "lab_6",
+            "testName": "Fasting Blood Glucose",
+            "value": "184",
+            "unit": "mg/dL",
+            "referenceRange": "70 - 100",
+            "status": "abnormal",
+            "confidence": 0.96,
+            "date": "2026-02-18"
+          },
+          {
+            "id": "lab_7",
+            "testName": "HbA1c",
+            "value": "9.2",
+            "unit": "%",
+            "referenceRange": "< 5.7",
+            "status": "critical",
+            "confidence": 0.97,
+            "date": "2026-02-18"
+          },
+          {
+            "id": "lab_8",
+            "testName": "Serum Creatinine",
+            "value": "1.0",
+            "unit": "mg/dL",
+            "referenceRange": "0.6 - 1.2",
+            "status": "normal",
+            "confidence": 0.94,
+            "date": "2026-02-18"
+          }
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "id": "ev_visit_doc_sample_lab_report",
+        "date": "2026-02-18",
+        "title": "Laboratory Investigations",
+        "category": "opd_visit",
+        "details": "National Clinical Reference Lab (Dr. A. Sen, MD (Pathologist))",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "confidenceScore": 0.95
+      },
+      {
+        "id": "ev_diag_diag_4",
+        "date": "2026-02-18",
+        "title": "Diagnosis: Dengue Viral Fever with Thrombocytopenia",
+        "category": "diagnosis",
+        "details": "Identified with 98% clinical confidence. Status: ACTIVE",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "confidenceScore": 0.98
+      },
+      {
+        "id": "ev_lab_lab_3",
+        "date": "2026-02-18",
+        "title": "Platelet Count: 58,000 /uL",
+        "category": "lab_result",
+        "details": "Ref: 150,000 - 450,000 | Evaluated Status: CRITICAL",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "criticalFlag": true,
+        "confidenceScore": 0.99
+      },
+      {
+        "id": "ev_lab_lab_4",
+        "date": "2026-02-18",
+        "title": "Dengue NS1 Antigen: POSITIVE Qualitative",
+        "category": "lab_result",
+        "details": "Ref: Negative / Non-Reactive | Evaluated Status: CRITICAL",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "criticalFlag": true,
+        "confidenceScore": 0.99
+      },
+      {
+        "id": "ev_lab_lab_5",
+        "date": "2026-02-18",
+        "title": "Total WBC Count (TLC): 3,200 /uL",
+        "category": "lab_result",
+        "details": "Ref: 4,000 - 11,000 | Evaluated Status: ABNORMAL",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "criticalFlag": false,
+        "confidenceScore": 0.95
+      },
+      {
+        "id": "ev_lab_lab_6",
+        "date": "2026-02-18",
+        "title": "Fasting Blood Glucose: 184 mg/dL",
+        "category": "lab_result",
+        "details": "Ref: 70 - 100 | Evaluated Status: ABNORMAL",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "criticalFlag": false,
+        "confidenceScore": 0.96
+      },
+      {
+        "id": "ev_lab_lab_7",
+        "date": "2026-02-18",
+        "title": "HbA1c: 9.2 %",
+        "category": "lab_result",
+        "details": "Ref: < 5.7 | Evaluated Status: CRITICAL",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "criticalFlag": true,
+        "confidenceScore": 0.97
+      },
+      {
+        "id": "ev_lab_lab_8",
+        "date": "2026-02-18",
+        "title": "Serum Creatinine: 1.0 mg/dL",
+        "category": "lab_result",
+        "details": "Ref: 0.6 - 1.2 | Evaluated Status: NORMAL",
+        "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+        "criticalFlag": false,
+        "confidenceScore": 0.94
+      }
+    ],
+    "triagePriority": "emergency",
+    "triageRationale": "RED FLAG PANIC VALUE: Dengue NS1 Reactive with Severe Thrombocytopenia (Platelet count 58,000 /uL) and gum bleeding. High risk of Dengue Hemorrhagic Fever.",
+    "redFlags": [
+      {
+        "id": "rf_dengue_bleed",
+        "title": "Dengue with Warning Signs & Thrombocytopenia",
+        "severity": "critical",
+        "description": "Platelet count 58,000/uL with mucosal bleeding (epistaxis/gingival bleeding).",
+        "clinicalActionNeeded": "Admit to medical ward/HDU. Start isotonic crystalloid IV fluids (Normal Saline / Ringer Lactate) as per NVBDCP guidelines. Avoid NSAIDs / Aspirin strictly. Monitor Hematocrit and Platelets every 12 hours."
+      }
+    ],
+    "clinicalSummary": {
+      "chiefComplaintFormatted": "High-grade fever with chills, retro-orbital pain and gum bleeding (5 days)",
+      "historyOfPresentIllness": "42-year-old female presents with 5-day history of acute high-grade fever accompanied by severe chills, retro-orbital ache, and generalized myalgia (\"break-bone pain\"). Patient reports episode of gingival bleeding today. Uploaded NABL lab report dated 18-Feb-2026 confirms Dengue NS1 Antigen Reactive with critical Platelet count of 58,000 /uL and TLC 3,200 /uL.",
+      "pastMedicalHistory": [
+        "Type-2 Diabetes (HbA1c 9.2% detected on recent panel)"
+      ],
+      "activeMedications": [],
+      "allergies": [
+        {
+          "allergen": "NSAIDs (Diclofenac/Ibuprofen)",
+          "reaction": "Avoid strictly due to bleeding risk in Dengue",
+          "severity": "severe"
+        }
+      ],
+      "investigationsSummary": "Platelets: 58,000 /uL (CRITICAL LOW). Dengue NS1: POSITIVE. HbA1c: 9.2%. Fasting Blood Sugar: 184 mg/dL."
+    },
+    "doctorReview": {
+      "verified": false,
+      "status": "pending",
+      "doctorNotes": "",
+      "differentialDiagnosis": [
+        "Dengue Fever with Warning Signs",
+        "Severe Thrombocytopenia",
+        "Chikungunya"
+      ],
+      "prescribedMedications": [
+        {
+          "name": "Tab Paracetamol",
+          "dosage": "650 mg",
+          "frequency": "1-1-1-1 (TDS/QID)",
+          "duration": "5 days",
+          "instructions": "Take only for fever > 100°F. DO NOT TAKE IBUPROFEN/DICLOFENAC"
+        },
+        {
+          "name": "Sachet ORS (Oral Rehydration Salts)",
+          "dosage": "1 Packet in 1L water",
+          "frequency": "Sip frequently",
+          "duration": "5 days",
+          "instructions": "Drink 2.5 - 3 Litres of fluids daily"
+        }
+      ],
+      "recommendedTests": [
+        "Repeat Complete Blood Count (CBC) with Hematocrit Stat",
+        "Liver Function Test (LFT)",
+        "Serum Electrolytes"
+      ]
+    },
+    "savedToHis": false,
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-OPD-MED-043"
+  },
+  {
+    "id": "enc_mohd_rafiq",
+    "opdToken": "OPD-MED-044",
+    "opdRoom": "Room 4 (General Medicine / Cardiology)",
+    "specialty": "Cardiology",
+    "createdAt": "2026-09-06T12:19:17.867Z",
+    "demographics": {
+      "id": "pat_rafiq",
+      "fullName": "Mohd. Rafiq",
+      "age": 64,
+      "gender": "male",
+      "phone": "9811223344",
+      "abha": {
+        "abhaNumber": "91-7714-2209-4455",
+        "abhaAddress": "mohd.rafiq64@abdm",
+        "status": "verified",
+        "kycStatus": "KYC_VERIFIED",
+        "linkedCareContextsCount": 4
+      },
+      "address": "Mohalla Qazi, Old City",
+      "preferredLanguage": "hi"
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-06T12:21:17.867Z",
+      "method": "audio_verbal",
+      "languageUsed": "hi",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "diabetes_review",
+      "title": "नियमित दवा रीफिल और चेकअप (Routine Post-PCI & HTN Refill)",
+      "description": "दिल के स्टेंट की नियमित दवाएं खत्म हो गई हैं और रूटीन चेकअप कराना है। कोई नया दर्द या सांस की तकलीफ नहीं है।",
+      "onsetDuration": "Chronic follow-up",
+      "voiceInputTranscript": "डॉक्टर साहब, 6 महीने पहले स्टेंट डला था। सारी दवाएं खत्म हो गई हैं, वही दवाएं आगे लिखवानी हैं। अभी कोई तकलीफ नहीं है।"
+    },
+    "adaptiveAnswers": [
+      {
+        "questionId": "dm_history",
+        "questionText": "How long have you had chronic condition?",
+        "answerText": "More than 10 years",
+        "category": "character",
+        "isRedFlagIndicator": false
+      },
+      {
+        "questionId": "dm_symptoms",
+        "questionText": "Any complications or red flags?",
+        "answerText": "No complications, just routine refill and checkup",
+        "category": "associated",
+        "isRedFlagIndicator": false
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc_sample_discharge",
+        "name": "Apex_Cardiology_Discharge_June2025.pdf",
+        "type": "discharge_summary",
+        "uploadTimestamp": "2025-06-10T16:00:00Z",
+        "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23ffffff;font-family:sans-serif;\">\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"100\" fill=\"%23047857\"/>\n  <text x=\"300\" y=\"42\" font-size=\"19\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">APEX INSTITUTE OF CARDIOVASCULAR SCIENCES</text>\n  <text x=\"300\" y=\"66\" font-size=\"13\" fill=\"%23a7f3d0\" text-anchor=\"middle\">Tertiary Care Cardiac &amp; Emergency Center</text>\n  <text x=\"300\" y=\"88\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">DISCHARGE SUMMARY &amp; OPERATIVE RECORD</text>\n\n  <!-- IPD info -->\n  <rect x=\"25\" y=\"115\" width=\"550\" height=\"55\" fill=\"%23f0fdf4\" stroke=\"%23bbf7d0\" rx=\"4\"/>\n  <text x=\"40\" y=\"136\" font-size=\"12\" fill=\"%2314532d\">Admission Date: <tspan font-weight=\"bold\">05-Jun-2025</tspan> | Discharge Date: <tspan font-weight=\"bold\">10-Jun-2025</tspan></text>\n  <text x=\"40\" y=\"156\" font-size=\"12\" fill=\"%2314532d\">Department: <tspan font-weight=\"bold\">Interventional Cardiology</tspan> | Ward: CCU Bed 04</text>\n\n  <text x=\"25\" y=\"195\" font-size=\"13\" font-weight=\"bold\" fill=\"%23047857\">FINAL DIAGNOSIS:</text>\n  <rect x=\"25\" y=\"205\" width=\"550\" height=\"50\" fill=\"%23f8fafc\" stroke=\"%23e2e8f0\" rx=\"4\"/>\n  <text x=\"38\" y=\"226\" font-size=\"12\" font-weight=\"bold\" fill=\"%230f172a\">• ACUTE INFERIOR WALL MYOCARDIAL INFARCTION (STEMI)</text>\n  <text x=\"38\" y=\"244\" font-size=\"12\" fill=\"%23334155\">• S/P PRIMARY PCI WITH DRUG ELUTING STENT (DES) TO RIGHT CORONARY ARTERY</text>\n\n  <text x=\"25\" y=\"280\" font-size=\"13\" font-weight=\"bold\" fill=\"%23047857\">PROCEDURE NOTE:</text>\n  <text x=\"25\" y=\"302\" font-size=\"12\" fill=\"%23334155\">Coronary Angiography revealed 100% thrombotic occlusion of mid RCA. Successful primary angioplasty</text>\n  <text x=\"25\" y=\"320\" font-size=\"12\" fill=\"%23334155\">with DES (3.0 x 28 mm) deployed with TIMI 3 distal flow. 2D Echo: LVEF 45%, mild hypokinesia.</text>\n\n  <text x=\"25\" y=\"360\" font-size=\"13\" font-weight=\"bold\" fill=\"%23047857\">DISCHARGE MEDICATIONS (MANDATORY CARDIAC DRUGS):</text>\n  <rect x=\"25\" y=\"370\" width=\"550\" height=\"190\" fill=\"%23f9fafb\" stroke=\"%23e5e7eb\" rx=\"4\"/>\n  <text x=\"38\" y=\"395\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">1. Tab Ticagrelor 90 mg — 1 tab Twice daily (1-0-1) - DO NOT STOP (DAPT)</text>\n  <text x=\"38\" y=\"425\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">2. Tab Ecosprin 75 mg — 1 tab Once daily post lunch (0-1-0)</text>\n  <text x=\"38\" y=\"455\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">3. Tab Metoprolol Succinate 25 mg — 1 tab Morning (1-0-0) [Beta Blocker]</text>\n  <text x=\"38\" y=\"485\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">4. Tab Rosuvastatin 40 mg — 1 tab Bedtime (0-0-1) [High-Intensity Statin]</text>\n  <text x=\"38\" y=\"515\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">5. Tab Pantoprazole 40 mg — 1 tab Before breakfast (1-0-0)</text>\n  <text x=\"38\" y=\"545\" font-size=\"11\" fill=\"%23dc2626\" font-weight=\"bold\">CRITICAL: Dual Antiplatelet Therapy (Ticagrelor + Aspirin) MUST NOT BE STOPPED</text>\n\n  <rect x=\"25\" y=\"580\" width=\"550\" height=\"60\" fill=\"%23ecfdf5\" stroke=\"%23a7f3d0\" rx=\"4\"/>\n  <text x=\"40\" y=\"605\" font-size=\"12\" font-weight=\"bold\" fill=\"%23065f46\">FOLLOW UP ADVICE:</text>\n  <text x=\"40\" y=\"625\" font-size=\"12\" fill=\"%23065f46\">Cardiology OPD visit after 2 weeks or immediately in Emergency if chest pain recurs.</text>\n\n  <text x=\"420\" y=\"730\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">Dr. Vikramaditya Rathore</text>\n  <text x=\"420\" y=\"746\" font-size=\"11\" fill=\"%234b5563\">Director, Interventional Cardiology</text>\n</svg>",
+        "doctorName": "Dr. Vikramaditya Rathore, DM (Cardiology)",
+        "facilityName": "Apex Institute of Cardiovascular Sciences",
+        "documentDate": "2025-06-10",
+        "isSamplePreset": true,
+        "ocrRawText": "APEX INSTITUTE OF CARDIOVASCULAR SCIENCES\nDischarge Summary\nPatient: Mohd. Rafiq, 64/M\nAdmission: 05-Jun-2025 | Discharge: 10-Jun-2025\nDiagnosis:\n- Acute Inferior Wall Myocardial Infarction (STEMI)\n- S/P Primary PCI to Right Coronary Artery (RCA) with DES (Drug Eluting Stent)\n2D Echo: LVEF 45%, regional wall motion abnormality in RCA territory.\nDischarge Medications:\n1. Tab Ticagrelor 90 mg - 1-0-1 (Twice daily) - Mandatory DAPT\n2. Tab Ecosprin 75 mg - 0-1-0 (After lunch)\n3. Tab Metoprolol Succinate 25 mg - 1-0-0 (Morning)\n4. Tab Rosuvastatin 40 mg - 0-0-1 (Bedtime)\n5. Tab Pantoprazole 40 mg - 1-0-0 (Empty stomach)\nWarning: Do not discontinue Ticagrelor or Aspirin without consulting cardiologist.",
+        "extractedDiagnoses": [
+          {
+            "id": "diag_5",
+            "condition": "Acute Inferior Wall STEMI (Post Primary PCI to RCA)",
+            "date": "2025-06-10",
+            "icd10Estimate": "I21.1",
+            "confidence": 0.99,
+            "status": "active"
+          },
+          {
+            "id": "diag_6",
+            "condition": "Coronary Artery Disease with Drug Eluting Stent",
+            "date": "2025-06-10",
+            "icd10Estimate": "Z95.5",
+            "confidence": 0.97,
+            "status": "active"
+          }
+        ],
+        "extractedMedications": [
+          {
+            "id": "med_5",
+            "name": "Ticagrelor",
+            "dosage": "90 mg",
+            "frequency": "1-0-1 (Twice daily)",
+            "duration": "12 Months Mandatory",
+            "purpose": "Antiplatelet Stent Thrombosis Prevention",
+            "confidence": 0.99,
+            "sourceDocName": "Apex Cardiology Discharge"
+          },
+          {
+            "id": "med_6",
+            "name": "Rosuvastatin",
+            "dosage": "40 mg",
+            "frequency": "0-0-1 (Bedtime)",
+            "duration": "Lifelong",
+            "purpose": "High Intensity Statin Therapy",
+            "confidence": 0.98,
+            "sourceDocName": "Apex Cardiology Discharge"
+          },
+          {
+            "id": "med_7",
+            "name": "Metoprolol Succinate",
+            "dosage": "25 mg",
+            "frequency": "1-0-0 (Morning)",
+            "duration": "Lifelong",
+            "purpose": "Beta Blocker Post-MI Cardioprotection",
+            "confidence": 0.96,
+            "sourceDocName": "Apex Cardiology Discharge"
+          }
+        ],
+        "extractedLabValues": [
+          {
+            "id": "lab_9",
+            "testName": "Echocardiography LVEF",
+            "value": "45",
+            "unit": "%",
+            "referenceRange": "55 - 70",
+            "status": "abnormal",
+            "confidence": 0.95,
+            "date": "2025-06-08"
+          }
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "id": "ev_visit_doc_sample_discharge",
+        "date": "2025-06-10",
+        "title": "Hospital Discharge Summary",
+        "category": "opd_visit",
+        "details": "Apex Institute of Cardiovascular Sciences (Dr. Vikramaditya Rathore, DM (Cardiology))",
+        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
+        "confidenceScore": 0.95
+      },
+      {
+        "id": "ev_diag_diag_5",
+        "date": "2025-06-10",
+        "title": "Diagnosis: Acute Inferior Wall STEMI (Post Primary PCI to RCA)",
+        "category": "diagnosis",
+        "details": "Identified with 99% clinical confidence. Status: ACTIVE",
+        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
+        "confidenceScore": 0.99
+      },
+      {
+        "id": "ev_diag_diag_6",
+        "date": "2025-06-10",
+        "title": "Diagnosis: Coronary Artery Disease with Drug Eluting Stent",
+        "category": "diagnosis",
+        "details": "Identified with 97% clinical confidence. Status: ACTIVE",
+        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
+        "confidenceScore": 0.97
+      },
+      {
+        "id": "ev_meds_doc_sample_discharge",
+        "date": "2025-06-10",
+        "title": "Medication Regimen (3 drugs)",
+        "category": "medication",
+        "details": "Ticagrelor 90 mg (1-0-1 (Twice daily)), Rosuvastatin 40 mg (0-0-1 (Bedtime)), Metoprolol Succinate 25 mg (1-0-0 (Morning))",
+        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
+        "confidenceScore": 0.92
+      },
+      {
+        "id": "ev_lab_lab_9",
+        "date": "2025-06-08",
+        "title": "Echocardiography LVEF: 45 %",
+        "category": "lab_result",
+        "details": "Ref: 55 - 70 | Evaluated Status: ABNORMAL",
+        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
+        "criticalFlag": false,
+        "confidenceScore": 0.95
+      }
+    ],
+    "triagePriority": "routine",
+    "triageRationale": "ROUTINE: Asymptomatic post-PCI patient presenting for chronic medication reconciliation and prescription refill.",
+    "redFlags": [],
+    "clinicalSummary": {
+      "chiefComplaintFormatted": "Routine medication refill for CAD Post-Primary PCI to RCA (Stent in-situ)",
+      "historyOfPresentIllness": "64-year-old male with history of Acute Inferior Wall STEMI status post primary angioplasty with DES to RCA in June 2025. Currently asymptomatic, denies chest pain, palpitations, or orthopnea. Adherent to Dual Antiplatelet Therapy (Ticagrelor 90mg BD + Aspirin 75mg OD), Metoprolol Succinate 25mg, and Rosuvastatin 40mg.",
+      "pastMedicalHistory": [
+        "Acute Inferior Wall STEMI (Post Primary PCI to RCA)",
+        "Coronary Artery Disease with Drug Eluting Stent"
+      ],
+      "activeMedications": [
+        {
+          "id": "med_5",
+          "name": "Ticagrelor",
+          "dosage": "90 mg",
+          "frequency": "1-0-1 (Twice daily)",
+          "duration": "12 Months Mandatory",
+          "purpose": "Antiplatelet Stent Thrombosis Prevention",
+          "confidence": 0.99,
+          "sourceDocName": "Apex Cardiology Discharge"
+        },
+        {
+          "id": "med_6",
+          "name": "Rosuvastatin",
+          "dosage": "40 mg",
+          "frequency": "0-0-1 (Bedtime)",
+          "duration": "Lifelong",
+          "purpose": "High Intensity Statin Therapy",
+          "confidence": 0.98,
+          "sourceDocName": "Apex Cardiology Discharge"
+        },
+        {
+          "id": "med_7",
+          "name": "Metoprolol Succinate",
+          "dosage": "25 mg",
+          "frequency": "1-0-0 (Morning)",
+          "duration": "Lifelong",
+          "purpose": "Beta Blocker Post-MI Cardioprotection",
+          "confidence": 0.96,
+          "sourceDocName": "Apex Cardiology Discharge"
+        }
+      ],
+      "allergies": [],
+      "investigationsSummary": "Previous 2D Echo showed LVEF 45% with regional wall motion abnormality in RCA territory."
+    },
+    "doctorReview": {
+      "verified": true,
+      "verifiedBy": "Dr. S. K. Verma, MD",
+      "verifiedAt": "2026-09-06T13:09:17.867Z",
+      "status": "verified",
+      "doctorNotes": "Patient doing well post-stenting. Vitals stable (BP 128/78, PR 68/min). Advised to strictly continue DAPT without missing any dose.",
+      "differentialDiagnosis": [
+        "Stable Ischemic Heart Disease (Post-PCI)"
+      ],
+      "finalImpression": "Status Post RCA Stenting (June 2025) - Clinically stable on guideline-directed medical therapy.",
+      "prescribedMedications": [
+        {
+          "name": "Tab Ticagrelor",
+          "dosage": "90 mg",
+          "frequency": "1-0-1 (BD)",
+          "duration": "60 days",
+          "instructions": "Take strictly after food - Mandatory DAPT"
+        },
+        {
+          "name": "Tab Ecosprin",
+          "dosage": "75 mg",
+          "frequency": "0-1-0 (OD)",
+          "duration": "60 days",
+          "instructions": "Take after lunch"
+        },
+        {
+          "name": "Tab Metoprolol Succinate",
+          "dosage": "25 mg",
+          "frequency": "1-0-0 (OD)",
+          "duration": "60 days",
+          "instructions": "Take morning after breakfast"
+        },
+        {
+          "name": "Tab Rosuvastatin",
+          "dosage": "40 mg",
+          "frequency": "0-0-1 (HS)",
+          "duration": "60 days",
+          "instructions": "Take at bedtime"
+        }
+      ],
+      "recommendedTests": [
+        "Lipid Profile",
+        "Serum Creatinine in 3 months"
+      ]
+    },
+    "savedToHis": true,
+    "hisSyncTimestamp": "2026-09-06T13:09:17.867Z",
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-OPD-MED-044"
+  }
+]
