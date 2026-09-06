@@ -405,12 +405,12 @@ export const DoctorDashboard: React.FC = () => {
               </p>
 
               {/* Red Flag Action Alerts */}
-              {currentPatient.redFlags.length > 0 && (
+              {(currentPatient.redFlags?.length ?? 0) > 0 && (
                 <div className="pt-2 border-t border-rose-200/80 space-y-1.5">
                   <div className="text-[11px] font-extrabold uppercase tracking-wider text-rose-800">
                     Immediate Clinical Actions Advised:
                   </div>
-                  {currentPatient.redFlags.map((rf) => (
+                  {currentPatient.redFlags?.map((rf) => (
                     <div key={rf.id} className="text-xs bg-white/80 p-2 rounded-xl border border-rose-200 flex items-start gap-2">
                       <span className="text-rose-600 font-bold">•</span>
                       <div>
@@ -445,7 +445,7 @@ export const DoctorDashboard: React.FC = () => {
                 }`}
               >
                 <Calendar className="w-4 h-4" />
-                <span>Medical Timeline ({currentPatient.timeline.length})</span>
+                <span>Medical Timeline ({currentPatient.timeline?.length ?? 0})</span>
               </button>
               <button
                 onClick={() => setActiveTab('documents')}
@@ -456,7 +456,7 @@ export const DoctorDashboard: React.FC = () => {
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                <span>Original Scans &amp; OCR ({currentPatient.documents.length})</span>
+                <span>Original Scans &amp; OCR ({currentPatient.documents?.length ?? 0})</span>
               </button>
             </div>
           </div>
@@ -774,13 +774,13 @@ export const DoctorDashboard: React.FC = () => {
                   </p>
                 </div>
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  {currentPatient.timeline.length} Events Reconstructed
+                  {currentPatient.timeline?.length ?? 0} Events Reconstructed
                 </span>
               </div>
 
               {/* Timeline Tree */}
               <div className="relative border-l-2 border-slate-200 ml-4 space-y-6 pl-6 py-2">
-                {currentPatient.timeline.map((event) => (
+                {(currentPatient.timeline || []).map((event) => (
                   <div key={event.id} className="relative group">
                     {/* Node Dot */}
                     <div
@@ -825,7 +825,7 @@ export const DoctorDashboard: React.FC = () => {
           {/* TAB 3: Original Scans & OCR Text View */}
           {activeTab === 'documents' && (
             <div className="space-y-6">
-              {currentPatient.documents.length === 0 ? (
+              {(!currentPatient.documents || currentPatient.documents.length === 0) ? (
                 <div className="p-8 bg-white rounded-3xl text-center text-slate-400 border border-slate-200">
                   No documents uploaded for this patient.
                 </div>
