@@ -155,7 +155,7 @@ export const AiChatbot: React.FC<AiChatbotProps> = ({
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 no-print">
+    <div className="fixed bottom-20 sm:bottom-24 right-5 z-40 no-print">
       {/* Trigger Button */}
       {!isOpen && (
         <button
@@ -175,7 +175,7 @@ export const AiChatbot: React.FC<AiChatbotProps> = ({
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="w-[340px] sm:w-[380px] h-[500px] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden animate-fade-in">
+        <div className="w-[340px] sm:w-[380px] h-[500px] max-h-[calc(100vh-7.5rem)] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden animate-fade-in">
           {/* Header */}
           <div className="bg-gradient-to-r from-teal-700 to-sky-800 text-white p-4 flex items-center justify-between shadow-md">
             <div className="flex items-center gap-2.5">
