@@ -27,7 +27,8 @@ export class ClinicalAIService {
     complaintId: ChiefComplaintId,
     complaintText: string,
     answers: AdaptiveAnswer[],
-    documents: UploadedMedicalDocument[]
+    documents: UploadedMedicalDocument[],
+    allergyInfo?: { hasAllergy: 'yes' | 'no' | 'not_sure'; details?: string }
   ): GeneratedClinicalAssessment {
     const redFlags: RedFlagAlert[] = [];
     let isEmergency = false;
@@ -157,16 +158,54 @@ export class ClinicalAIService {
       .map((a) => `${a.questionText}: ${a.answerText}`)
       .join('; ');
 
-    const hpi = `${demographics.age}-year-old ${demographics.gender} presented to the Outpatient Department with primary complaint of ${complaintText || getComplaintDisplayName(complaintId)}. Clinical evaluation details elicited via adaptive voice/touch intake: ${hpiAnswersSummary || 'No specific exacerbating notes provided'}. Review of prior medical documentation identified: ${allDiagnoses.length > 0 ? allDiagnoses.join(', ') : 'No documented prior chronic morbidities'}.`;
+    const attendantNote = demographics.accompanyingPerson?.name
+      ? ` Accompanying Attendant: ${demographics.accompanyingPerson.name} (${demographics.accompanyingPerson.relation}, Phone: ${demographics.accompanyingPerson.phone || 'N/A'}).`
+      : '';
+
+    const allergyNote = allergyInfo
+      ? ` Allergy Status: ${
+          allergyInfo.hasAllergy === 'yes'
+            ? `Known allergy reported (${allergyInfo.details || 'details unspecified'})`
+            : allergyInfo.hasAllergy === 'not_sure'
+            ? 'Allergy status unconfirmed / Not sure (caution advised)'
+            : 'No known allergies reported'
+        }.`
+      : '';
+
+    const hpi = `${demographics.age}-year-old ${demographics.gender} presented to the Outpatient Department with primary complaint of ${complaintText || getComplaintDisplayName(complaintId)}. Clinical evaluation details elicited via adaptive voice/touch intake: ${hpiAnswersSummary || 'No specific exacerbating notes provided'}.${allergyNote}${attendantNote} Review of prior medical documentation identified: ${allDiagnoses.length > 0 ? allDiagnoses.join(', ') : 'No documented prior chronic morbidities'}.`;
 
     // Past history deduplicated
     const pastMedicalHistory = allDiagnoses.length > 0 ? allDiagnoses : ['None explicitly documented in uploaded records'];
 
     // Allergies standard checklist
-    const allergies = [
-      { allergen: 'Penicillin / Amoxicillin', reaction: 'No known allergy', severity: 'mild' as const },
-      { allergen: 'NSAIDs (Brufen/Diclofenac)', reaction: 'No known allergy', severity: 'mild' as const },
-    ];
+    const allergies = allergyInfo
+      ? allergyInfo.hasAllergy === 'yes'
+        ? [
+            {
+              allergen: allergyInfo.details || 'Known Allergies Reported',
+              reaction: 'Patient confirmed active allergy',
+              severity: 'moderate' as const,
+            },
+          ]
+        : allergyInfo.hasAllergy === 'not_sure'
+        ? [
+            {
+              allergen: 'Allergy Status Unconfirmed',
+              reaction: 'Patient selected Not Sure — verify before prescribing antibiotics/NSAIDs',
+              severity: 'mild' as const,
+            },
+          ]
+        : [
+            {
+              allergen: 'No Known Drug / Food Allergies (NKDA)',
+              reaction: 'Patient reports no known allergies',
+              severity: 'mild' as const,
+            },
+          ]
+      : [
+          { allergen: 'Penicillin / Amoxicillin', reaction: 'No known allergy', severity: 'mild' as const },
+          { allergen: 'NSAIDs (Brufen/Diclofenac)', reaction: 'No known allergy', severity: 'mild' as const },
+        ];
 
     // Investigations summary
     const investigationsSummary = criticalLabNotes.length > 0

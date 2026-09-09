@@ -87,6 +87,7 @@ export const Header: React.FC<HeaderProps> = ({
       if (currentUser?.role === 'doctor') {
         onModeChange('doctor');
       } else {
+        alert('Access Restricted: Reception staff cannot access the Doctor Dashboard. Doctor login required.');
         onRequestLogin('doctor');
       }
       return;

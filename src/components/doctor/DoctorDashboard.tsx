@@ -26,6 +26,8 @@ import {
   Check,
   ExternalLink,
   RefreshCw,
+  Users,
+  HelpCircle,
 } from 'lucide-react';
 import type {
   PatientCaseEncounter,
@@ -603,6 +605,39 @@ export const DoctorDashboard: React.FC = () => {
                   <span>Currently Inspecting: <strong className="font-mono text-teal-700 dark:text-teal-300">{currentVisit.visitId || 'V001'} ({currentVisit.opdToken})</strong></span>
                 </div>
 
+                {/* Accompanying Person and Known Allergies Row */}
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  {(currentVisit.accompanyingPerson?.name || currentPatientRecord.accompanyingPerson?.name) && (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-950 dark:text-teal-200 border border-teal-200 dark:border-teal-800 text-xs font-bold shadow-2xs">
+                      <Users className="w-3.5 h-3.5 text-teal-600" />
+                      <span>Attendant: <strong>{(currentVisit.accompanyingPerson || currentPatientRecord.accompanyingPerson)?.name}</strong> ({(currentVisit.accompanyingPerson || currentPatientRecord.accompanyingPerson)?.relation})</span>
+                      <span className="text-teal-700 dark:text-teal-400 font-semibold">• Mobile: {(currentVisit.accompanyingPerson || currentPatientRecord.accompanyingPerson)?.phone || 'N/A'}</span>
+                    </div>
+                  )}
+
+                  {currentVisit.knownAllergies && (
+                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black border shadow-2xs ${
+                      currentVisit.knownAllergies.hasAllergy === 'yes'
+                        ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-950 dark:text-rose-200 border-rose-300 dark:border-rose-800'
+                        : currentVisit.knownAllergies.hasAllergy === 'not_sure'
+                        ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 border-amber-300 dark:border-amber-800'
+                        : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 border-emerald-300 dark:border-emerald-800'
+                    }`}>
+                      <AlertTriangle className={`w-3.5 h-3.5 ${
+                        currentVisit.knownAllergies.hasAllergy === 'yes' ? 'text-rose-600' : currentVisit.knownAllergies.hasAllergy === 'not_sure' ? 'text-amber-600' : 'text-emerald-600'
+                      }`} />
+                      <span>Allergy: </span>
+                      <span>
+                        {currentVisit.knownAllergies.hasAllergy === 'yes'
+                          ? `YES — ${currentVisit.knownAllergies.details || 'Specified by patient'}`
+                          : currentVisit.knownAllergies.hasAllergy === 'not_sure'
+                          ? 'NOT SURE (Caution: Verify before prescribing antibiotics/NSAIDs)'
+                          : 'No known drug or food allergies (NKDA)'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
                 {/* Real-time Firebase + Excel Storage Status Banner */}
                 <div className="mt-3 flex flex-wrap items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs">
                   {currentVisit.firebaseStoredAt ? (
@@ -980,6 +1015,46 @@ export const DoctorDashboard: React.FC = () => {
                   <div className="p-3 bg-blue-50/70 dark:bg-blue-950/40 rounded-xl border border-blue-100 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-300 flex items-start gap-2">
                     <span className="font-bold shrink-0">🗣️ Vernacular Audio Voice Input:</span>
                     <span className="italic">&quot;{currentVisit.chiefComplaint.voiceInputTranscript}&quot;</span>
+                  </div>
+                )}
+
+                {/* AI Adaptive Follow-up Responses (Cross-Questions) */}
+                {currentVisit.adaptiveAnswers && currentVisit.adaptiveAnswers.length > 0 && (
+                  <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+                        <HelpCircle className="w-4 h-4 text-teal-600" />
+                        <span>Cross-Questioning / Adaptive Follow-up Responses ({currentVisit.adaptiveAnswers.length} Questions Answered)</span>
+                      </div>
+                      <span className="text-[10px] text-teal-700 dark:text-teal-300 font-semibold bg-teal-50 dark:bg-teal-950 px-2 py-0.5 rounded border border-teal-200 dark:border-teal-800">
+                        Synthesized in Clinical AI Narrative
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {currentVisit.adaptiveAnswers.map((ans, idx) => (
+                        <div
+                          key={ans.questionId || idx}
+                          className={`p-2.5 rounded-xl border text-xs space-y-0.5 ${
+                            ans.isRedFlagIndicator
+                              ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900 text-rose-950 dark:text-rose-200'
+                              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200'
+                          }`}
+                        >
+                          <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                            {ans.questionText}
+                          </div>
+                          <div className="font-bold flex items-center justify-between gap-1">
+                            <span>{ans.answerText}</span>
+                            {ans.isRedFlagIndicator && (
+                              <span className="text-[9px] font-black px-1.5 py-0.2 rounded bg-rose-200 dark:bg-rose-900 text-rose-900 dark:text-rose-100">
+                                Red Flag
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

@@ -146,9 +146,12 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
             </div>
             <div>
               <span className="text-xs uppercase tracking-wider font-bold text-teal-200 block">
-                {visit?.hospitalName?.toUpperCase() }
+                {visit?.hospitalName?.toUpperCase() || 'DISTRICT HOSPITAL'}
               </span>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+              <p className="text-xs text-teal-100 font-medium">
+                {visit?.hospitalAddress || 'Hospital Complex, Main Road, Civil Lines'}
+              </p>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight leading-tight mt-1">
                 Verified Medical Consultation Receipt
               </h1>
             </div>
@@ -223,6 +226,36 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
                 {visitDateFormatted}
               </p>
             </div>
+
+            {/* Accompanying Person */}
+            {visit?.accompanyingPerson?.name && (
+              <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100 col-span-2">
+                <span className="text-slate-400 font-medium block">Person Accompanying Patient</span>
+                <p className="font-bold text-slate-800 mt-0.5">
+                  {visit.accompanyingPerson.name} ({visit.accompanyingPerson.relation}) • Mobile: {visit.accompanyingPerson.phone || 'N/A'}
+                </p>
+              </div>
+            )}
+
+            {/* Known Allergies */}
+            {visit?.knownAllergies && (
+              <div className={`rounded-2xl p-3 border col-span-2 font-bold ${
+                visit.knownAllergies.hasAllergy === 'yes'
+                  ? 'bg-rose-50 border-rose-200 text-rose-800'
+                  : visit.knownAllergies.hasAllergy === 'not_sure'
+                  ? 'bg-amber-50 border-amber-200 text-amber-800'
+                  : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+              }`}>
+                <span className="block text-[10px] uppercase tracking-wider font-semibold opacity-80">Allergy Status</span>
+                <p className="mt-0.5">
+                  {visit.knownAllergies.hasAllergy === 'yes'
+                    ? `Known Allergies: ${visit.knownAllergies.details || 'Specified by patient'}`
+                    : visit.knownAllergies.hasAllergy === 'not_sure'
+                    ? 'Allergy Status: Not sure (Caution: verify before medication)'
+                    : 'No known drug or food allergies (NKDA)'}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Chief Complaint & Clinical Summary */}

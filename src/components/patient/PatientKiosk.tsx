@@ -17,45 +17,54 @@ import {
   Phone,
   Shield,
   Sparkles,
-  Printer} from 'lucide-react';
+  Printer,
+  Users,
+  HelpCircle,
+} from 'lucide-react';
 import type {
   LanguageCode,
   ChiefComplaintId,
   PatientDemographics,
   AdaptiveAnswer,
   UploadedMedicalDocument,
-  PatientCaseEncounter} from '../../types/clinical';
+  PatientCaseEncounter,
+  AccompanyingPerson,
+  AttendantRelation,
+} from '../../types/clinical';
 import { TRANSLATIONS, CHIEF_COMPLAINTS_DATA, SUPPORTED_LANGUAGES } from '../../services/i18n';
-import {  } from '../../services/adaptiveQuestions';
+import { COMPLAINT_QUESTIONS_MAP } from '../../services/adaptiveQuestions';
 import { SAMPLE_DOCUMENTS, buildChronologicalTimeline, parseMedicalText } from '../../services/ocrEngine';
 import { clinicalAI } from '../../services/clinicalAI';
 import { storage } from '../../services/storage';
 import { hospitalDb } from '../../services/hospitalDatabase';
 import { speech } from '../../services/speech';
 import { AbhaCardModal } from './AbhaCardModal';
+import { AiChatbot } from '../common/AiChatbot';
 
 interface PatientKioskProps {
   currentLanguage: LanguageCode;
   onLanguageChange: (lang: LanguageCode) => void;
-  
   onPatientCompleted?: (patientId: string) => void;
   hospitalName?: string;
+  hospitalAddress?: string;
 }
 
 export const PatientKiosk: React.FC<PatientKioskProps> = ({
   currentLanguage,
   onLanguageChange,
-  
   onPatientCompleted,
-  hospitalName}) => {
+  hospitalName,
+  hospitalAddress,
+}) => {
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
 
   // Multi-step navigation (1 to 7)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  // Speech input state
+  // Speech input & output state
   const [isListening, setIsListening] = useState<boolean>(false);
   const [speechFieldTarget, setSpeechFieldTarget] = useState<string | null>(null);
+  const [voiceGuideEnabled, setVoiceGuideEnabled] = useState<boolean>(true);
 
   // Demographics state
   const [demographics, setDemographics] = useState<PatientDemographics>({
@@ -68,22 +77,46 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
       abhaNumber: '',
       abhaAddress: '',
       status: 'pending',
-      kycStatus: 'SELF_DECLARED'},
-    preferredLanguage: currentLanguage});
+      kycStatus: 'SELF_DECLARED',
+    },
+    preferredLanguage: currentLanguage,
+  });
+
+  // Accompanying Person / Attendant State (Optional)
+  const [hasAccompanyingPerson, setHasAccompanyingPerson] = useState<boolean>(false);
+  const [accompanyingPerson, setAccompanyingPerson] = useState<AccompanyingPerson>({
+    name: '',
+    phone: '',
+    relation: 'Other',
+  });
 
   const [showAbhaModal, setShowAbhaModal] = useState<boolean>(false);
   const [detectedPatientRecord, setDetectedPatientRecord] = useState<any>(null);
 
-  // Auto detect returning patient by phone number
+  // Auto detect & auto-fill returning patient by phone number
   useEffect(() => {
-    if (demographics.phone && demographics.phone.length >= 7) {
-      const existing = hospitalDb.findExistingPatient(demographics.phone);
+    const cleanPhone = demographics.phone.replace(/\D/g, '');
+    if (cleanPhone.length === 10) {
+      const existing = hospitalDb.findExistingPatient(cleanPhone);
       if (existing) {
         setDetectedPatientRecord(existing);
+        // Auto-fill available details while letting patient edit/correct
+        setDemographics((prev) => ({
+          ...prev,
+          fullName: existing.fullName || prev.fullName,
+          age: existing.age || prev.age,
+          gender: existing.gender || prev.gender,
+          address: existing.address || prev.address,
+          abha: existing.abha || prev.abha,
+        }));
+        if (existing.accompanyingPerson) {
+          setAccompanyingPerson(existing.accompanyingPerson);
+          setHasAccompanyingPerson(true);
+        }
       } else {
         setDetectedPatientRecord(null);
       }
-    } else {
+    } else if (cleanPhone.length < 7) {
       setDetectedPatientRecord(null);
     }
   }, [demographics.phone]);
@@ -98,7 +131,11 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
   const [painSeverity, setPainSeverity] = useState<number>(7);
 
   // Adaptive Answers state
-  
+  const [adaptiveAnswers, setAdaptiveAnswers] = useState<Record<string, string | string[] | number>>({});
+
+  // Allergy question state (Yes, No, Not sure)
+  const [allergyResponse, setAllergyResponse] = useState<'yes' | 'no' | 'not_sure'>('no');
+  const [allergyDetails, setAllergyDetails] = useState<string>('');
 
   // Documents & OCR state
   const [uploadedDocs, setUploadedDocs] = useState<UploadedMedicalDocument[]>([]);
@@ -115,13 +152,31 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Read step instructions aloud (REMOVED)
+  // Text-To-Speech helper for accessibility
+  const handleSpeak = (text: string) => {
+    if (!text) return;
+    speech.speak(text, currentLanguage);
+  };
+
+  // Read step instructions aloud if Voice Guide is enabled
   useEffect(() => {
-    // Text-to-speech output removed as per requirement,
-    // microphone input (speech-to-text) is still active.
-    speech.stopSpeaking();
+    if (voiceGuideEnabled) {
+      let promptText = '';
+      if (currentStep === 1) promptText = t.selectLanguage;
+      else if (currentStep === 2) promptText = `${t.stepDemographicsTitle}. ${t.stepDemographicsSubtitle}`;
+      else if (currentStep === 3) promptText = `${t.stepConsentTitle}. ${t.consentText}`;
+      else if (currentStep === 4) promptText = `${t.stepComplaintTitle}. ${t.stepComplaintSubtitle}`;
+      else if (currentStep === 5) promptText = `${t.stepQuestionsTitle}. ${t.stepQuestionsSubtitle}`;
+      else if (currentStep === 6) promptText = `${t.stepDocsTitle}`;
+      else if (currentStep === 7) promptText = `${t.stepReviewTitle}`;
+      if (promptText) {
+        handleSpeak(promptText);
+      }
+    } else {
+      speech.stopSpeaking();
+    }
     return () => speech.stopSpeaking();
-  }, [currentStep, currentLanguage]);
+  }, [currentStep, currentLanguage, voiceGuideEnabled]);
 
   // Voice dictation handler
   const handleToggleListening = (targetField: string) => {
@@ -140,6 +195,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           setDemographics((prev) => ({ ...prev, fullName: transcript }));
         } else if (targetField === 'complaint') {
           setComplaintCustomText(transcript);
+        } else if (targetField === 'allergy') {
+          setAllergyDetails(transcript);
         }
         if (isFinal) {
           setIsListening(false);
@@ -161,10 +218,21 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     }
   };
 
-  // Read consent out loud (REMOVED text-to-speech)
+  // Read consent out loud (Restored TTS)
   const handleReadConsentAloud = () => {
+    if (isReadingConsent) {
+      speech.stopSpeaking();
+      setIsReadingConsent(false);
+      return;
+    }
     setIsReadingConsent(true);
-    setTimeout(() => setIsReadingConsent(false), 2000);
+    speech.speak(
+      t.consentText,
+      currentLanguage,
+      () => setIsReadingConsent(true),
+      () => setIsReadingConsent(false),
+      () => setIsReadingConsent(false)
+    );
   };
 
   // Load sample document preset
@@ -219,7 +287,39 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
       answerText: `${painSeverity} / 10 (${painSeverity >= 7 ? 'Severe' : painSeverity >= 4 ? 'Moderate' : 'Mild'})`,
       answerValue: painSeverity,
       category: 'severity',
-      isRedFlagIndicator: painSeverity >= 8});
+      isRedFlagIndicator: painSeverity >= 8,
+    });
+
+    // Compile answered adaptive questions
+    const complaintQuestions = COMPLAINT_QUESTIONS_MAP[selectedComplaintId] || [];
+    complaintQuestions.forEach((q) => {
+      const val = adaptiveAnswers[q.id];
+      if (val !== undefined && val !== null && val !== '') {
+        let answerText = '';
+        let isRedFlag = false;
+        if (Array.isArray(val)) {
+          const selectedLabels = q.options?.filter((o) => val.includes(o.id));
+          answerText = selectedLabels?.map((o) => o.label[currentLanguage] || o.label.en).join(', ') || val.join(', ');
+          isRedFlag = selectedLabels?.some((o) => o.isRedFlag) || false;
+        } else {
+          const matchedOpt = q.options?.find((o) => o.id === val);
+          if (matchedOpt) {
+            answerText = matchedOpt.label[currentLanguage] || matchedOpt.label.en;
+            isRedFlag = matchedOpt.isRedFlag || false;
+          } else {
+            answerText = String(val);
+          }
+        }
+        formattedAnswers.push({
+          questionId: q.id,
+          questionText: q.text[currentLanguage] || q.text.en,
+          answerText,
+          answerValue: val,
+          category: q.category,
+          isRedFlagIndicator: isRedFlag,
+        });
+      }
+    });
 
     const timeline = buildChronologicalTimeline(uploadedDocs);
 
@@ -228,7 +328,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
       selectedComplaintId,
       complaintCustomText,
       formattedAnswers,
-      uploadedDocs
+      uploadedDocs,
+      { hasAllergy: allergyResponse, details: allergyDetails }
     );
 
     const tokenNumber = `OPD-MED-${Math.floor(100 + Math.random() * 900)}`;
@@ -238,33 +339,47 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     const assignedPatientId = existingPatient?.patientId || hospitalDb.generateNextPatientId();
     const assignedVisitId = existingPatient ? `V${String(existingPatient.visits.length + 1).padStart(3, '0')}` : 'V001';
 
+    const finalHospitalName = hospitalName || localStorage.getItem('medico_hospital_name') || 'District Hospital';
+    const finalHospitalAddress = hospitalAddress || localStorage.getItem('medico_hospital_address') || 'Hospital Complex, Main Road';
+
+    const finalAccompanying = hasAccompanyingPerson && accompanyingPerson.name.trim() ? accompanyingPerson : undefined;
+
     const newEncounter: PatientCaseEncounter = {
       id: `enc_${Date.now()}`,
       patientId: assignedPatientId,
       visitId: assignedVisitId,
       visitDate: new Date().toISOString().split('T')[0],
-      
       opdToken: tokenNumber,
       opdRoom: roomNumber,
       specialty: 'Internal Medicine',
-      hospitalName: hospitalName ,
+      hospitalName: finalHospitalName,
+      hospitalAddress: finalHospitalAddress,
+      accompanyingPerson: finalAccompanying,
+      knownAllergies: {
+        hasAllergy: allergyResponse,
+        details: allergyDetails,
+      },
       createdAt: new Date().toISOString(),
       demographics: {
         ...demographics,
-        preferredLanguage: currentLanguage},
+        accompanyingPerson: finalAccompanying,
+        preferredLanguage: currentLanguage,
+      },
       consent: {
         granted: true,
         timestamp: new Date().toISOString(),
         method: 'biometric_touch',
         languageUsed: currentLanguage,
-        abdmLinkConsent: true},
+        abdmLinkConsent: true,
+      },
       chiefComplaint: {
         id: selectedComplaintId,
         title: CHIEF_COMPLAINTS_DATA.find((c) => c.id === selectedComplaintId)?.titles[currentLanguage] || 'Chief Complaint',
         description: complaintCustomText || 'Patient reported acute symptoms',
         onsetDuration: `${painSeverity}/10 severity`,
-        voiceInputTranscript: complaintCustomText},
-      
+        voiceInputTranscript: complaintCustomText,
+      },
+      adaptiveAnswers: formattedAnswers,
       documents: uploadedDocs,
       timeline,
       triagePriority: assessment.triagePriority,
@@ -282,22 +397,27 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           pulse: '76',
           spo2: '98',
           temp: '98.6',
-          rr: '18'}},
+          rr: '18',
+        },
+      },
       doctorReview: {
         verified: false,
-        status: 'pending'},
+        status: 'pending',
+      },
       savedToHis: false,
       abdmCareContextLinked: true,
-      abdmCareContextRef: `CARE-CTX-${assignedPatientId}-${tokenNumber}`};
+      abdmCareContextRef: `CARE-CTX-${assignedPatientId}-${tokenNumber}`,
+    };
 
     storage.savePatient(newEncounter);
     setCompletedEncounter(newEncounter);
-    setCurrentStep(6);
+    setCurrentStep(7);
 
     confetti({
       particleCount: 80,
       spread: 70,
-      origin: { y: 0.6 }});
+      origin: { y: 0.6 },
+    });
 
 
     if (onPatientCompleted) {
@@ -331,8 +451,30 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      {/* Live Date, Day and Time */}
-      <div className="flex justify-end mb-4 no-print">
+      {/* Live Date, Day and Time + Voice Guide Audio Toggle */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 no-print">
+        <button
+          type="button"
+          onClick={() => {
+            const nextVal = !voiceGuideEnabled;
+            setVoiceGuideEnabled(nextVal);
+            if (nextVal) {
+              handleSpeak('आवाज सहायता चालू है / Voice guide is enabled');
+            } else {
+              speech.stopSpeaking();
+            }
+          }}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border shadow-sm transition-all cursor-pointer ${
+            voiceGuideEnabled
+              ? 'bg-teal-600 text-white border-teal-700'
+              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+          }`}
+          title="Toggle Read Aloud Audio"
+        >
+          <Volume2 className={`w-4 h-4 ${voiceGuideEnabled ? 'animate-pulse' : ''}`} />
+          <span>{voiceGuideEnabled ? t.audioOn : t.audioOff}</span>
+        </button>
+
         <div className="text-right text-xs text-slate-500 font-semibold bg-white border border-slate-200/60 shadow-sm rounded-xl py-1.5 px-3">
           <div className="text-sm font-black text-slate-800 tracking-tight">
             {currentTime.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
@@ -346,23 +488,24 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
         </div>
       </div>
 
-      {/* Step Progress Bar */}
+      {/* Step Progress Bar (1 to 7) */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-extrabold uppercase tracking-wider text-teal-800">
-            {t.kioskMode} • Step {currentStep} of 6
+            {t.kioskMode} • Step {currentStep} of 7
           </span>
           <span className="text-xs font-semibold text-slate-500">
             {currentStep === 1 && 'Language & Accessibility'}
-            {currentStep === 2 && 'Patient Demographics'}
+            {currentStep === 2 && 'Patient Demographics & Attendant'}
             {currentStep === 3 && 'Informed Consent'}
             {currentStep === 4 && 'Chief Complaint'}
-            {currentStep === 5 && 'Document Scanner & OCR'}
-            {currentStep === 6 && 'OPD Queue Token'}
+            {currentStep === 5 && 'Adaptive Questions & Allergies'}
+            {currentStep === 6 && 'Document Scanner & OCR'}
+            {currentStep === 7 && 'OPD Queue Token'}
           </span>
         </div>
         <div className="h-2.5 w-full bg-slate-200/80 rounded-full overflow-hidden flex shadow-inner">
-          {[1, 2, 3, 4, 5, 6].map((stepNum) => (
+          {[1, 2, 3, 4, 5, 6, 7].map((stepNum) => (
             <div
               key={stepNum}
               className={`flex-1 transition-all duration-300 border-r border-white/60 ${
@@ -680,6 +823,94 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
               </div>
             </div>
 
+            {/* Person Accompanying Patient Section (Optional) */}
+            <div className="p-5 rounded-2xl bg-slate-50 border-2 border-slate-200 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-teal-700" />
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900">
+                      {t.attendantSectionTitle || 'Person Accompanying Patient (Optional)'}
+                    </h3>
+                    <p className="text-[11px] text-slate-500 font-medium">
+                      {t.attendantSectionSubtitle || 'If someone came with the patient, please enter their details'}
+                    </p>
+                  </div>
+                </div>
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200 select-none">
+                  <input
+                    type="checkbox"
+                    checked={hasAccompanyingPerson}
+                    onChange={(e) => setHasAccompanyingPerson(e.target.checked)}
+                    className="w-4 h-4 rounded text-teal-600 focus:ring-teal-500 cursor-pointer"
+                  />
+                  <span>Attendant Present</span>
+                </label>
+              </div>
+
+              {hasAccompanyingPerson && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-200 animate-fade-in">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700">
+                      {t.attendantName || 'Accompanying Person Name'}
+                    </label>
+                    <input
+                      type="text"
+                      value={accompanyingPerson.name}
+                      onChange={(e) =>
+                        setAccompanyingPerson({ ...accompanyingPerson, name: e.target.value })
+                      }
+                      placeholder="e.g., Suresh Kumar"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700">
+                      {t.attendantPhone || 'Accompanying Person Mobile Number'}
+                    </label>
+                    <input
+                      type="tel"
+                      maxLength={10}
+                      value={accompanyingPerson.phone}
+                      onChange={(e) =>
+                        setAccompanyingPerson({ ...accompanyingPerson, phone: e.target.value })
+                      }
+                      placeholder="10-digit mobile number"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700">
+                      {t.attendantRelation || 'Relation with Patient'}
+                    </label>
+                    <select
+                      value={accompanyingPerson.relation}
+                      onChange={(e) =>
+                        setAccompanyingPerson({
+                          ...accompanyingPerson,
+                          relation: e.target.value as AttendantRelation,
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    >
+                      <option value="Father">{t.relationFather || 'Father'}</option>
+                      <option value="Mother">{t.relationMother || 'Mother'}</option>
+                      <option value="Son">{t.relationSon || 'Son'}</option>
+                      <option value="Daughter">{t.relationDaughter || 'Daughter'}</option>
+                      <option value="Husband">{t.relationHusband || 'Husband'}</option>
+                      <option value="Wife">{t.relationWife || 'Wife'}</option>
+                      <option value="Brother">{t.relationBrother || 'Brother'}</option>
+                      <option value="Sister">{t.relationSister || 'Sister'}</option>
+                      <option value="Guardian">{t.relationGuardian || 'Guardian'}</option>
+                      <option value="Other">{t.relationOther || 'Other'}</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Navigation Buttons */}
             <div className="pt-6 flex items-center justify-between">
               <button
@@ -920,8 +1151,225 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
 
-        {/* STEP 5: Document Scanner, OCR & Medical Timeline */}
+        {/* STEP 5: Adaptive Follow-up Questions & Known Allergies */}
         {currentStep === 5 && (
+          <div className="p-6 sm:p-10 space-y-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
+                <HelpCircle className="w-8 h-8 text-teal-600" />
+                {t.stepQuestionsTitle || 'Adaptive Clinical Questions'}
+              </h2>
+              <p className="text-sm text-slate-600 font-medium mt-1">
+                {t.stepQuestionsSubtitle || 'AI-tailored follow-up questions based on your complaint'}
+              </p>
+            </div>
+
+            {/* Questions List for Chief Complaint */}
+            <div className="space-y-5">
+              {(COMPLAINT_QUESTIONS_MAP[selectedComplaintId] || []).map((q, qIndex) => {
+                const qText = q.text[currentLanguage] || q.text.en;
+                const currentAnswer = adaptiveAnswers[q.id];
+
+                return (
+                  <div
+                    key={q.id}
+                    className="p-5 rounded-2xl bg-slate-50/80 border-2 border-slate-200/90 space-y-3.5 transition-all shadow-2xs"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-100 text-teal-800 border border-teal-200">
+                          Q{qIndex + 1} • {q.category.toUpperCase()}
+                        </span>
+                        <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                          {qText}
+                        </h4>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSpeak(qText)}
+                        className="p-2 rounded-xl bg-white hover:bg-teal-50 text-teal-700 border border-slate-200 shadow-2xs shrink-0 transition-colors"
+                        title="Listen to question"
+                      >
+                        <Volume2 className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {/* Options list */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {q.options?.map((opt) => {
+                        const optLabel = opt.label[currentLanguage] || opt.label.en;
+                        const isSelected = currentAnswer === opt.id;
+
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => {
+                              setAdaptiveAnswers((prev) => ({
+                                ...prev,
+                                [q.id]: opt.id,
+                              }));
+                            }}
+                            className={`p-3.5 rounded-xl border-2 text-left font-bold text-xs sm:text-sm transition-all flex items-center justify-between ${
+                              isSelected
+                                ? opt.isRedFlag
+                                  ? 'border-rose-600 bg-rose-50 text-rose-950 shadow-2xs'
+                                  : 'border-teal-600 bg-teal-50 text-teal-950 shadow-2xs'
+                                : 'border-slate-200 bg-white hover:bg-slate-100/80 text-slate-700'
+                            }`}
+                          >
+                            <span>{optLabel}</span>
+                            {isSelected && (
+                              <CheckCircle
+                                className={`w-4 h-4 shrink-0 ${
+                                  opt.isRedFlag ? 'text-rose-600' : 'text-teal-600'
+                                }`}
+                              />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* MANDATORY ALLERGY QUESTION SECTION */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-amber-50/70 border-2 border-amber-300 space-y-4 shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">⚠️</span>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black text-amber-950">
+                      {t.allergyQuestionTitle || 'Do you have any known allergies?'}
+                    </h3>
+                    <p className="text-xs text-amber-800 font-medium mt-0.5">
+                      (Dawa, bhojan, ya kisi anya vastu se allergy / Any allergy to medicines, foods, or substances)
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSpeak(
+                      t.allergyQuestionTitle || 'Do you have any known allergies?'
+                    )
+                  }
+                  className="p-2 rounded-xl bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs shrink-0 transition-colors"
+                  title="Listen to allergy question"
+                >
+                  <Volume2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* 3 Choice Buttons: Yes, No, Not sure */}
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setAllergyResponse('yes')}
+                  className={`py-3.5 px-3 rounded-xl border-2 text-center text-xs sm:text-sm font-black transition-all ${
+                    allergyResponse === 'yes'
+                      ? 'border-rose-600 bg-rose-50 text-rose-950 shadow-2xs ring-2 ring-rose-400/30'
+                      : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-700'
+                  }`}
+                >
+                  {t.allergyYes || 'Yes'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAllergyResponse('no')}
+                  className={`py-3.5 px-3 rounded-xl border-2 text-center text-xs sm:text-sm font-black transition-all ${
+                    allergyResponse === 'no'
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-950 shadow-2xs ring-2 ring-emerald-400/30'
+                      : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-700'
+                  }`}
+                >
+                  {t.allergyNo || 'No'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAllergyResponse('not_sure')}
+                  className={`py-3.5 px-3 rounded-xl border-2 text-center text-xs sm:text-sm font-black transition-all ${
+                    allergyResponse === 'not_sure'
+                      ? 'border-amber-600 bg-amber-100 text-amber-950 shadow-2xs ring-2 ring-amber-400/30'
+                      : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-700'
+                  }`}
+                >
+                  {t.allergyNotSure || 'Not sure'}
+                </button>
+              </div>
+
+              {/* If Yes: text input to specify allergy details */}
+              {allergyResponse === 'yes' && (
+                <div className="space-y-2 pt-2 border-t border-amber-200 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-amber-950">
+                      {t.allergySpecify || 'Please specify allergy (e.g., penicillin, sulfa, peanuts, dust):'}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleToggleListening('allergy')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+                        isListening && speechFieldTarget === 'allergy'
+                          ? 'bg-rose-500 text-white animate-pulse'
+                          : 'bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300'
+                      }`}
+                    >
+                      {isListening && speechFieldTarget === 'allergy' ? (
+                        <>
+                          <MicOff className="w-3.5 h-3.5" />
+                          <span>{t.listening}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Mic className="w-3.5 h-3.5" />
+                          <span>{t.speakAnswer}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={allergyDetails}
+                    onChange={(e) => setAllergyDetails(e.target.value)}
+                    placeholder="e.g., Penicillin, Sulfa drugs, Peanuts, Seafood"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-amber-300 text-slate-900 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  />
+                </div>
+              )}
+
+              {allergyResponse === 'not_sure' && (
+                <p className="text-[11px] text-amber-900 font-semibold italic">
+                  Note: &quot;Not sure&quot; will be flagged to the attending doctor to verify before prescribing medications.
+                </p>
+              )}
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="pt-4 flex items-center justify-between">
+              <button
+                onClick={() => setCurrentStep(4)}
+                className="px-6 py-3 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-2xl flex items-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>{t.back}</span>
+              </button>
+              <button
+                onClick={() => setCurrentStep(6)}
+                className="px-8 py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-2xl shadow-sm shadow-teal-600/30 flex items-center gap-3"
+              >
+                <span>{t.next}</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 6: Document Scanner, OCR & Medical Timeline */}
+        {currentStep === 6 && (
           <div className="p-6 sm:p-10 space-y-6">
             <div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
@@ -1062,7 +1510,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
             <div className="pt-4 flex items-center justify-between">
               <button
-                onClick={() => setCurrentStep(4)}
+                onClick={() => setCurrentStep(5)}
                 className="px-6 py-3 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-2xl flex items-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -1079,8 +1527,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
 
-        {/* STEP 6: Case Review & OPD Queue Token - Light Theme */}
-        {currentStep === 6 && completedEncounter && (
+        {/* STEP 7: Case Review & OPD Queue Token - Light Theme */}
+        {currentStep === 7 && completedEncounter && (
           <div className="p-6 sm:p-10 space-y-6">
             <div className="text-center space-y-2">
               <div className="inline-flex p-3 rounded-full bg-emerald-100 text-emerald-700">
@@ -1100,9 +1548,12 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
               <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                 <div>
                   <div className="text-[11px] font-black text-teal-800 uppercase tracking-wider">
-                    {completedEncounter.hospitalName?.toUpperCase() } OPD
+                    {completedEncounter.hospitalName?.toUpperCase() || 'DISTRICT HOSPITAL'} OPD
                   </div>
-                  <div className="text-xs font-semibold text-slate-500">National Health Mission</div>
+                  <div className="text-[11px] font-semibold text-slate-600">
+                    {completedEncounter.hospitalAddress || 'Hospital Complex, Main Road'}
+                  </div>
+                  <div className="text-[10px] text-slate-400">National Health Mission</div>
                 </div>
                 <div className="w-10 h-10 bg-teal-100/80 rounded-2xl flex items-center justify-center text-xl shadow-2xs">
                   🏥
@@ -1158,6 +1609,32 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                   <span className="text-slate-500 font-medium">Patient:</span>
                   <span className="font-bold text-slate-900">{completedEncounter.demographics.fullName} ({completedEncounter.demographics.age}Y/{completedEncounter.demographics.gender.toUpperCase()})</span>
                 </div>
+                {completedEncounter.accompanyingPerson?.name && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Attendant:</span>
+                    <span className="font-bold text-slate-800">
+                      {completedEncounter.accompanyingPerson.name} ({completedEncounter.accompanyingPerson.relation})
+                    </span>
+                  </div>
+                )}
+                {completedEncounter.knownAllergies && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Allergies:</span>
+                    <span className={`font-bold ${
+                      completedEncounter.knownAllergies.hasAllergy === 'yes'
+                        ? 'text-rose-700'
+                        : completedEncounter.knownAllergies.hasAllergy === 'not_sure'
+                        ? 'text-amber-700'
+                        : 'text-emerald-700'
+                    }`}>
+                      {completedEncounter.knownAllergies.hasAllergy === 'yes'
+                        ? `Yes (${completedEncounter.knownAllergies.details || 'Specified'})`
+                        : completedEncounter.knownAllergies.hasAllergy === 'not_sure'
+                        ? 'Not sure'
+                        : 'No allergies'}
+                    </span>
+                  </div>
+                )}
                 {(completedEncounter.demographics.abha?.abhaAddress || completedEncounter.demographics.abha?.abhaNumber) && (
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">ABHA:</span>
@@ -1217,6 +1694,13 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
         onSelectAbha={(newAbha) => {
           setDemographics((prev) => ({ ...prev, abha: newAbha }));
         }}
+      />
+
+      {/* Floating Hospital AI Assistant */}
+      <AiChatbot
+        currentLanguage={currentLanguage}
+        hospitalName={hospitalName}
+        hospitalAddress={hospitalAddress}
       />
     </div>
   );

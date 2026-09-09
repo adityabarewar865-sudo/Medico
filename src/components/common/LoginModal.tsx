@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, User, Key, Stethoscope, Users, Building, AlertCircle } from 'lucide-react';
+import { ShieldCheck, Lock, User, Key, Stethoscope, Users, Building, MapPin, AlertCircle } from 'lucide-react';
 import type { AuthUser } from '../../types/clinical';
 
 interface LoginPageProps {
@@ -12,7 +12,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [selectedRole, setSelectedRole] = useState<'reception' | 'doctor'>('reception');
   const [username, setUsername] = useState<string>('reception');
   const [password, setPassword] = useState<string>('hospital123');
-  const [hospitalName, setHospitalName] = useState<string>('ABC Hospital');
+  const [hospitalName, setHospitalName] = useState<string>(() => {
+    return localStorage.getItem('medico_hospital_name') || 'District Hospital';
+  });
+  const [hospitalAddress, setHospitalAddress] = useState<string>(() => {
+    return localStorage.getItem('medico_hospital_address') || 'Hospital Complex, Main Road, Civil Lines';
+  });
   const [error, setError] = useState<string>('');
 
   const handleRoleChange = (role: 'reception' | 'doctor') => {
@@ -36,6 +41,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       return;
     }
 
+    const trimmedHospital = hospitalName.trim();
+    const trimmedAddress = hospitalAddress.trim() || 'Hospital Complex, Main Road, Civil Lines';
+
+    try {
+      localStorage.setItem('medico_hospital_name', trimmedHospital);
+      localStorage.setItem('medico_hospital_address', trimmedAddress);
+    } catch {
+      // ignore
+    }
+
     if (selectedRole === 'reception') {
       if (
         (username.trim().toLowerCase() === 'reception' && password === 'hospital123') ||
@@ -47,7 +62,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           name: 'Pooja Verma (Reception Desk 1)',
           username: username.trim(),
           title: 'OPD Registration Officer',
-          hospitalName: hospitalName.trim()
+          hospitalName: trimmedHospital,
+          hospitalAddress: trimmedAddress,
         });
         return;
       }
@@ -55,7 +71,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       try {
         const existing = localStorage.getItem('medico_registered_doctors');
         const doctors = existing ? JSON.parse(existing) : [];
-        const found = doctors.find((d: any) => d.username === username.trim() && d.password === password && d.hospitalName.toLowerCase() === hospitalName.trim().toLowerCase());
+        const found = doctors.find((d: any) => d.username === username.trim() && d.password === password && d.hospitalName.toLowerCase() === trimmedHospital.toLowerCase());
         
         if (found) {
           onLoginSuccess({
@@ -63,7 +79,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             name: found.name,
             username: found.username,
             title: 'Medical Officer',
-            hospitalName: found.hospitalName
+            hospitalName: found.hospitalName,
+            hospitalAddress: trimmedAddress,
           });
           return;
         } else {
@@ -80,7 +97,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             name: 'Dr. S. K. Verma, MD',
             username: username.trim(),
             title: 'Senior Consultant Physician',
-            hospitalName: hospitalName.trim()
+            hospitalName: trimmedHospital,
+            hospitalAddress: trimmedAddress,
           });
           return;
         }
@@ -186,6 +204,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               onChange={(e) => setHospitalName(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl text-xs font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="e.g., ABC Hospital"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+              <span>Hospital Address / Location</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={hospitalAddress}
+              onChange={(e) => setHospitalAddress(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl text-xs font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              placeholder="e.g., Hospital Complex, Main Road, Civil Lines"
             />
           </div>
 

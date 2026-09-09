@@ -166,8 +166,8 @@ export const App: React.FC = () => {
           <PatientKiosk
             currentLanguage={currentLanguage}
             onLanguageChange={setCurrentLanguage}
-            
             hospitalName={currentUser?.hospitalName}
+            hospitalAddress={currentUser?.hospitalAddress}
             onPatientCompleted={() => {}}
           />
         )}
@@ -180,7 +180,25 @@ export const App: React.FC = () => {
         )}
 
         {currentMode === 'doctor' && (
-          <DoctorDashboard />
+          currentUser?.role === 'doctor' ? (
+            <DoctorDashboard />
+          ) : (
+            <div className="max-w-md mx-auto my-12 p-8 bg-white dark:bg-slate-900 rounded-3xl border border-rose-200 text-center space-y-4 shadow-xl">
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-2xl">
+                🔒
+              </div>
+              <h2 className="text-xl font-black text-slate-900 dark:text-white">Doctor Workstation Restricted</h2>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Reception staff cannot access the Doctor Dashboard. Please sign in with Doctor credentials to access clinical patient records.
+              </p>
+              <button
+                onClick={() => setCurrentMode('reception')}
+                className="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-xs"
+              >
+                Return to Reception
+              </button>
+            </div>
+          )
         )}
       </main>
 

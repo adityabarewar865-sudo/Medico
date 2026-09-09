@@ -76,10 +76,11 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
   doc.setFontSize(14);
   doc.text(hospitalName, margin + 21, y + 9);
 
+  const hospitalAddress = visit.hospitalAddress || patient.hospitalAddress || localStorage.getItem('medico_hospital_address') || 'Hospital Complex, Main Road, Civil Lines';
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
+  doc.setFontSize(7.5);
   doc.setTextColor(230, 245, 243);
-  doc.text(`${department} • AI Clinical Workstation Receipt`, margin + 21, y + 15);
+  doc.text(`${hospitalAddress}  •  ${department}`, margin + 21, y + 15);
 
   // Verification Badge Pill on top right
   doc.setFillColor(240, 253, 244);
@@ -98,9 +99,12 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
   // -------------------------------------------------------------
   // 2. PATIENT IDENTIFICATION CARD & VISIT INFO
   // -------------------------------------------------------------
+  const attendant = visit.accompanyingPerson || patient.accompanyingPerson;
+  const cardHeight = attendant?.name || visit.knownAllergies ? 36 : 28;
+
   doc.setFillColor(248, 250, 252); // #f8fafc
   doc.setDrawColor(226, 232, 240); // #e2e8f0
-  doc.roundedRect(margin, y, contentWidth, 26, 2, 2, 'FD');
+  doc.roundedRect(margin, y, contentWidth, cardHeight, 2, 2, 'FD');
 
   doc.setTextColor(15, 23, 42); // slate-900
   doc.setFont('helvetica', 'bold');
@@ -108,16 +112,31 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
   doc.text(patient.fullName, margin + 4, y + 6);
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
+  doc.setFontSize(8);
   doc.setTextColor(71, 85, 105); // slate-600
   doc.text(
     `Age / Gender: ${patient.age} Y / ${patient.gender.toUpperCase()}    •    Mobile: ${patient.phone}`,
     margin + 4,
-    y + 12
+    y + 11.5
   );
 
   const abha = patient.abha?.abhaNumber || visit.demographics.abha?.abhaNumber || '91-XXXX-XXXX-XXXX';
-  doc.text(`ABHA Number: ${abha}    •    Address: ${patient.address || 'District Catchment Area'}`, margin + 4, y + 18);
+  doc.text(`ABHA Number: ${abha}    •    Address: ${patient.address || 'District Catchment Area'}`, margin + 4, y + 17);
+
+  let extraY = y + 22.5;
+  if (attendant?.name) {
+    doc.text(`Attendant: ${attendant.name} (${attendant.relation})    •    Mobile: ${attendant.phone || 'N/A'}`, margin + 4, extraY);
+    extraY += 5;
+  }
+
+  if (visit.knownAllergies) {
+    const allergyText = visit.knownAllergies.hasAllergy === 'yes'
+      ? `YES — ${visit.knownAllergies.details || 'Specified'}`
+      : visit.knownAllergies.hasAllergy === 'not_sure'
+      ? 'NOT SURE (Caution: Verify before prescribing)'
+      : 'NO (No known drug or food allergies)';
+    doc.text(`Allergies: ${allergyText}`, margin + 4, extraY);
+  }
 
   // Visit metadata (Right column)
   const visitDateStr = visit.visitDate || visit.createdAt.split('T')[0];
@@ -134,7 +153,7 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
   doc.text(`Date: ${visitDateStr} (${visitTimeStr})`, pageWidth - margin - 60, y + 16);
   doc.text(`Token: ${visit.opdToken}  |  ${visit.opdRoom}`, pageWidth - margin - 60, y + 21);
 
-  y += 30;
+  y += cardHeight + 4;
 
   // -------------------------------------------------------------
   // 3. CLINICAL PROBLEM & BEDSIDE VITALS

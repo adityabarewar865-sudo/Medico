@@ -12,6 +12,24 @@ export interface AbhaDetails {
   linkedCareContextsCount?: number;
 }
 
+export type AttendantRelation =
+  | 'Father'
+  | 'Mother'
+  | 'Son'
+  | 'Daughter'
+  | 'Husband'
+  | 'Wife'
+  | 'Brother'
+  | 'Sister'
+  | 'Guardian'
+  | 'Other';
+
+export interface AccompanyingPerson {
+  name: string;
+  phone: string;
+  relation: AttendantRelation;
+}
+
 export interface PatientDemographics {
   id: string;
   fullName: string;
@@ -22,6 +40,7 @@ export interface PatientDemographics {
   address?: string;
   preferredLanguage: LanguageCode;
   emergencyContact?: string;
+  accompanyingPerson?: AccompanyingPerson;
 }
 
 export interface ConsentRecord {
@@ -209,6 +228,12 @@ export interface PatientCaseEncounter {
   firebaseStoredAt?: string;
   excelStoredAt?: string;
   hospitalName?: string;
+  hospitalAddress?: string;
+  accompanyingPerson?: AccompanyingPerson;
+  knownAllergies?: {
+    hasAllergy: 'yes' | 'no' | 'not_sure';
+    details?: string;
+  };
 }
 
 export interface VisitMedicineItem {
@@ -233,6 +258,8 @@ export interface PatientRecord {
   abha?: AbhaDetails;
   address?: string;
   emergencyContact?: string;
+  accompanyingPerson?: AccompanyingPerson;
+  hospitalAddress?: string;
   registeredAt: string;
   totalVisits: number;
   visits: PatientCaseEncounter[];
@@ -246,5 +273,6 @@ export interface AuthUser {
   username?: string;
   title?: string;
   hospitalName: string;
+  hospitalAddress?: string;
 }
 

@@ -55,12 +55,14 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
               </div>
               <div>
                 <h1 className="text-xl font-black uppercase tracking-wider text-slate-900">
-                  {encounter.hospitalName?.toUpperCase() || (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).hospitalName?.toUpperCase() : 'HOSPITAL NAME NOT SET')}
+                  {encounter.hospitalName?.toUpperCase() || (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).hospitalName?.toUpperCase() : 'DISTRICT HOSPITAL')}
                 </h1>
-                <p className="text-xs font-semibold text-slate-700">
-                  Department of Outpatient Clinical Services • Government of India
+                <p className="text-xs font-bold text-teal-900">
+                  {encounter.hospitalAddress || localStorage.getItem('medico_hospital_address') || 'Hospital Complex, Main Road, Civil Lines'}
                 </p>
-                <div className="flex items-center gap-2 text-[10px] text-teal-800 font-bold mt-0.5">
+                <div className="flex items-center gap-2 text-[10px] text-teal-800 font-semibold mt-0.5">
+                  <span>Department of Outpatient Clinical Services</span>
+                  <span>•</span>
                   <span>ABDM Enabled HIP/HIU</span>
                   <span>•</span>
                   <span>National Health Mission (NHM)</span>
@@ -125,6 +127,36 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
                 {encounter.triagePriority}
               </span>
             </div>
+
+            {/* Accompanying Person Row */}
+            {encounter.accompanyingPerson?.name && (
+              <div className="sm:col-span-2 pt-1 border-t border-slate-200">
+                <span className="text-slate-500 font-semibold block">Person Accompanying Patient:</span>
+                <span className="font-bold text-slate-900">
+                  {encounter.accompanyingPerson.name} ({encounter.accompanyingPerson.relation}) • Mobile: {encounter.accompanyingPerson.phone || 'N/A'}
+                </span>
+              </div>
+            )}
+
+            {/* Allergy Status Row */}
+            {encounter.knownAllergies && (
+              <div className="sm:col-span-2 pt-1 border-t border-slate-200">
+                <span className="text-slate-500 font-semibold block">Allergy Status:</span>
+                <span className={`font-bold ${
+                  encounter.knownAllergies.hasAllergy === 'yes'
+                    ? 'text-rose-700'
+                    : encounter.knownAllergies.hasAllergy === 'not_sure'
+                    ? 'text-amber-700'
+                    : 'text-emerald-700'
+                }`}>
+                  {encounter.knownAllergies.hasAllergy === 'yes'
+                    ? `YES — ${encounter.knownAllergies.details || 'Specified'}`
+                    : encounter.knownAllergies.hasAllergy === 'not_sure'
+                    ? 'NOT SURE (Caution: Verify before prescribing)'
+                    : 'NO (No known drug/food allergies)'}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Chief Complaint & HPI */}

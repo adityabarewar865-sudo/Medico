@@ -57,6 +57,30 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     abhaVerifyBtn: 'ABHA जांचें / नया बनाएं',
     abhaHelper: 'यदि आपके पास ABHA नहीं है, तो सिस्टम स्वचालित रूप से एक लिंक बनाएगा।',
 
+    // Person Accompanying Patient
+    attendantSectionTitle: 'मरीज के साथ आए व्यक्ति का विवरण (वैकल्पिक)',
+    attendantSectionSubtitle: 'यदि मरीज के साथ कोई आया है, तो उनका विवरण दर्ज करें',
+    attendantName: 'साथ आए व्यक्ति का नाम',
+    attendantPhone: 'साथ आए व्यक्ति का मोबाइल नंबर',
+    attendantRelation: 'मरीज के साथ संबंध',
+    relationFather: 'पिता (Father)',
+    relationMother: 'माता (Mother)',
+    relationSon: 'बेटा (Son)',
+    relationDaughter: 'बेटी (Daughter)',
+    relationHusband: 'पति (Husband)',
+    relationWife: 'पत्नी (Wife)',
+    relationBrother: 'भाई (Brother)',
+    relationSister: 'बहन (Sister)',
+    relationGuardian: 'अभिभावक (Guardian)',
+    relationOther: 'अन्य (Other)',
+
+    // Allergy
+    allergyQuestionTitle: 'क्या आपको किसी दवा, भोजन या अन्य वस्तु से कोई एलर्जी है?',
+    allergyYes: 'हाँ (Yes)',
+    allergyNo: 'नहीं (No)',
+    allergyNotSure: 'पक्का पता नहीं (Not sure)',
+    allergySpecify: 'कृपया अपनी एलर्जी का विवरण लिखें या बताएं (उदा. पेनिसिलिन, सल्फा, धूल):',
+
     // Consent
     stepConsentTitle: 'मरीज की सहमति (Informed Consent)',
     stepConsentSubtitle: 'कृपया नीचे दी गई जानकारी सुनें और अपनी सहमति दें',
@@ -144,6 +168,30 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     abhaVerified: 'ABHA Verified (KYC Linked)',
     abhaVerifyBtn: 'Verify / Generate ABHA',
     abhaHelper: 'If you do not have an ABHA, one will be automatically linked via phone OTP.',
+
+    // Person Accompanying Patient
+    attendantSectionTitle: 'Person Accompanying Patient (Optional)',
+    attendantSectionSubtitle: 'If anyone came with the patient, please enter their details',
+    attendantName: 'Accompanying Person Name',
+    attendantPhone: 'Accompanying Person Mobile Number',
+    attendantRelation: 'Relation with Patient',
+    relationFather: 'Father',
+    relationMother: 'Mother',
+    relationSon: 'Son',
+    relationDaughter: 'Daughter',
+    relationHusband: 'Husband',
+    relationWife: 'Wife',
+    relationBrother: 'Brother',
+    relationSister: 'Sister',
+    relationGuardian: 'Guardian',
+    relationOther: 'Other',
+
+    // Allergy
+    allergyQuestionTitle: 'Do you have any known allergies?',
+    allergyYes: 'Yes',
+    allergyNo: 'No',
+    allergyNotSure: 'Not sure',
+    allergySpecify: 'Please specify your allergy / allergies (e.g., Penicillin, Sulfa, Dust, Food):',
 
     stepConsentTitle: 'Patient Informed Consent',
     stepConsentSubtitle: 'Please listen to the clinical consent notice and confirm',
@@ -535,6 +583,30 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     abhaVerified: 'ABHA Verified (KYC Linked)',
     abhaVerifyBtn: 'Verify / Generate ABHA',
     abhaHelper: 'If you do not have an ABHA, one will be automatically linked via phone OTP.',
+
+    // Person Accompanying Patient
+    attendantSectionTitle: 'ਮਰੀਜ਼ ਨਾਲ ਆਏ ਵਿਅਕਤੀ ਦਾ ਵੇਰਵਾ (ਵਿਕਲਪਿਕ)',
+    attendantSectionSubtitle: 'ਜੇਕਰ ਮਰੀਜ਼ ਨਾਲ ਕੋਈ ਆਇਆ ਹੈ, ਤਾਂ ਉਹਨਾਂ ਦਾ ਵੇਰਵਾ ਭਰੋ',
+    attendantName: 'ਨਾਲ ਆਏ ਵਿਅਕਤੀ ਦਾ ਨਾਮ',
+    attendantPhone: 'ਨਾਲ ਆਏ ਵਿਅਕਤੀ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ',
+    attendantRelation: 'ਮਰੀਜ਼ ਨਾਲ ਰਿਸ਼ਤਾ',
+    relationFather: 'ਪਿਤਾ (Father)',
+    relationMother: 'ਮਾਤਾ (Mother)',
+    relationSon: 'ਪੁੱਤਰ (Son)',
+    relationDaughter: 'ਧੀ (Daughter)',
+    relationHusband: 'ਪਤੀ (Husband)',
+    relationWife: 'ਪਤਨੀ (Wife)',
+    relationBrother: 'ਭਰਾ (Brother)',
+    relationSister: 'ਭੈਣ (Sister)',
+    relationGuardian: 'ਸਰਪ੍ਰਸਤ (Guardian)',
+    relationOther: 'ਹੋਰ (Other)',
+
+    // Allergy
+    allergyQuestionTitle: 'ਕੀ ਤੁਹਾਨੂੰ ਕਿਸੇ ਦਵਾਈ, ਭੋਜਨ ਜਾਂ ਹੋਰ ਚੀਜ਼ ਤੋਂ ਐਲਰਜੀ ਹੈ?',
+    allergyYes: 'ਹਾਂ (Yes)',
+    allergyNo: 'ਨਹੀਂ (No)',
+    allergyNotSure: 'ਪੱਕਾ ਪਤਾ ਨਹੀਂ (Not sure)',
+    allergySpecify: 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਐਲਰਜੀ ਦਾ ਵੇਰਵਾ ਲਿਖੋ ਜਾਂ ਦੱਸੋ:',
 
     stepConsentTitle: 'Patient Informed Consent',
     stepConsentSubtitle: 'Please listen to the clinical consent notice and confirm',
