@@ -608,9 +608,18 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
                                 ).map((med, medIdx) => (
                                   <span
                                     key={medIdx}
-                                    className="px-2 py-0.5 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800 text-[11px] font-semibold"
+                                    className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold border flex items-center gap-1.5 ${
+                                      med.category === 'ayurvedic'
+                                        ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                                        : med.category === 'homeopathic'
+                                        ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+                                        : 'bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800'
+                                    }`}
                                   >
-                                    {med.name} ({med.dosage}) - {med.frequency}
+                                    <span>{med.name} ({med.dosage}) - {med.frequency}</span>
+                                    <span className="font-mono text-[9px] font-black uppercase opacity-90">
+                                      [{med.category === 'ayurvedic' ? 'AYURVEDIC MEDICINES' : med.category === 'homeopathic' ? 'HOMEOPATHIC MEDICINES' : 'ALLOPATHIC MEDICINES'}]
+                                    </span>
                                   </span>
                                 ))}
                               </div>

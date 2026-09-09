@@ -283,7 +283,7 @@ export interface PatientCaseEncounter {
   };
   // AYUSH & Wellness integration
   consultationType?: 'opd' | 'ipd' | 'wellness';
-  systemOfMedicine?: 'allopathy' | 'ayurveda';
+  systemOfMedicine?: 'allopathy' | 'ayurveda' | 'homeopathy';
   ayushHistory?: AyushHistory;
   // IPD fast-track details
   isIpd?: boolean;

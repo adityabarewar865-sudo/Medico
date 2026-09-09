@@ -5,10 +5,12 @@ import { LiveDateTime } from './LiveDateTime';
 
 interface LoginPageProps {
   onLoginSuccess: (user: AuthUser) => void;
+  onOpenKiosk?: () => void;
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({
   onLoginSuccess,
+  onOpenKiosk,
 }) => {
   const [selectedRole, setSelectedRole] = useState<'reception' | 'doctor'>('reception');
   const [username, setUsername] = useState<string>('reception');
@@ -111,7 +113,32 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-950 animate-fade-in space-y-4">
-      <LiveDateTime />
+      <div className="w-full max-w-md space-y-3">
+        <LiveDateTime variant="banner" />
+
+        {onOpenKiosk && (
+          <div className="p-4 rounded-3xl bg-gradient-to-r from-teal-700 via-teal-800 to-sky-800 text-white shadow-lg border border-teal-500/30 flex items-center justify-between gap-3">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
+                Self-Service Kiosk
+              </span>
+              <h4 className="text-sm font-black mt-1">Patient Kiosk (OPD &amp; IPD)</h4>
+              <p className="text-[11px] text-teal-100 font-medium">
+                Direct OPD intake, emergency IPD, and AYUSH wellness
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onOpenKiosk}
+              className="px-4 py-2.5 bg-white hover:bg-teal-50 text-teal-900 font-black text-xs rounded-xl shadow-sm shrink-0 cursor-pointer transition-transform active:scale-95 flex items-center gap-1.5"
+            >
+              <span>Open Kiosk</span>
+              <span>→</span>
+            </button>
+          </div>
+        )}
+      </div>
+
       <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-md overflow-hidden relative">
 
         {/* Header */}

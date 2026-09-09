@@ -133,9 +133,12 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
   const [consentGranted, setConsentGranted] = useState<boolean>(false);
   const [isReadingConsent, setIsReadingConsent] = useState<boolean>(false);
 
+  // Kiosk View State (Home: OPD vs IPD Selection | IPD Form | IPD Success | OPD Flow)
+  const [kioskView, setKioskView] = useState<'home' | 'ipd_form' | 'ipd_success' | 'opd_flow'>('home');
+
   // Consultation Type & System of Medicine
   const [consultationType, setConsultationType] = useState<'opd' | 'wellness'>('opd');
-  const [systemOfMedicine, setSystemOfMedicine] = useState<'allopathy' | 'ayurveda'>('allopathy');
+  const [systemOfMedicine, setSystemOfMedicine] = useState<'allopathy' | 'ayurveda' | 'homeopathy'>('allopathy');
 
   // AYUSH: Dashavidha Pariksha (10 Parameters)
   const [dashavidha, setDashavidha] = useState<DashavidhaPariksha>({
@@ -173,14 +176,13 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     otherHabits: 'No smoking, no alcohol, limited caffeine',
   });
 
-  // Emergency IPD Fast-Track State
-  const [showIpdModal, setShowIpdModal] = useState<boolean>(false);
+  // Emergency IPD Fast-Track State (ONLY Name, Age, Mobile Number)
   const [ipdForm, setIpdForm] = useState({
     fullName: '',
     age: 42,
     phone: '',
-    bedWard: 'Emergency Bed 1 (Acute Resus)',
   });
+  const [isSubmittingIpd, setIsSubmittingIpd] = useState<boolean>(false);
   const [ipdSuccessEncounter, setIpdSuccessEncounter] = useState<PatientCaseEncounter | null>(null);
 
   // Chief Complaint state
@@ -502,21 +504,31 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
   const handleEmergencyIpdSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!ipdForm.fullName.trim() || !ipdForm.phone.trim()) {
-      alert('Please provide patient name and mobile number for emergency IPD registration.');
+    if (isSubmittingIpd) return; // Strict duplicate prevention
+
+    if (!ipdForm.fullName.trim()) {
+      alert('Please enter patient full name.');
+      return;
+    }
+    if (!ipdForm.phone.trim() || ipdForm.phone.replace(/\D/g, '').length < 10) {
+      alert('Please provide a valid 10-digit mobile number.');
       return;
     }
 
-    const created = hospitalDb.registerIpdPatient({
-      fullName: ipdForm.fullName.trim(),
-      age: Number(ipdForm.age) || 40,
-      phone: ipdForm.phone.trim(),
-      bedWard: ipdForm.bedWard,
-    });
+    setIsSubmittingIpd(true);
+    try {
+      const created = hospitalDb.registerIpdPatient({
+        fullName: ipdForm.fullName.trim(),
+        age: Number(ipdForm.age) || 40,
+        phone: ipdForm.phone.trim(),
+      });
 
-    setIpdSuccessEncounter(created);
-    setShowIpdModal(false);
-    confetti({ particleCount: 60, spread: 60 });
+      setIpdSuccessEncounter(created);
+      setKioskView('ipd_success');
+      confetti({ particleCount: 60, spread: 60 });
+    } finally {
+      setIsSubmittingIpd(false);
+    }
   };
 
   const handleResetForNewPatient = () => {
@@ -546,111 +558,264 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      {/* Live Date, Day and Time + Voice Guide Audio Toggle + Fast-Track IPD Registration */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 no-print">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              const nextVal = !voiceGuideEnabled;
-              setVoiceGuideEnabled(nextVal);
-              if (nextVal) {
-                handleSpeak('आवाज सहायता चालू है / Voice guide is enabled');
-              } else {
-                speech.stopSpeaking();
-              }
-            }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border shadow-sm transition-all cursor-pointer ${
-              voiceGuideEnabled
-                ? 'bg-teal-600 text-white border-teal-700'
-                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-            title="Toggle Read Aloud Audio"
-          >
-            <Volume2 className={`w-4 h-4 ${voiceGuideEnabled ? 'animate-pulse' : ''}`} />
-            <span>{voiceGuideEnabled ? t.audioOn : t.audioOff}</span>
-          </button>
+      {/* 1. FIRST PAGE: Department Selection (OPD / IPD) */}
+      {kioskView === 'home' && (
+        <div className="space-y-6 animate-fade-in">
+          <LiveDateTime variant="banner" />
 
-          <button
-            type="button"
-            onClick={() => setShowIpdModal(true)}
-            className="px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 shadow-sm transition-all cursor-pointer"
-            title="Emergency IPD Fast-Track (Only Name, Age, Mobile Number required)"
-          >
-            <Bed className="w-4 h-4" />
-            <span>🚨 {t.ipdFastTrack || 'Emergency IPD Registration'}</span>
-          </button>
-        </div>
-
-        <LiveDateTime />
-      </div>
-
-      {/* Step Progress Bar (1 to 7) */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-teal-800">
-            {t.kioskMode} • Step {currentStep} of 7
-          </span>
-          <span className="text-xs font-semibold text-slate-500">
-            {currentStep === 1 && 'Language & Accessibility'}
-            {currentStep === 2 && 'Patient Demographics & Attendant'}
-            {currentStep === 3 && 'Informed Consent'}
-            {currentStep === 4 && 'Chief Complaint'}
-            {currentStep === 5 && 'Adaptive Questions & Allergies'}
-            {currentStep === 6 && 'Document Scanner & OCR'}
-            {currentStep === 7 && 'OPD Queue Token'}
-          </span>
-        </div>
-        <div className="h-2.5 w-full bg-slate-200/80 rounded-full overflow-hidden flex shadow-inner">
-          {[1, 2, 3, 4, 5, 6, 7].map((stepNum) => (
-            <div
-              key={stepNum}
-              className={`flex-1 transition-all duration-300 border-r border-white/60 ${
-                stepNum <= currentStep ? 'bg-teal-600' : 'bg-transparent'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Main Kiosk Card */}
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-200/90 overflow-hidden">
-        {/* STEP 1: Department Selection (OPD / IPD) & Language Selection */}
-        {currentStep === 1 && (
-          <div className="p-6 sm:p-10 space-y-6">
-            {/* Department Registration Selection: OPD vs IPD */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-              <div className="text-center mb-3">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                  Select Department Registration / पंजीकरण विभाग चुनें
-                </span>
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200/90 overflow-hidden p-6 sm:p-10 space-y-8">
+            <div className="text-center space-y-2 max-w-xl mx-auto">
+              <div className="w-16 h-16 rounded-3xl bg-teal-50 text-teal-700 flex items-center justify-center mx-auto text-3xl border border-teal-200 shadow-xs">
+                🏥
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto">
-                <button
-                  type="button"
-                  onClick={() => setShowIpdModal(false)}
-                  className="p-4 rounded-2xl border-2 border-teal-600 bg-white dark:bg-slate-800 hover:bg-teal-50/50 text-left transition-all shadow-xs flex items-center justify-between group cursor-pointer"
-                >
-                  <div>
-                    <div className="text-xl font-black text-teal-800 dark:text-teal-300">OPD</div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">Outpatient Consultation</div>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                Patient Intake &amp; Registration Portal
+              </h2>
+              <p className="text-sm text-slate-600 font-medium">
+                मरीज पंजीकरण केंद्र • Please select your department intake pathway to begin:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              {/* OPD BUTTON CARD */}
+              <div className="p-6 rounded-3xl border-2 border-teal-600 bg-gradient-to-b from-teal-50/60 to-white hover:border-teal-700 transition-all shadow-md flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="p-3 rounded-2xl bg-teal-600 text-white text-2xl shadow-xs">
+                      🩺
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-200">
+                      Outpatient
+                    </span>
                   </div>
-                  <span className="text-2xl">🩺</span>
-                </button>
+                  <h3 className="text-3xl font-black text-teal-950">
+                    OPD
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    General &amp; Specialist Consultations, Routine Check-ups, Allopathy, Homeopathy, and AYUSH Wellness Case-Taking.
+                  </p>
+                </div>
 
                 <button
                   type="button"
-                  onClick={() => setShowIpdModal(true)}
-                  className="p-4 rounded-2xl border-2 border-rose-600 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-left transition-all shadow-xs flex items-center justify-between group cursor-pointer"
+                  onClick={() => {
+                    setKioskView('opd_flow');
+                    setCurrentStep(1);
+                  }}
+                  className="w-full py-4 px-4 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-black text-sm shadow-md shadow-teal-600/20 flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95"
                 >
-                  <div>
-                    <div className="text-xl font-black text-rose-700 dark:text-rose-400">IPD</div>
-                    <div className="text-xs text-rose-600 dark:text-rose-300 font-bold">Emergency Inpatient Admission</div>
+                  <span>Enter OPD Consultation</span>
+                  <span>→</span>
+                </button>
+              </div>
+
+              {/* IPD BUTTON CARD */}
+              <div className="p-6 rounded-3xl border-2 border-rose-600 bg-gradient-to-b from-rose-50/60 to-white hover:border-rose-700 transition-all shadow-md flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="p-3 rounded-2xl bg-rose-600 text-white text-2xl shadow-xs">
+                      🚨
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200 animate-pulse">
+                      Emergency
+                    </span>
                   </div>
-                  <span className="text-2xl animate-pulse">🚨</span>
+                  <h3 className="text-3xl font-black text-rose-950">
+                    IPD
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    Direct Emergency Inpatient Hospital Admission. Fast-track intake with minimal details and zero questionnaires.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setKioskView('ipd_form')}
+                  className="w-full py-4 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm shadow-md shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95"
+                >
+                  <span>Enter Emergency IPD</span>
+                  <span>🚨</span>
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. DEDICATED IPD EMERGENCY REGISTRATION SCREEN */}
+      {kioskView === 'ipd_form' && (
+        <div className="space-y-6 animate-fade-in max-w-xl mx-auto">
+          <LiveDateTime variant="banner" />
+
+          <div className="bg-white rounded-3xl shadow-sm border-2 border-rose-300 overflow-hidden p-6 sm:p-8 space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full border border-rose-300 inline-block">
+                  Fast-Track Emergency
+                </span>
+                <h2 className="text-2xl font-black text-slate-900 mt-1">
+                  IPD Emergency Registration
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setKioskView('home')}
+                className="text-xs font-bold text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer"
+              >
+                ← Back
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">
+              Immediate inpatient admission for critical and emergency patients. Enter the 3 required fields and click <strong>REGISTER</strong>:
+            </p>
+
+            <form onSubmit={handleEmergencyIpdSubmit} className="space-y-4 pt-1">
+              <div className="space-y-1.5">
+                <label className="text-xs font-black text-slate-800 flex items-center gap-1">
+                  <span>1. Patient Full Name</span>
+                  <span className="text-rose-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={ipdForm.fullName}
+                  onChange={(e) => setIpdForm({ ...ipdForm, fullName: e.target.value })}
+                  placeholder="e.g., Harish Chandra"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-black text-slate-800 flex items-center gap-1">
+                    <span>2. Age (Years)</span>
+                    <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={120}
+                    required
+                    value={ipdForm.age}
+                    onChange={(e) => setIpdForm({ ...ipdForm, age: Number(e.target.value) })}
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-black text-slate-800 flex items-center gap-1">
+                    <span>3. Mobile Number</span>
+                    <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    maxLength={10}
+                    value={ipdForm.phone}
+                    onChange={(e) => setIpdForm({ ...ipdForm, phone: e.target.value })}
+                    placeholder="10-digit mobile"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => setKioskView('home')}
+                  className="px-5 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingIpd}
+                  className="flex-1 py-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-black text-sm shadow-md shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95"
+                >
+                  <Bed className="w-4 h-4" />
+                  <span>{isSubmittingIpd ? 'Registering...' : 'REGISTER'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 3. OPD FLOW (Steps 1 to 7) */}
+      {kioskView === 'opd_flow' && (
+        <div className="space-y-4">
+          {/* OPD Top Navigation Bar with Back to Department & LiveDateTime */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-2 no-print">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setKioskView('home')}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 flex items-center gap-1 cursor-pointer"
+              >
+                <span>←</span>
+                <span>Department Selection</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const nextVal = !voiceGuideEnabled;
+                  setVoiceGuideEnabled(nextVal);
+                  if (nextVal) {
+                    handleSpeak('आवाज सहायता चालू है / Voice guide is enabled');
+                  } else {
+                    speech.stopSpeaking();
+                  }
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border shadow-sm transition-all cursor-pointer ${
+                  voiceGuideEnabled
+                    ? 'bg-teal-600 text-white border-teal-700'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                }`}
+                title="Toggle Read Aloud Audio"
+              >
+                <Volume2 className={`w-4 h-4 ${voiceGuideEnabled ? 'animate-pulse' : ''}`} />
+                <span>{voiceGuideEnabled ? t.audioOn : t.audioOff}</span>
+              </button>
+            </div>
+
+            <LiveDateTime />
+          </div>
+
+          {/* Step Progress Bar (1 to 7) */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-teal-800">
+                {t.kioskMode} • Step {currentStep} of 7
+              </span>
+              <span className="text-xs font-semibold text-slate-500">
+                {currentStep === 1 && 'Language & Accessibility'}
+                {currentStep === 2 && 'Patient Demographics & Attendant'}
+                {currentStep === 3 && 'Informed Consent'}
+                {currentStep === 4 && (consultationType === 'wellness' ? 'Wellness Focus & Goals' : 'Chief Complaint & System')}
+                {currentStep === 5 && (systemOfMedicine === 'ayurveda' || consultationType === 'wellness' ? 'AYUSH History Mode' : 'Adaptive Questions & Allergies')}
+                {currentStep === 6 && 'Document Scanner & OCR'}
+                {currentStep === 7 && 'OPD Queue Token'}
+              </span>
+            </div>
+            <div className="h-2.5 w-full bg-slate-200/80 rounded-full overflow-hidden flex shadow-inner">
+              {[1, 2, 3, 4, 5, 6, 7].map((stepNum) => (
+                <div
+                  key={stepNum}
+                  className={`flex-1 transition-all duration-300 border-r border-white/60 ${
+                    stepNum <= currentStep ? 'bg-teal-600' : 'bg-transparent'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Main Kiosk Card */}
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200/90 overflow-hidden">
+            {/* STEP 1: Language Selection */}
+            {currentStep === 1 && (
+              <div className="p-6 sm:p-10 space-y-6">
 
             <div className="text-center space-y-2">
               <div className="inline-flex p-3 rounded-2xl bg-teal-50 text-teal-700 mb-2 border border-teal-100">
@@ -1198,28 +1363,39 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                 <label className="text-xs font-black uppercase tracking-wider text-slate-600">
                   {t.systemOfMedicine || 'System of Medicine'}
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     onClick={() => setSystemOfMedicine('allopathy')}
-                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                    className={`py-2 px-2 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1 ${
                       systemOfMedicine === 'allopathy' && consultationType !== 'wellness'
                         ? 'border-teal-600 bg-teal-50 text-teal-950 font-black shadow-2xs ring-2 ring-teal-400/20'
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <span>🏥 {t.allopathyOpd || 'Allopathy OPD'}</span>
+                    <span>🏥 Allopathy</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setSystemOfMedicine('ayurveda')}
-                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                    className={`py-2 px-2 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1 ${
                       systemOfMedicine === 'ayurveda'
                         ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-black shadow-2xs ring-2 ring-emerald-400/20'
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <span>🍃 {t.ayurvedicOpd || 'Ayurveda OPD'}</span>
+                    <span>🍃 Ayurveda</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSystemOfMedicine('homeopathy')}
+                    className={`py-2 px-2 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+                      systemOfMedicine === 'homeopathy'
+                        ? 'border-purple-600 bg-purple-50 text-purple-950 font-black shadow-2xs ring-2 ring-purple-400/20'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>💧 Homeopathy</span>
                   </button>
                 </div>
               </div>
@@ -2450,117 +2626,10 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
       </div>
+    </div>
+  )}
 
-      {/* EMERGENCY IPD FAST-TRACK MODAL (3 mandatory fields: Name, Age, Mobile) */}
-      {showIpdModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-rose-500 animate-scale-in">
-            <div className="flex items-start justify-between gap-3 border-b border-rose-100 pb-4">
-              <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-                  FAST-TRACK ADMISSION
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black text-rose-950 flex items-center gap-2 mt-1">
-                  <span>🚨 Emergency IPD Registration</span>
-                </h3>
-                <p className="text-xs text-slate-600 mt-1 font-medium">
-                  Direct admission protocol: No initial case questions required. Minimal intake.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowIpdModal(false)}
-                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100"
-              >
-                ✕
-              </button>
-            </div>
 
-            <form onSubmit={handleEmergencyIpdSubmit} className="space-y-4 pt-4">
-              <div className="space-y-1">
-                <label className="text-xs font-black text-slate-800">
-                  Patient Full Name <span className="text-rose-600">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={ipdForm.fullName}
-                  onChange={(e) => setIpdForm({ ...ipdForm, fullName: e.target.value })}
-                  placeholder="e.g., Harish Chandra"
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs font-black text-slate-800">
-                    Age (Years) <span className="text-rose-600">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={120}
-                    required
-                    value={ipdForm.age}
-                    onChange={(e) => setIpdForm({ ...ipdForm, age: Number(e.target.value) })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-black text-slate-800">
-                    Mobile Number <span className="text-rose-600">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    maxLength={10}
-                    value={ipdForm.phone}
-                    onChange={(e) => setIpdForm({ ...ipdForm, phone: e.target.value })}
-                    placeholder="10-digit mobile"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-black text-slate-800">
-                  Allocated Emergency Bed / Ward:
-                </label>
-                <select
-                  value={ipdForm.bedWard}
-                  onChange={(e) => setIpdForm({ ...ipdForm, bedWard: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
-                >
-                  <option value="Emergency Bed 1 (Acute Resus)">Emergency Bed 1 (Acute Resus)</option>
-                  <option value="Emergency Bed 2 (Triage / Monitor)">Emergency Bed 2 (Triage / Monitor)</option>
-                  <option value="ICU Bed 4 (Critical Care)">ICU Bed 4 (Critical Care)</option>
-                  <option value="Male IPD Ward - Bed 12">Male IPD Ward - Bed 12</option>
-                  <option value="Female IPD Ward - Bed 08">Female IPD Ward - Bed 08</option>
-                  <option value="Pediatric Ward - Bed 03">Pediatric Ward - Bed 03</option>
-                </select>
-              </div>
-
-              <div className="pt-2 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowIpdModal(false)}
-                  className="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-8 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm shadow-md shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-transform active:scale-95"
-                >
-                  <Bed className="w-4 h-4" />
-                  <span>Register</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* IPD REGISTRATION CONFIRMATION SLIP */}
       {ipdSuccessEncounter && (

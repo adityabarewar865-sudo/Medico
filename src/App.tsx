@@ -132,8 +132,14 @@ export const App: React.FC = () => {
     return <PatientReceiptPage token={receiptToken} />;
   }
 
-  if (!currentUser) {
-    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
+  // First page shows Login by default if not signed in, with direct Kiosk access
+  if (!currentUser && currentMode !== 'kiosk') {
+    return (
+      <LoginPage
+        onLoginSuccess={handleLoginSuccess}
+        onOpenKiosk={() => setCurrentMode('kiosk')}
+      />
+    );
   }
 
   return (
@@ -144,10 +150,24 @@ export const App: React.FC = () => {
     >
       {/* Top Navigation & Controls */}
       <Header
-        currentMode={currentMode}
-        onModeChange={setCurrentMode}
+        currentMode={
+          currentMode === 'kiosk'
+            ? 'kiosk'
+            : currentUser?.role === 'doctor'
+            ? 'doctor'
+            : 'reception'
+        }
+        onModeChange={(mode) => {
+          if (mode === 'kiosk') {
+            setCurrentMode('kiosk');
+          } else if (currentUser) {
+            setCurrentMode(currentUser.role === 'doctor' ? 'doctor' : 'reception');
+          } else {
+            setCurrentMode('login' as any);
+          }
+        }}
         currentUser={currentUser}
-        onRequestLogin={() => {}}
+        onRequestLogin={() => setCurrentMode('login' as any)}
         onLogout={handleLogout}
         currentLanguage={currentLanguage}
         onLanguageChange={setCurrentLanguage}

@@ -18,7 +18,7 @@ import { SAMPLE_PATIENT_RECORDS } from '../data/samplePatients';
 import { firebaseService } from './firebase';
 import { api } from './api';
 
-const HOSPITAL_DB_KEY = 'medico_hospital_patients_v2';
+const HOSPITAL_DB_KEY = 'medico_hospital_patients_v3';
 
 class HospitalDatabaseService {
   private patients: PatientRecord[] = [];
@@ -497,6 +497,7 @@ class HospitalDatabaseService {
         visitId: visit.visitId || 'V001',
         patientId: patient.patientId,
         name: rx.name,
+        category: rx.category || 'allopathic',
         dosage: rx.dosage,
         frequency: rx.frequency,
         duration: rx.duration,
@@ -541,7 +542,10 @@ class HospitalDatabaseService {
     const history: VisitMedicineItem[] = [];
     patient.visits.forEach((v) => {
       if (v.medicines && v.medicines.length > 0) {
-        v.medicines.forEach((m) => history.push(m));
+        v.medicines.forEach((m) => history.push({
+          ...m,
+          category: m.category || 'allopathic',
+        }));
       } else if (v.doctorReview?.prescribedMedications) {
         v.doctorReview.prescribedMedications.forEach((rx, idx) => {
           history.push({
@@ -549,6 +553,7 @@ class HospitalDatabaseService {
             visitId: v.visitId || 'V001',
             patientId: patient.patientId,
             name: rx.name,
+            category: rx.category || 'allopathic',
             dosage: rx.dosage,
             frequency: rx.frequency,
             duration: rx.duration,

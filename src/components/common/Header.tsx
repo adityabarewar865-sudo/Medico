@@ -211,7 +211,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Live Date, Day and Time Display */}
-          <LiveDateTime className="hidden sm:inline-flex" />
+          <LiveDateTime className="flex shrink-0" />
 
           {/* Accessibility & Language Controls */}
           <div className="flex items-center gap-2">
