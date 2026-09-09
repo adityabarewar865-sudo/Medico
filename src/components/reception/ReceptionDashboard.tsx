@@ -307,22 +307,15 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
               </button>
             )}
             <button
-              onClick={() => setShowRegisterModal(true)}
-              className="px-4 py-2 bg-teal-500/30 hover:bg-teal-500/40 text-white font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5 border border-white/20"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span>Register Patient</span>
-            </button>
-            <button
               onClick={() => setShowIpdModal(true)}
-              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5"
+              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Bed className="w-4 h-4" />
               <span>🚨 Emergency IPD</span>
             </button>
             <button
               onClick={() => setShowAddDoctorModal(true)}
-              className="px-4 py-2 bg-sky-100 hover:bg-sky-50 text-sky-900 font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5"
+              className="px-4 py-2 bg-sky-100 hover:bg-sky-50 text-sky-900 font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               <span>Register Doctor</span>
@@ -354,13 +347,6 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
                   <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Export Excel</span>
                 </button>
-                <button
-                  onClick={() => setShowRegisterModal(true)}
-                  className="px-3 py-1.5 bg-teal-50 dark:bg-teal-950/50 hover:bg-teal-100 text-teal-700 dark:text-teal-300 font-bold text-xs rounded-xl border border-teal-200 dark:border-teal-800 flex items-center gap-1 cursor-pointer transition-colors"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>New</span>
-                </button>
               </div>
             </div>
 
@@ -380,7 +366,7 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
             <div className="space-y-2 max-h-[580px] overflow-y-auto pr-1">
               {filteredPatients.length === 0 ? (
                 <div className="text-center py-8 text-slate-400 text-xs">
-                  No matching patients found. Click &quot;Register Patient&quot; above to add a new record.
+                  No matching patients found. Intake patients via &quot;Patient Kiosk&quot; or &quot;Emergency IPD&quot;.
                 </div>
               ) : (
                 filteredPatients.map((patient) => {
