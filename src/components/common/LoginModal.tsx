@@ -158,7 +158,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             Sign In / Login
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Authorized sign-in for Receptionists &amp; Medical Officers
+            Medikiosk Hospital Portal &bull; Receptionists &amp; Medical Officers
           </p>
 
           {/* Role Selector Tabs */}

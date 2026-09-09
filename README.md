@@ -1,4 +1,4 @@
-# 🏥 Medico
+# 🏥 Medikiosk
 ### Central Hospital AI Patient Case-Taking, Multi-Visit EMR & Triage Workstation
 
 [![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
@@ -10,7 +10,7 @@
 [![ABDM](https://img.shields.io/badge/ABDM-M1%20%26%20M2%20Compliant-orange.svg)](https://abdm.gov.in/)
 [![FHIR](https://img.shields.io/badge/HL7-FHIR%20R4%20(NRCeS)-red.svg)](https://nrces.in/)
 
-**Medico** is an AI-powered hospital patient-record and clinical case-taking web platform built for high-volume public and private hospital Outpatient Departments (OPDs). It unites **3 distinct user roles**:
+**Medikiosk** is an AI-powered hospital patient-record and clinical case-taking web platform built for high-volume public and private hospital Outpatient Departments (OPDs). It unites **3 distinct user roles**:
 1. **Patient**: Direct walk-in touchscreen & voice-guided kiosk (zero login, zero registration).
 2. **Reception**: Authorized portal for registering new patients, searching records, and creating new visits under the same Patient ID.
 3. **Doctor**: Authorized clinical workstation with multi-visit history review, complete medicine history, AI clinical summary review, inline editing, verification, rejection, and prescription authoring.

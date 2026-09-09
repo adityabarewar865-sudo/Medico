@@ -18,7 +18,7 @@ interface ChatMessage {
 
 const CHAT_RESPONSES: Record<LanguageCode, Record<string, string>> = {
   hi: {
-    welcome: 'नमस्ते! मैं मेदिको अस्पताल सहायक हूँ। मैं आपको केस-टेकिंग, रजिस्ट्रेशन या अस्पताल सेवाओं में मदद कर सकता हूँ। (कृपया ध्यान दें: मैं अंतिम चिकित्सीय परामर्श नहीं दे सकता, परामर्श हेतु डॉक्टर से मिलें।)',
+    welcome: 'नमस्ते! मैं मेडिकियोस्क अस्पताल सहायक हूँ। मैं आपको केस-टेकिंग, रजिस्ट्रेशन या अस्पताल सेवाओं में मदद कर सकता हूँ। (कृपया ध्यान दें: मैं अंतिम चिकित्सीय परामर्श नहीं दे सकता, परामर्श हेतु डॉक्टर से मिलें।)',
     helpFill: 'रजिस्ट्रेशन करने के लिए पहले अपनी भाषा चुनें, फिर नाम, उम्र और मोबाइल नंबर भरें। यदि कोई साथ आया है तो "मरीज के साथ आए व्यक्ति का विवरण" भी भर सकते हैं।',
     token: 'केस-टेकिंग पूरा होने के बाद आपको स्क्रीन पर ओपीडी टोकन नंबर और डॉक्टर का कमरा नंबर मिलेगा।',
     emergency: 'यदि सीने में तेज दर्द, सांस फूलना या बेहोशी जैसे गंभीर लक्षण हैं, तो तुरंत आपातकालीन कक्ष (कमरा नंबर 1) में जाएं!',
@@ -27,7 +27,7 @@ const CHAT_RESPONSES: Record<LanguageCode, Record<string, string>> = {
     default: 'मैं आपकी अस्पताल प्रक्रिया में सहायता के लिए यहाँ हूँ। आप पंजीकरण, टोकन, आपातकालीन कक्ष या पुरानी पर्चियों के बारे में पूछ सकते हैं।',
   },
   en: {
-    welcome: 'Hello! I am the Medico Hospital Assistant. I can guide you with registration, case-taking, and hospital OPD services. (Note: I cannot provide medical diagnoses; your doctor will evaluate your condition.)',
+    welcome: 'Hello! I am the Medikiosk Hospital Assistant. I can guide you with registration, case-taking, and hospital OPD services. (Note: I cannot provide medical diagnoses; your doctor will evaluate your condition.)',
     helpFill: 'To register, choose your language, enter your name, age, and mobile number. You can also add accompanying person details if someone came with you.',
     token: 'After submitting your symptoms, you will receive an official OPD Token and assigned consultation room number.',
     emergency: 'For severe chest pain, extreme breathlessness, or collapse, report immediately to Room 1 Emergency Resus!',
@@ -36,7 +36,7 @@ const CHAT_RESPONSES: Record<LanguageCode, Record<string, string>> = {
     default: 'I am here to guide your visit. You can ask about registration, OPD queue tokens, emergency care, or uploading past prescriptions.',
   },
   pa: {
-    welcome: 'ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਮੇਦਿਕੋ ਹਸਪਤਾਲ ਸਹਾਇਕ ਹਾਂ। ਮੈਂ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਅਤੇ ਓਪੀਡੀ ਸੇਵਾਵਾਂ ਵਿੱਚ ਤੁਹਾਡੀ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ। (ਧਿਆਨ ਦਿਓ: ਮੈਂ ਡਾਕਟਰੀ ਇਲਾਜ ਦਾ ਫੈਸਲਾ ਨਹੀਂ ਕਰ ਸਕਦਾ, ਡਾਕਟਰ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।)',
+    welcome: 'ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਮੈਡੀਕਿਓਸਕ ਹਸਪਤਾਲ ਸਹਾਇਕ ਹਾਂ। ਮੈਂ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਅਤੇ ਓਪੀਡੀ ਸੇਵਾਵਾਂ ਵਿੱਚ ਤੁਹਾਡੀ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ। (ਧਿਆਨ ਦਿਓ: ਮੈਂ ਡਾਕਟਰੀ ਇਲਾਜ ਦਾ ਫੈਸਲਾ ਨਹੀਂ ਕਰ ਸਕਦਾ, ਡਾਕਟਰ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।)',
     helpFill: 'ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ, ਨਾਮ, ਉਮਰ ਅਤੇ ਮੋਬਾਈਲ ਨੰਬਰ ਭਰੋ। ਨਾਲ ਆਏ ਵਿਅਕਤੀ ਦਾ ਵੇਰਵਾ ਵੀ ਜੋੜ ਸਕਦੇ ਹੋ।',
     token: 'ਕੇਸ ਪੂਰਾ ਹੋਣ ਤੋਂ ਬਾਅਦ ਤੁਹਾਨੂੰ ਓਪੀਡੀ ਟੋਕਨ ਨੰਬਰ ਅਤੇ ਕਮਰਾ ਨੰਬਰ ਮਿਲੇਗਾ।',
     emergency: 'ਜੇਕਰ ਛਾਤੀ ਵਿੱਚ ਤੇਜ਼ ਦਰਦ ਜਾਂ ਸਾਹ ਚੜ੍ਹ ਰਿਹਾ ਹੈ, ਤਾਂ ਤੁਰੰਤ ਐਮਰਜੈਂਸੀ ਰੂਮ (ਕਮਰਾ ਨੰਬਰ 1) ਵਿੱਚ ਜਾਓ!',

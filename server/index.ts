@@ -72,7 +72,7 @@ app.use((err: Error, _req: Request, res: Response, _next: unknown): void => {
 const server = app.listen(PORT, () => {
   const stats = db.getStats();
   console.log('====================================================');
-  console.log(`🏥 Medico Backend Server Live!`);
+  console.log(`🏥 Medikiosk Backend Server Live!`);
   console.log(`📡 URL: http://localhost:${PORT}`);
   console.log(`📊 Loaded ${stats.total} patient cases (${stats.emergency} Emergency, ${stats.urgent} Urgent)`);
   console.log(`🔗 ABDM Sandbox M1/M2: Ready | HIS Gateway: Ready`);

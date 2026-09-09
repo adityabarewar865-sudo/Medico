@@ -438,7 +438,7 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6.5);
   doc.setTextColor(148, 163, 184);
-  doc.text('This is an official hospital clinical summary generated via Medico AI OPD System.', margin, pageHeight - margin - 4);
+  doc.text('This is an official hospital clinical summary generated via Medikiosk AI OPD System.', margin, pageHeight - margin - 4);
   doc.text('Valid for clinical records, pharmacy dispensing, and hospital follow-up under ABDM.', margin, pageHeight - margin - 1);
 
   return doc;
