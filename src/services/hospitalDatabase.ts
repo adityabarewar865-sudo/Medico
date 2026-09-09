@@ -582,6 +582,123 @@ class HospitalDatabaseService {
   }
 
   /**
+   * Get all registered hospitals available in the system
+   */
+  public getRegisteredHospitals(): RegisteredHospitalInfo[] {
+    const map = new Map<string, RegisteredHospitalInfo>();
+
+    DEFAULT_REGISTERED_HOSPITALS.forEach((h) => {
+      map.set(h.name.trim().toLowerCase(), h);
+    });
+
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('medico_registered_hospitals');
+        if (stored) {
+          const list: RegisteredHospitalInfo[] = JSON.parse(stored);
+          list.forEach((h) => {
+            if (h && h.name) {
+              map.set(h.name.trim().toLowerCase(), h);
+            }
+          });
+        }
+      } catch {
+        // ignore
+      }
+
+      try {
+        const docStored = localStorage.getItem('medico_registered_doctors');
+        if (docStored) {
+          const docs: Array<{ hospitalName?: string; hospitalAddress?: string }> = JSON.parse(docStored);
+          docs.forEach((d) => {
+            if (d?.hospitalName?.trim()) {
+              const key = d.hospitalName.trim().toLowerCase();
+              if (!map.has(key)) {
+                map.set(key, {
+                  id: `hosp_doc_${key.replace(/\s+/g, '_')}`,
+                  name: d.hospitalName.trim(),
+                  address: d.hospitalAddress?.trim() || 'Hospital Complex, Main Road',
+                  type: 'District Hospital',
+                });
+              }
+            }
+          });
+        }
+      } catch {
+        // ignore
+      }
+
+      try {
+        const currentName = localStorage.getItem('medico_hospital_name');
+        const currentAddr = localStorage.getItem('medico_hospital_address');
+        if (currentName?.trim()) {
+          const key = currentName.trim().toLowerCase();
+          if (!map.has(key)) {
+            map.set(key, {
+              id: `hosp_current_${key.replace(/\s+/g, '_')}`,
+              name: currentName.trim(),
+              address: currentAddr?.trim() || 'Hospital Complex, Main Road, Civil Lines',
+              type: 'District Hospital',
+            });
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    this.patients.forEach((p) => {
+      p.visits.forEach((v) => {
+        if (v.hospitalName?.trim()) {
+          const key = v.hospitalName.trim().toLowerCase();
+          if (!map.has(key)) {
+            map.set(key, {
+              id: `hosp_enc_${key.replace(/\s+/g, '_')}`,
+              name: v.hospitalName.trim(),
+              address: v.hospitalAddress?.trim() || 'Hospital Complex, Main Road',
+              type: 'District Hospital',
+            });
+          }
+        }
+      });
+    });
+
+    return Array.from(map.values());
+  }
+
+  /**
+   * Register a new hospital into the system
+   */
+  public registerHospital(hospital: Omit<RegisteredHospitalInfo, 'id'>): RegisteredHospitalInfo {
+    const existing = this.getRegisteredHospitals();
+    const match = existing.find(
+      (h) => h.name.trim().toLowerCase() === hospital.name.trim().toLowerCase()
+    );
+    if (match) return match;
+
+    const newHosp: RegisteredHospitalInfo = {
+      ...hospital,
+      id: `hosp_${Date.now()}`,
+      name: hospital.name.trim(),
+      address: hospital.address?.trim() || 'Hospital Complex, Main Road, Civil Lines',
+      type: hospital.type || 'District Hospital',
+    };
+
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('medico_registered_hospitals');
+        const list: RegisteredHospitalInfo[] = stored ? JSON.parse(stored) : [];
+        list.push(newHosp);
+        localStorage.setItem('medico_registered_hospitals', JSON.stringify(list));
+      } catch {
+        // ignore
+      }
+    }
+
+    return newHosp;
+  }
+
+  /**
    * Reset database back to default sample records
    */
   public resetToDefaults(): void {
@@ -592,5 +709,65 @@ class HospitalDatabaseService {
     api.resetHospitalData().catch(() => {});
   }
 }
+
+export interface RegisteredHospitalInfo {
+  id: string;
+  name: string;
+  address: string;
+  type: string;
+  code?: string;
+}
+
+const DEFAULT_REGISTERED_HOSPITALS: RegisteredHospitalInfo[] = [
+  {
+    id: 'hosp_district_main',
+    name: 'District Hospital',
+    address: 'Hospital Complex, Main Road, Civil Lines',
+    type: 'District Hospital',
+    code: 'DH-01',
+  },
+  {
+    id: 'hosp_district_civil',
+    name: 'District Civil Hospital',
+    address: 'Civil Hospital Road, Civil Lines',
+    type: 'Civil Hospital',
+    code: 'DCH-02',
+  },
+  {
+    id: 'hosp_gmch',
+    name: 'Government Medical College & Hospital (GMCH)',
+    address: 'Medical Campus, University Avenue',
+    type: 'Medical College',
+    code: 'GMCH-03',
+  },
+  {
+    id: 'hosp_aiims',
+    name: 'All India Institute of Medical Sciences (AIIMS)',
+    address: 'National Health Hub, Apex Centre',
+    type: 'Medical College',
+    code: 'AIIMS-04',
+  },
+  {
+    id: 'hosp_chc',
+    name: 'Community Health Centre (CHC)',
+    address: 'Block Development Area, Primary Ring Road',
+    type: 'Community Health Centre',
+    code: 'CHC-05',
+  },
+  {
+    id: 'hosp_sdh',
+    name: 'Sub-District Hospital (SDH)',
+    address: 'Sub-Divisional Administrative Complex',
+    type: 'Sub-District Hospital',
+    code: 'SDH-06',
+  },
+  {
+    id: 'hosp_ayush',
+    name: 'Ayush Integrated District Hospital',
+    address: 'AYUSH Wellness & Panchakarma Complex',
+    type: 'AYUSH Centre',
+    code: 'AYUSH-07',
+  },
+];
 
 export const hospitalDb = new HospitalDatabaseService();
