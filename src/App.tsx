@@ -63,7 +63,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setCurrentMode(currentUser.role === 'doctor' ? 'doctor' : 'reception');
+      setCurrentMode('kiosk');
     }
   }, []);
 
@@ -114,7 +114,8 @@ export const App: React.FC = () => {
     } catch {
       // ignore
     }
-    setCurrentMode(user.role === 'doctor' ? 'doctor' : 'reception');
+    // PAGE 2: After successful login, show the existing "Choose OPD or IPD"
+    setCurrentMode('kiosk');
   };
 
   const handleLogout = () => {
@@ -132,12 +133,11 @@ export const App: React.FC = () => {
     return <PatientReceiptPage token={receiptToken} />;
   }
 
-  // First page shows Login by default if not signed in, with direct Kiosk access
-  if (!currentUser && currentMode !== 'kiosk') {
+  // PAGE 1: First page MUST be Doctor / Reception Login when website opens
+  if (!currentUser) {
     return (
       <LoginPage
         onLoginSuccess={handleLoginSuccess}
-        onOpenKiosk={() => setCurrentMode('kiosk')}
       />
     );
   }
