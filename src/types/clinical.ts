@@ -1,4 +1,4 @@
-export type LanguageCode = 'hi' | 'en' | 'bn' | 'ta' | 'te' | 'mr';
+export type LanguageCode = 'hi' | 'en' | 'bn' | 'ta' | 'te' | 'mr' | 'pa';
 
 export type Gender = 'male' | 'female' | 'other';
 
@@ -149,6 +149,7 @@ export interface DoctorVerification {
   verifiedBy?: string;
   verifiedAt?: string;
   doctorNotes?: string;
+  doctorAdvice?: string; // Doctor's lifestyle/diet/recovery advice and clinical tips
   differentialDiagnosis?: string[];
   finalImpression?: string;
   prescribedMedications?: PrescribedRxItem[];
@@ -172,7 +173,7 @@ export interface PatientCaseEncounter {
     onsetDuration: string;
     voiceInputTranscript?: string;
   };
-  adaptiveAnswers: AdaptiveAnswer[];
+  adaptiveAnswers?: AdaptiveAnswer[];
   documents: UploadedMedicalDocument[];
   timeline: MedicalTimelineEvent[];
   triagePriority: TriagePriority;
@@ -185,10 +186,65 @@ export interface PatientCaseEncounter {
     activeMedications: ExtractedMedication[];
     allergies: Array<{ allergen: string; reaction: string; severity: 'mild' | 'moderate' | 'severe' }>;
     investigationsSummary: string;
+    vitals?: {
+      bp: string;
+      pulse: string;
+      spo2: string;
+      temp: string;
+      rr: string;
+    };
   };
   doctorReview: DoctorVerification;
   savedToHis: boolean;
   hisSyncTimestamp?: string;
   abdmCareContextLinked: boolean;
   abdmCareContextRef?: string;
+  patientId?: string; // e.g. P10025
+  visitId?: string; // e.g. V001
+  visitDate?: string; // e.g. 2026-09-07
+  attendingDoctor?: string; // e.g. Dr. S. K. Verma, MD
+  medicines?: VisitMedicineItem[];
+  receiptToken?: string;
+  receiptUrl?: string;
+  firebaseStoredAt?: string;
+  excelStoredAt?: string;
+  hospitalName?: string;
 }
+
+export interface VisitMedicineItem {
+  id: string;
+  visitId: string; // e.g. V001
+  patientId: string; // e.g. P10025
+  name: string;
+  dosage: string;
+  frequency: string;
+  duration?: string;
+  instructions?: string;
+  datePrescribed: string;
+  doctor: string;
+}
+
+export interface PatientRecord {
+  patientId: string; // e.g. P10025
+  fullName: string;
+  age: number;
+  gender: Gender;
+  phone: string;
+  abha?: AbhaDetails;
+  address?: string;
+  emergencyContact?: string;
+  registeredAt: string;
+  totalVisits: number;
+  visits: PatientCaseEncounter[];
+}
+
+export type UserRole = 'patient' | 'reception' | 'doctor';
+
+export interface AuthUser {
+  role: UserRole;
+  name: string;
+  username?: string;
+  title?: string;
+  hospitalName: string;
+}
+

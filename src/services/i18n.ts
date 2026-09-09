@@ -15,6 +15,7 @@ export const SUPPORTED_LANGUAGES: LanguageInfo[] = [
   { code: 'mr', name: 'Marathi', nativeName: 'मराठी', locale: 'mr-IN', speechCode: 'mr-IN' },
   { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', locale: 'te-IN', speechCode: 'te-IN' },
   { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', locale: 'ta-IN', speechCode: 'ta-IN' },
+  { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', locale: 'pa-IN', speechCode: 'pa-IN' },
 ];
 
 export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
@@ -498,6 +499,89 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     printToken: 'OPD சீட்டை அச்சிடுக',
     newPatientBtn: 'அடுத்த நோயாளி',
   },
+  pa: {
+    appName: 'Medico',
+    appTagline: 'Hospital AI Clinical Case-Taking & OPD Triage System',
+    kioskMode: 'Patient Kiosk',
+    doctorStation: 'Doctor Station',
+    selectLanguage: 'Choose Your Preferred Language',
+    listenPrompt: 'Listen (Audio)',
+    speakAnswer: 'Speak (Voice Input)',
+    listening: 'Listening... Please speak now',
+    stopListening: 'Stop Listening',
+    next: 'Next Step',
+    back: 'Back',
+    submit: 'Submit Case',
+    cancel: 'Cancel',
+    highContrast: 'High Contrast',
+    audioGuidance: 'Voice Guide',
+    audioOn: 'Audio ON',
+    audioOff: 'Audio OFF',
+
+    stepDemographicsTitle: 'Basic Patient Information',
+    stepDemographicsSubtitle: 'Please enter or speak your name, age, and contact details',
+    fullName: 'Full Name of Patient',
+    fullNamePlaceholder: 'e.g., Ramesh Kumar',
+    age: 'Age (Years)',
+    agePlaceholder: 'e.g., 48',
+    gender: 'Gender',
+    male: 'Male',
+    female: 'Female',
+    other: 'Other',
+    phone: 'Mobile Number',
+    phonePlaceholder: '10-digit mobile number',
+    abhaNumber: 'Ayushman Bharat Health Account (ABHA ID)',
+    abhaPlaceholder: 'e.g., 91-4521-8890-1234 or user@abdm',
+    abhaVerified: 'ABHA Verified (KYC Linked)',
+    abhaVerifyBtn: 'Verify / Generate ABHA',
+    abhaHelper: 'If you do not have an ABHA, one will be automatically linked via phone OTP.',
+
+    stepConsentTitle: 'Patient Informed Consent',
+    stepConsentSubtitle: 'Please listen to the clinical consent notice and confirm',
+    consentText: 'I hereby consent to sharing my medical symptoms, clinical history, and previous records with this hospital AI case-taking system. I understand this will be reviewed and verified by a medical officer for my consultation and linked to my Ayushman Bharat Health Account (ABHA) under ABDM guidelines.',
+    consentCheckbox: 'Yes, I have understood and give my consent',
+    consentAudioPlaying: 'Reading consent notice aloud...',
+    readConsentAudio: 'Listen to Consent Aloud',
+
+    stepComplaintTitle: 'What is your main health problem today?',
+    stepComplaintSubtitle: 'Tap an anatomical symptom card or speak in your own language',
+    selectComplaintHint: 'Tap your primary symptom:',
+    orSpeakComplaint: 'Or speak your problem aloud:',
+    typeComplaintDetails: 'When did it start and how does it feel? (Type or speak details):',
+    complaintPlaceholder: 'e.g., Severe chest heaviness with sweating since 3 hours...',
+
+    stepQuestionsTitle: 'Adaptive Clinical Questions',
+    stepQuestionsSubtitle: 'AI-tailored follow-up questions based on your complaint',
+    painSeverityLabel: 'Pain / Discomfort Severity (1 to 10):',
+    mild: 'Mild (1-3)',
+    moderate: 'Moderate (4-6)',
+    severe: 'Severe (7-10 - Red Flag)',
+
+    stepDocsTitle: 'Scan Previous Prescriptions & Lab Reports',
+    stepDocsSubtitle: 'Capture or upload previous hospital slips, blood tests, or discharge summaries',
+    uploadOrScanPrompt: 'Capture Photo or Choose File:',
+    useSampleDoc: 'Load Pre-packaged Sample Hospital Document',
+    samplePrescription: 'Govt Hospital Old Rx (Diabetes / HTN)',
+    sampleLabReport: 'Blood Investigation (CBC & Blood Sugar)',
+    sampleDischarge: 'Cardiology Discharge Summary',
+    ocrProcessing: 'Performing Optical Character Recognition (OCR) and clinical extraction...',
+    extractedTimelineTitle: 'AI-Generated Medical Timeline',
+    diagnosesFound: 'Identified Diagnoses',
+    medicationsFound: 'Active Medications',
+    labValuesFound: 'Lab Values & Tests',
+    noDocsAdded: 'No previous documents added (optional to skip)',
+
+    stepReviewTitle: 'Case Summary & OPD Queue Token',
+    stepReviewSubtitle: 'Your clinical case has been organized and routed to the doctor station',
+    tokenGenerated: 'Your OPD Token Number:',
+    assignedRoom: 'Consultation Room:',
+    triageCategory: 'Triage Priority Category:',
+    emergencyAlert: 'RED FLAG EMERGENCY: Report immediately to Emergency / Room 1!',
+    urgentAlert: 'URGENT: High clinical priority queue',
+    routineNotice: 'ROUTINE: Please proceed to the designated waiting hall',
+    printToken: 'Print / Download OPD Slip',
+    newPatientBtn: 'Intake Next Patient',
+  },
 };
 
 export const CHIEF_COMPLAINTS_DATA: Array<{
@@ -518,6 +602,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'छातीत दुखणे / जडपणा',
       te: 'ఛాతీలో నొప్పి / బరువు',
       ta: 'நெஞ்சு வலி / பாரம்',
+          pa: 'Chest Pain / Heaviness',
     },
     description: {
       hi: 'सीने में जकड़न, जलन या दर्द जो बाएं हाथ की ओर जा रहा हो',
@@ -526,6 +611,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'छातीवर दबाव किंवा दुखणे जे डाव्या हाताकडे जात आहे',
       te: 'ఛాతీలో బిగుతుగా ఉండటం, ఎడమ చేతికి వ్యాపించే నొప్పి',
       ta: 'நெஞ்சில் அழுத்தம் மற்றும் இடது கைக்கு பரவும் வலி',
+          pa: 'Pressure, tightness, crushing pain, radiating to arm/jaw',
     },
   },
   {
@@ -539,6 +625,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'ताप आणि थंडी वाजणे',
       te: 'జ్వరం మరియు వణుకు',
       ta: 'காய்ச்சல் மற்றும் நடுக்கம்',
+          pa: 'Fever with Chills / Body Ache',
     },
     description: {
       hi: 'तेज बुखार, कंपकंपी, सिरदर्द या जोड़ों में अत्यधिक दर्द',
@@ -547,6 +634,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'अंग तापणे, थंडी वाजणे व शरीर दुखणे',
       te: 'అధిక జ్వరం, వణుకు మరియు ఒంటి నొప్పులు',
       ta: 'அதிக காய்ச்சல், நடுக்கம் மற்றும் உடல் வலி',
+          pa: 'High temperature, shaking chills, body pain, weakness',
     },
   },
   {
@@ -560,6 +648,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'श्वास घेण्यास त्रास / धाप लागणे',
       te: 'శ్వాస తీసుకోవడంలో ఇబ్బంది',
       ta: 'மூச்சுத்திணறல் / மூச்சிரைப்பு',
+          pa: 'Shortness of Breath / Wheezing',
     },
     description: {
       hi: 'सांस फूलना, घरघराहट, लेटने पर सांस रुकना',
@@ -568,6 +657,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'बसल्या जागी किंवा चालताना धाप लागणे',
       te: 'విశ్రాంతిలో లేదా నడిచేటప్పుడు శ్వాస ఆడకపోవడం',
       ta: 'ஓய்வின் போது அல்லது நடக்கும் போது மூச்சுத்திணறல்',
+          pa: 'Breathlessness at rest/exertion, whistling chest sound',
     },
   },
   {
@@ -581,6 +671,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'पोटदुखी / पोटात गोळा येणे',
       te: 'కడుపు నొప్పి / తిమ్మిరి',
       ta: 'வயிற்று வலி / பிடிப்பு',
+          pa: 'Abdominal / Stomach Pain',
     },
     description: {
       hi: 'नाभि, पसलियों के नीचे या निचले पेट में तेज दर्द',
@@ -589,6 +680,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'पोटात तीव्र कळा, फुगारा किंवा मळमळ',
       te: 'పొత్తికడుపులో తీవ్రమైన నొప్పి, వికారం',
       ta: 'அடிவயிற்றில் கடுமையான வலி, குமட்டல்',
+          pa: 'Cramping, sharp pain, bloating, nausea',
     },
   },
   {
@@ -602,6 +694,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'सांधेदुखी व गुडघेदुखी',
       te: 'కీళ్ల నొప్పులు & వాపులు',
       ta: 'மூட்டு வலி மற்றும் வீக்கம்',
+          pa: 'Joint Pain & Swelling / Arthritis',
     },
     description: {
       hi: 'घुटनों, कमर या उंगलियों में सूजन, चलने में असमर्थता',
@@ -610,6 +703,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'गुडघे सुजणे, चालताना तीव्र वेदना',
       te: 'మోకాళ్ల వాపు, నడవలేకపోవడం',
       ta: 'மூட்டுகளில் வீக்கம், நடக்க இயலாமை',
+          pa: 'Stiffness, swelling, inability to bear weight',
     },
   },
   {
@@ -623,6 +717,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'तीव्र डोकेदुखी व चक्कर येणे',
       te: 'తీవ్రమైన తలనొప్పి & కళ్లు తిరగడం',
       ta: 'கடுமையான தலைவலி & தலைச்சுற்றல்',
+          pa: 'Severe Headache / Dizziness',
     },
     description: {
       hi: 'अचानक तेज सिरदर्द, उल्टी या धुंधला दिखाई देना',
@@ -631,6 +726,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'अचानक तीव्र डोकेदुखी व अंधारी येणे',
       te: 'అకస్మాత్తుగా తీవ్ర తలనొప్పి, కంటి చూపు మసకబారడం',
       ta: 'திடீர் தலைவலி மற்றும் பார்வை மங்குதல்',
+          pa: 'Sudden thunderclap pain, blurred vision, neck stiffness',
     },
   },
   {
@@ -644,6 +740,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'उलट्या आणि जुलाब',
       te: 'వాంతులు మరియు విరేచనాలు',
       ta: 'வாந்தி மற்றும் வயிற்றுப்போக்கு',
+          pa: 'Vomiting & Loose Stools / Diarrhea',
     },
     description: {
       hi: 'बार-बार दस्त, पानी की कमी, मुंह सूखना, अत्यधिक कमजोरी',
@@ -652,6 +749,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'वारंवार जुलाब, तोंड सुकणे, अशक्तपणा',
       te: 'తరచుగా విరేచనాలు, తీవ్ర నీరసం',
       ta: 'அடிக்கடி வயிற்றுப்போக்கு, கடுமையான சோர்வு',
+          pa: 'Frequent watery stools, unable to retain fluids',
     },
   },
   {
@@ -665,6 +763,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'मधुमेह व बीपी नियमित तपासणी',
       te: 'షుగర్ & బీపీ రెగ్యులర్ చెకప్',
       ta: 'சர்க்கரை & ரத்த அழுத்த வழக்கமான பரிசோதனை',
+          pa: 'Diabetes / BP Routine Check & Refill',
     },
     description: {
       hi: 'पुरानी शुगर, बीपी की दवा खत्म होना या जांच कराना',
@@ -673,6 +772,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'जुनी औषधे संपणे किंवा नियमित तपासणी',
       te: 'క్రమం తప్పకుండా మందుల రెన్యూవల్ మరియు చెకప్',
       ta: 'வழக்கமான மாத்திரைகள் மற்றும் பரிசோதனை',
+          pa: 'Chronic disease management, regular refill, lab review',
     },
   },
   {
@@ -686,6 +786,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'त्वचेवर पुरळ, खाज किंवा न भरणारी जखम',
       te: 'చర్మంపై దద్దుర్లు, దురద లేదా పుండ్లు',
       ta: 'தோல் தடிப்பு, அரிப்பு அல்லது புண்',
+          pa: 'Skin Rash, Itching or Non-healing Ulcer',
     },
     description: {
       hi: 'त्वचा का लाल होना, फफोले पड़ना, खुजली या पुराना घाव',
@@ -694,6 +795,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'अंगावर लाल चट्टे, खाज किंवा जखम',
       te: 'ఎర్రటి దద్దుర్లు, తీవ్రమైన దురద',
       ta: 'தோல் சிவத்தல், அரிப்பு அல்லது ஆறாத புண்',
+          pa: 'Spreading redness, blisters, severe itching, ulcer',
     },
   },
   {
@@ -707,6 +809,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'अतिशय अशक्तपणा व चक्कर',
       te: 'తీవ్రమైన నీరసం మరియు అలసట',
       ta: 'அதிக சோர்வு மற்றும் மயக்கம்',
+          pa: 'Severe Weakness, Fatigue & Syncope',
     },
     description: {
       hi: 'अचानक चक्कर आना, बेहोशी या लंबे समय से खून की कमी',
@@ -715,6 +818,7 @@ export const CHIEF_COMPLAINTS_DATA: Array<{
       mr: 'अचानक चक्कर येणे किंवा सतत अशक्तपणा',
       te: 'కళ్లు తిరగడం లేదా నిరంతర అలసట',
       ta: 'திடீர் தலைச்சுற்றல் அல்லது சோர்வு',
+          pa: 'Sudden dizziness, syncope or chronic fatigue',
     },
   },
 ];

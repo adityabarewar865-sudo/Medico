@@ -17,37 +17,37 @@ import {
   Phone,
   Shield,
   Sparkles,
-  Printer,
-} from 'lucide-react';
+  Printer} from 'lucide-react';
 import type {
   LanguageCode,
   ChiefComplaintId,
   PatientDemographics,
   AdaptiveAnswer,
   UploadedMedicalDocument,
-  PatientCaseEncounter,
-} from '../../types/clinical';
+  PatientCaseEncounter} from '../../types/clinical';
 import { TRANSLATIONS, CHIEF_COMPLAINTS_DATA, SUPPORTED_LANGUAGES } from '../../services/i18n';
-import { COMPLAINT_QUESTIONS_MAP } from '../../services/adaptiveQuestions';
+import {  } from '../../services/adaptiveQuestions';
 import { SAMPLE_DOCUMENTS, buildChronologicalTimeline, parseMedicalText } from '../../services/ocrEngine';
 import { clinicalAI } from '../../services/clinicalAI';
 import { storage } from '../../services/storage';
+import { hospitalDb } from '../../services/hospitalDatabase';
 import { speech } from '../../services/speech';
 import { AbhaCardModal } from './AbhaCardModal';
 
 interface PatientKioskProps {
   currentLanguage: LanguageCode;
   onLanguageChange: (lang: LanguageCode) => void;
-  audioEnabled: boolean;
+  
   onPatientCompleted?: (patientId: string) => void;
+  hospitalName?: string;
 }
 
 export const PatientKiosk: React.FC<PatientKioskProps> = ({
   currentLanguage,
   onLanguageChange,
-  audioEnabled,
+  
   onPatientCompleted,
-}) => {
+  hospitalName}) => {
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
 
   // Multi-step navigation (1 to 7)
@@ -68,12 +68,25 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
       abhaNumber: '',
       abhaAddress: '',
       status: 'pending',
-      kycStatus: 'SELF_DECLARED',
-    },
-    preferredLanguage: currentLanguage,
-  });
+      kycStatus: 'SELF_DECLARED'},
+    preferredLanguage: currentLanguage});
 
   const [showAbhaModal, setShowAbhaModal] = useState<boolean>(false);
+  const [detectedPatientRecord, setDetectedPatientRecord] = useState<any>(null);
+
+  // Auto detect returning patient by phone number
+  useEffect(() => {
+    if (demographics.phone && demographics.phone.length >= 7) {
+      const existing = hospitalDb.findExistingPatient(demographics.phone);
+      if (existing) {
+        setDetectedPatientRecord(existing);
+      } else {
+        setDetectedPatientRecord(null);
+      }
+    } else {
+      setDetectedPatientRecord(null);
+    }
+  }, [demographics.phone]);
 
   // Consent state
   const [consentGranted, setConsentGranted] = useState<boolean>(false);
@@ -85,7 +98,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
   const [painSeverity, setPainSeverity] = useState<number>(7);
 
   // Adaptive Answers state
-  const [adaptiveAnswers, setAdaptiveAnswers] = useState<Record<string, any>>({});
+  
 
   // Documents & OCR state
   const [uploadedDocs, setUploadedDocs] = useState<UploadedMedicalDocument[]>([]);
@@ -94,36 +107,21 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
   // Completed Encounter Result
   const [completedEncounter, setCompletedEncounter] = useState<PatientCaseEncounter | null>(null);
 
-  // Read step instructions aloud if audio is enabled
+  // Live Clock
+  const [currentTime, setCurrentTime] = useState(new Date());
+
   useEffect(() => {
-    if (!audioEnabled) {
-      speech.stopSpeaking();
-      return;
-    }
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-    let textToSpeak = '';
-    if (currentStep === 1) {
-      textToSpeak = t.selectLanguage;
-    } else if (currentStep === 2) {
-      textToSpeak = `${t.stepDemographicsTitle}. ${t.stepDemographicsSubtitle}`;
-    } else if (currentStep === 3) {
-      textToSpeak = `${t.stepConsentTitle}. ${t.stepConsentSubtitle}`;
-    } else if (currentStep === 4) {
-      textToSpeak = `${t.stepComplaintTitle}. ${t.selectComplaintHint}`;
-    } else if (currentStep === 5) {
-      textToSpeak = `${t.stepQuestionsTitle}. ${t.stepQuestionsSubtitle}`;
-    } else if (currentStep === 6) {
-      textToSpeak = `${t.stepDocsTitle}. ${t.stepDocsSubtitle}`;
-    }
-
-    if (textToSpeak) {
-      speech.speak(textToSpeak, currentLanguage);
-    }
-
-    return () => {
-      speech.stopSpeaking();
-    };
-  }, [currentStep, currentLanguage, audioEnabled]);
+  // Read step instructions aloud (REMOVED)
+  useEffect(() => {
+    // Text-to-speech output removed as per requirement,
+    // microphone input (speech-to-text) is still active.
+    speech.stopSpeaking();
+    return () => speech.stopSpeaking();
+  }, [currentStep, currentLanguage]);
 
   // Voice dictation handler
   const handleToggleListening = (targetField: string) => {
@@ -163,16 +161,10 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     }
   };
 
-  // Read consent out loud
+  // Read consent out loud (REMOVED text-to-speech)
   const handleReadConsentAloud = () => {
     setIsReadingConsent(true);
-    speech.speak(
-      t.consentText,
-      currentLanguage,
-      () => setIsReadingConsent(true),
-      () => setIsReadingConsent(false),
-      () => setIsReadingConsent(false)
-    );
+    setTimeout(() => setIsReadingConsent(false), 2000);
   };
 
   // Load sample document preset
@@ -210,8 +202,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
         extractedDiagnoses: parsed.diagnoses,
         extractedMedications: parsed.medications,
         extractedLabValues: parsed.labValues,
-        documentDate: new Date().toISOString().split('T')[0],
-      };
+        documentDate: new Date().toISOString().split('T')[0]};
 
       setUploadedDocs((prev) => [...prev, newDoc]);
       setIsOcrProcessing(false);
@@ -220,37 +211,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
   // Submit case and generate triage + OPD token
   const handleFinalSubmit = () => {
-    const complaintQuestions = COMPLAINT_QUESTIONS_MAP[selectedComplaintId] || [];
-    const formattedAnswers: AdaptiveAnswer[] = complaintQuestions.map((q) => {
-      const userAns = adaptiveAnswers[q.id];
-      let answerText = 'Not specified';
-      let isRedFlagIndicator = false;
-
-      if (q.type === 'select' && q.options) {
-        const matched = q.options.find((o) => o.id === userAns);
-        if (matched) {
-          answerText = matched.label[currentLanguage] || matched.label.en;
-          isRedFlagIndicator = !!matched.isRedFlag;
-        }
-      } else if (q.type === 'multiselect' && Array.isArray(userAns) && q.options) {
-        const matchedLabels = q.options
-          .filter((o) => userAns.includes(o.id))
-          .map((o) => {
-            if (o.isRedFlag) isRedFlagIndicator = true;
-            return o.label[currentLanguage] || o.label.en;
-          });
-        answerText = matchedLabels.length > 0 ? matchedLabels.join(', ') : 'None';
-      }
-
-      return {
-        questionId: q.id,
-        questionText: q.text.en,
-        answerText,
-        answerValue: userAns,
-        category: q.category,
-        isRedFlagIndicator,
-      };
-    });
+    const formattedAnswers: AdaptiveAnswer[] = [];
 
     formattedAnswers.push({
       questionId: 'pain_severity_scale',
@@ -258,8 +219,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
       answerText: `${painSeverity} / 10 (${painSeverity >= 7 ? 'Severe' : painSeverity >= 4 ? 'Moderate' : 'Mild'})`,
       answerValue: painSeverity,
       category: 'severity',
-      isRedFlagIndicator: painSeverity >= 8,
-    });
+      isRedFlagIndicator: painSeverity >= 8});
 
     const timeline = buildChronologicalTimeline(uploadedDocs);
 
@@ -274,31 +234,37 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     const tokenNumber = `OPD-MED-${Math.floor(100 + Math.random() * 900)}`;
     const roomNumber = assessment.triagePriority === 'emergency' ? 'Room 1 (Emergency Resus / Med)' : 'Room 4 (General Medicine)';
 
+    const existingPatient = detectedPatientRecord || hospitalDb.findExistingPatient(demographics.phone);
+    const assignedPatientId = existingPatient?.patientId || hospitalDb.generateNextPatientId();
+    const assignedVisitId = existingPatient ? `V${String(existingPatient.visits.length + 1).padStart(3, '0')}` : 'V001';
+
     const newEncounter: PatientCaseEncounter = {
       id: `enc_${Date.now()}`,
+      patientId: assignedPatientId,
+      visitId: assignedVisitId,
+      visitDate: new Date().toISOString().split('T')[0],
+      
       opdToken: tokenNumber,
       opdRoom: roomNumber,
       specialty: 'Internal Medicine',
+      hospitalName: hospitalName ,
       createdAt: new Date().toISOString(),
       demographics: {
         ...demographics,
-        preferredLanguage: currentLanguage,
-      },
+        preferredLanguage: currentLanguage},
       consent: {
         granted: true,
         timestamp: new Date().toISOString(),
         method: 'biometric_touch',
         languageUsed: currentLanguage,
-        abdmLinkConsent: true,
-      },
+        abdmLinkConsent: true},
       chiefComplaint: {
         id: selectedComplaintId,
         title: CHIEF_COMPLAINTS_DATA.find((c) => c.id === selectedComplaintId)?.titles[currentLanguage] || 'Chief Complaint',
         description: complaintCustomText || 'Patient reported acute symptoms',
         onsetDuration: `${painSeverity}/10 severity`,
-        voiceInputTranscript: complaintCustomText,
-      },
-      adaptiveAnswers: formattedAnswers,
+        voiceInputTranscript: complaintCustomText},
+      
       documents: uploadedDocs,
       timeline,
       triagePriority: assessment.triagePriority,
@@ -311,33 +277,28 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
         activeMedications: assessment.activeMedications,
         allergies: assessment.allergies,
         investigationsSummary: assessment.investigationsSummary,
-      },
+        vitals: {
+          bp: '120/80',
+          pulse: '76',
+          spo2: '98',
+          temp: '98.6',
+          rr: '18'}},
       doctorReview: {
         verified: false,
-        status: 'pending',
-      },
+        status: 'pending'},
       savedToHis: false,
       abdmCareContextLinked: true,
-      abdmCareContextRef: `CARE-CTX-${tokenNumber}`,
-    };
+      abdmCareContextRef: `CARE-CTX-${assignedPatientId}-${tokenNumber}`};
 
     storage.savePatient(newEncounter);
     setCompletedEncounter(newEncounter);
-    setCurrentStep(7);
+    setCurrentStep(6);
 
     confetti({
       particleCount: 80,
       spread: 70,
-      origin: { y: 0.6 },
-    });
+      origin: { y: 0.6 }});
 
-    if (audioEnabled) {
-      const announcement =
-        currentLanguage === 'hi'
-          ? `आपका पंजीकरण पूरा हो गया है। आपका टोकन नंबर है ${tokenNumber}। कृपया ${roomNumber} के प्रतीक्षा क्षेत्र में जाएं।`
-          : `Case intake complete. Your token number is ${tokenNumber}. Please proceed to ${roomNumber}.`;
-      speech.speak(announcement, currentLanguage);
-    }
 
     if (onPatientCompleted) {
       onPatientCompleted(newEncounter.id);
@@ -356,40 +317,52 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
         abhaNumber: '',
         abhaAddress: '',
         status: 'pending',
-        kycStatus: 'SELF_DECLARED',
-      },
-      preferredLanguage: currentLanguage,
-    });
+        kycStatus: 'SELF_DECLARED'},
+      preferredLanguage: currentLanguage});
     setConsentGranted(false);
     setSelectedComplaintId('chest_pain');
     setComplaintCustomText('');
-    setAdaptiveAnswers({});
+    
     setUploadedDocs([]);
     setCompletedEncounter(null);
   };
 
-  const currentQuestions = COMPLAINT_QUESTIONS_MAP[selectedComplaintId] || [];
+  
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
+      {/* Live Date, Day and Time */}
+      <div className="flex justify-end mb-4 no-print">
+        <div className="text-right text-xs text-slate-500 font-semibold bg-white border border-slate-200/60 shadow-sm rounded-xl py-1.5 px-3">
+          <div className="text-sm font-black text-slate-800 tracking-tight">
+            {currentTime.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          </div>
+          <div>
+            {currentTime.toLocaleDateString('en-US', { weekday: 'long' })}
+          </div>
+          <div>
+            {currentTime.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })}
+          </div>
+        </div>
+      </div>
+
       {/* Step Progress Bar */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-extrabold uppercase tracking-wider text-teal-800">
-            {t.kioskMode} • Step {currentStep} of 7
+            {t.kioskMode} • Step {currentStep} of 6
           </span>
           <span className="text-xs font-semibold text-slate-500">
             {currentStep === 1 && 'Language & Accessibility'}
             {currentStep === 2 && 'Patient Demographics'}
             {currentStep === 3 && 'Informed Consent'}
             {currentStep === 4 && 'Chief Complaint'}
-            {currentStep === 5 && 'Adaptive Clinical Questions'}
-            {currentStep === 6 && 'Document Scanner & OCR'}
-            {currentStep === 7 && 'OPD Queue Token'}
+            {currentStep === 5 && 'Document Scanner & OCR'}
+            {currentStep === 6 && 'OPD Queue Token'}
           </span>
         </div>
         <div className="h-2.5 w-full bg-slate-200/80 rounded-full overflow-hidden flex shadow-inner">
-          {[1, 2, 3, 4, 5, 6, 7].map((stepNum) => (
+          {[1, 2, 3, 4, 5, 6].map((stepNum) => (
             <div
               key={stepNum}
               className={`flex-1 transition-all duration-300 border-r border-white/60 ${
@@ -425,7 +398,6 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                     key={lang.code}
                     onClick={() => {
                       onLanguageChange(lang.code);
-                      speech.speak(lang.nativeName, lang.code);
                     }}
                     className={`p-5 rounded-2xl border-2 text-left transition-all duration-200 flex flex-col justify-between h-32 ${
                       isSelected
@@ -486,6 +458,27 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
               </span>
               <button
                 type="button"
+                onClick={() => {
+                  setDemographics({
+                    id: 'pat_rahul_sharma',
+                    fullName: 'Rahul Sharma',
+                    age: 25,
+                    gender: 'male',
+                    phone: '9876500001',
+                    abha: {
+                      abhaNumber: '91-8899-4455-1025',
+                      abhaAddress: 'rahul.sharma25@abdm',
+                      status: 'verified',
+                      kycStatus: 'KYC_VERIFIED'},
+                    preferredLanguage: currentLanguage});
+                  setSelectedComplaintId('headache');
+                }}
+                className="px-3 py-1 bg-white hover:bg-teal-50 text-teal-800 border border-teal-300 rounded-lg text-xs font-bold shadow-2xs flex items-center gap-1"
+              >
+                <span>Rahul Sharma (25M - P10025 Returning Patient)</span>
+              </button>
+              <button
+                type="button"
                 onClick={() =>
                   setDemographics({
                     id: `pat_ramesh_${Date.now()}`,
@@ -497,10 +490,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                       abhaNumber: '91-4521-8890-1234',
                       abhaAddress: 'ramesh.kumar@abdm',
                       status: 'verified',
-                      kycStatus: 'KYC_VERIFIED',
-                    },
-                    preferredLanguage: currentLanguage,
-                  })
+                      kycStatus: 'KYC_VERIFIED'},
+                    preferredLanguage: currentLanguage})
                 }
                 className="px-3 py-1 bg-white hover:bg-teal-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold shadow-2xs"
               >
@@ -519,16 +510,30 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                       abhaNumber: '91-3312-7740-9981',
                       abhaAddress: 'sunita.devi42@abdm',
                       status: 'verified',
-                      kycStatus: 'KYC_VERIFIED',
-                    },
-                    preferredLanguage: currentLanguage,
-                  })
+                      kycStatus: 'KYC_VERIFIED'},
+                    preferredLanguage: currentLanguage})
                 }
                 className="px-3 py-1 bg-white hover:bg-teal-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold shadow-2xs"
               >
                 Sunita Devi (42F - Dengue/Fever)
               </button>
             </div>
+
+            {/* Existing Patient Detected Banner */}
+            {detectedPatientRecord && (
+              <div className="p-3.5 bg-emerald-50 border-2 border-emerald-300 rounded-2xl flex items-center gap-3 text-xs text-emerald-950 font-bold shadow-2xs animate-fade-in">
+                <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div>
+                  <span className="font-extrabold text-emerald-900">Existing Patient Found: </span>
+                  <span>
+                    {detectedPatientRecord.fullName} (Patient ID: <strong className="font-mono bg-emerald-100 px-1.5 py-0.5 rounded">{detectedPatientRecord.patientId}</strong>) • {detectedPatientRecord.visits.length} past visit(s) on hospital record.
+                  </span>
+                  <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">
+                    No need to register again! Today&apos;s case-taking will be attached as Visit {detectedPatientRecord.visits.length + 1} under {detectedPatientRecord.patientId}.
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {/* Full Name with Voice Dictation */}
@@ -581,8 +586,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                   onChange={(e) =>
                     setDemographics({
                       ...demographics,
-                      age: parseInt(e.target.value) || 0,
-                    })
+                      age: parseInt(e.target.value) || 0})
                   }
                   placeholder={t.agePlaceholder}
                   className="w-full px-4 py-3.5 rounded-2xl bg-slate-50/70 border-2 border-slate-200 text-slate-900 font-bold focus:outline-none focus:border-teal-600 focus:bg-white text-base"
@@ -660,9 +664,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                         abha: {
                           ...demographics.abha,
                           abhaAddress: e.target.value,
-                          abhaNumber: e.target.value,
-                        },
-                      })
+                          abhaNumber: e.target.value}})
                     }
                     placeholder={t.abhaPlaceholder}
                     className="w-full px-4 py-3.5 rounded-2xl bg-slate-50/70 border-2 border-slate-200 text-slate-900 font-mono text-sm font-bold focus:outline-none focus:border-blue-600 focus:bg-white"
@@ -800,9 +802,6 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                     key={item.id}
                     onClick={() => {
                       setSelectedComplaintId(item.id);
-                      if (audioEnabled) {
-                        speech.speak(item.titles[currentLanguage] || item.titles.en, currentLanguage);
-                      }
                     }}
                     className={`p-4 rounded-2xl border-2 text-left transition-all duration-200 flex flex-col justify-between h-36 ${
                       isSelected
@@ -868,40 +867,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
               />
             </div>
 
-            <div className="pt-4 flex items-center justify-between">
-              <button
-                onClick={() => setCurrentStep(3)}
-                className="px-6 py-3 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-2xl flex items-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>{t.back}</span>
-              </button>
-              <button
-                onClick={() => setCurrentStep(5)}
-                className="px-8 py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-2xl shadow-sm shadow-teal-600/30 flex items-center gap-3"
-              >
-                <span>{t.next}</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5: Adaptive Clinical Questions */}
-        {currentStep === 5 && (
-          <div className="p-6 sm:p-10 space-y-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
-                <Activity className="w-8 h-8 text-teal-600" />
-                {t.stepQuestionsTitle}
-              </h2>
-              <p className="text-sm text-slate-600 font-medium mt-1">
-                {t.stepQuestionsSubtitle}
-              </p>
-            </div>
-
             {/* Pain / Discomfort Severity Slider */}
-            <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
+            <div className="p-5 mt-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
               <div className="flex items-center justify-between">
                 <label className="font-black text-slate-900 text-sm sm:text-base">
                   {t.painSeverityLabel}
@@ -934,119 +901,16 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
               </div>
             </div>
 
-            {/* Adaptive Follow-up Questions */}
-            <div className="space-y-6">
-              {currentQuestions.map((q, idx) => (
-                <div
-                  key={q.id}
-                  className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-3"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <h4 className="font-black text-slate-900 text-sm sm:text-base">
-                      {idx + 1}. {q.text[currentLanguage] || q.text.en}
-                    </h4>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        speech.speak(q.text[currentLanguage] || q.text.en, currentLanguage)
-                      }
-                      className="p-1.5 text-teal-700 hover:bg-teal-100 rounded-lg shrink-0 transition-colors"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* Single Choice Options */}
-                  {q.type === 'select' && q.options && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {q.options.map((opt) => {
-                        const isChosen = adaptiveAnswers[q.id] === opt.id;
-                        return (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            onClick={() =>
-                              setAdaptiveAnswers((prev) => ({
-                                ...prev,
-                                [q.id]: opt.id,
-                              }))
-                            }
-                            className={`p-3.5 rounded-xl border-2 text-left font-bold text-xs sm:text-sm transition-all flex items-center justify-between ${
-                              isChosen
-                                ? opt.isRedFlag
-                                  ? 'border-rose-600 bg-rose-50 text-rose-950 shadow-2xs'
-                                  : 'border-teal-600 bg-teal-50 text-teal-950 shadow-2xs'
-                                : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
-                            }`}
-                          >
-                            <span>{opt.label[currentLanguage] || opt.label.en}</span>
-                            {isChosen && (
-                              <CheckCircle
-                                className={`w-4 h-4 shrink-0 ${
-                                  opt.isRedFlag ? 'text-rose-600' : 'text-teal-600'
-                                }`}
-                              />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Multi-select Options */}
-                  {q.type === 'multiselect' && q.options && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {q.options.map((opt) => {
-                        const currentList: string[] = adaptiveAnswers[q.id] || [];
-                        const isChosen = currentList.includes(opt.id);
-                        return (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            onClick={() => {
-                              setAdaptiveAnswers((prev) => {
-                                const list: string[] = prev[q.id] || [];
-                                const nextList = list.includes(opt.id)
-                                  ? list.filter((i) => i !== opt.id)
-                                  : [...list, opt.id];
-                                return { ...prev, [q.id]: nextList };
-                              });
-                            }}
-                            className={`p-3.5 rounded-xl border-2 text-left font-bold text-xs sm:text-sm transition-all flex items-center justify-between ${
-                              isChosen
-                                ? opt.isRedFlag
-                                  ? 'border-rose-600 bg-rose-50 text-rose-950 shadow-2xs'
-                                  : 'border-teal-600 bg-teal-50 text-teal-950 shadow-2xs'
-                                : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
-                            }`}
-                          >
-                            <span>{opt.label[currentLanguage] || opt.label.en}</span>
-                            <div
-                              className={`w-4 h-4 rounded border flex items-center justify-center ${
-                                isChosen ? 'bg-teal-600 border-teal-600 text-white' : 'border-slate-300'
-                              }`}
-                            >
-                              {isChosen && <CheckCircle className="w-3.5 h-3.5" />}
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
             <div className="pt-4 flex items-center justify-between">
               <button
-                onClick={() => setCurrentStep(4)}
+                onClick={() => setCurrentStep(3)}
                 className="px-6 py-3 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-2xl flex items-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>{t.back}</span>
               </button>
               <button
-                onClick={() => setCurrentStep(6)}
+                onClick={() => setCurrentStep(5)}
                 className="px-8 py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-2xl shadow-sm shadow-teal-600/30 flex items-center gap-3"
               >
                 <span>{t.next}</span>
@@ -1056,8 +920,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
 
-        {/* STEP 6: Document Scanner, OCR & Medical Timeline */}
-        {currentStep === 6 && (
+        {/* STEP 5: Document Scanner, OCR & Medical Timeline */}
+        {currentStep === 5 && (
           <div className="p-6 sm:p-10 space-y-6">
             <div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
@@ -1198,7 +1062,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
             <div className="pt-4 flex items-center justify-between">
               <button
-                onClick={() => setCurrentStep(5)}
+                onClick={() => setCurrentStep(4)}
                 className="px-6 py-3 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-2xl flex items-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -1215,8 +1079,8 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
 
-        {/* STEP 7: Case Review & OPD Queue Token - Light Theme */}
-        {currentStep === 7 && completedEncounter && (
+        {/* STEP 6: Case Review & OPD Queue Token - Light Theme */}
+        {currentStep === 6 && completedEncounter && (
           <div className="p-6 sm:p-10 space-y-6">
             <div className="text-center space-y-2">
               <div className="inline-flex p-3 rounded-full bg-emerald-100 text-emerald-700">
@@ -1236,7 +1100,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
               <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                 <div>
                   <div className="text-[11px] font-black text-teal-800 uppercase tracking-wider">
-                    DISTRICT CIVIL HOSPITAL OPD
+                    {completedEncounter.hospitalName?.toUpperCase() } OPD
                   </div>
                   <div className="text-xs font-semibold text-slate-500">National Health Mission</div>
                 </div>
@@ -1278,16 +1142,30 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
               {/* Patient Details & ABHA Bar */}
               <div className="bg-white rounded-2xl p-3.5 border border-slate-200 text-xs space-y-2 shadow-2xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500 font-medium">Hospital Patient ID:</span>
+                  <span className="font-mono font-black text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                    {completedEncounter.patientId || 'P10025'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Visit Number:</span>
+                  <span className="font-mono font-bold text-slate-800">
+                    {completedEncounter.visitId || 'V001'}
+                  </span>
+                </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 font-medium">Patient:</span>
                   <span className="font-bold text-slate-900">{completedEncounter.demographics.fullName} ({completedEncounter.demographics.age}Y/{completedEncounter.demographics.gender.toUpperCase()})</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 font-medium">ABHA:</span>
-                  <span className="font-mono font-bold text-blue-700">
-                    {completedEncounter.demographics.abha.abhaAddress || completedEncounter.demographics.abha.abhaNumber || 'Verified in Session'}
-                  </span>
-                </div>
+                {(completedEncounter.demographics.abha?.abhaAddress || completedEncounter.demographics.abha?.abhaNumber) && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">ABHA:</span>
+                    <span className="font-mono font-bold text-blue-700">
+                      {completedEncounter.demographics.abha.abhaAddress || completedEncounter.demographics.abha.abhaNumber}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span className="text-slate-500 font-medium">Complaint:</span>
                   <span className="font-bold text-slate-900 truncate max-w-[200px]">{completedEncounter.chiefComplaint.title}</span>

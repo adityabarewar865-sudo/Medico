@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "server": "npx tsx server/index.ts",
+    "dev:all": "concurrently \"npm run server\" \"npm run dev\" --names \"BACKEND,FRONTEND\" --prefix-colors \"blue,green\"",
+    "start": "npm run dev:all",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -15,10 +17,13 @@
     "clsx": "^2.1.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "firebase": "^12.18.0",
+    "jspdf": "^4.2.1",
     "lucide-react": "^1.41.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -29,6 +34,8 @@
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
     "autoprefixer": "^10.5.5",
+    "concurrently": "^10.0.5",
+    "gh-pages": "^6.3.0",
     "oxlint": "^1.79.0",
     "postcss": "^8.5.28",
     "tailwindcss": "^3.4.17",

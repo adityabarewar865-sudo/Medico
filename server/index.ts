@@ -1,7 +1,18 @@
+// Load .env environment variables natively
+try {
+  if (typeof process.loadEnvFile === 'function') {
+    process.loadEnvFile();
+  }
+} catch {
+  // Ignore if .env doesn't exist yet
+}
+
 import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import patientRoutes from './routes/patientRoutes';
 import clinicalRoutes from './routes/clinicalRoutes';
+import hospitalRoutes from './routes/hospitalRoutes';
+import receiptRoutes from './routes/receiptRoutes';
 import { sse } from './services/sse';
 import { db } from './services/db';
 
@@ -35,6 +46,8 @@ app.get('/api/events', (req: Request, res: Response): void => {
 });
 
 // API Routes
+app.use('/api/receipts', receiptRoutes);
+app.use('/api/hospital', hospitalRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api', clinicalRoutes);
 

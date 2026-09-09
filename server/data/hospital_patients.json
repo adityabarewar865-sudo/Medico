@@ -1,0 +1,1922 @@
+[
+  {
+    "patientId": "P10031",
+    "fullName": "Ramesh Kumar",
+    "age": 45,
+    "gender": "male",
+    "phone": "",
+    "address": "District Catchment Area",
+    "emergencyContact": "",
+    "registeredAt": "2026-09-09T05:21:22.614Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_1788931281969",
+        "patientId": "P10031",
+        "visitId": "V001",
+        "visitDate": "2026-09-09",
+        "opdToken": "OPD-MED-786",
+        "opdRoom": "Room 4 (General Medicine)",
+        "specialty": "Internal Medicine",
+        "hospitalName": "ABC Hospital",
+        "createdAt": "2026-09-09T05:21:21.969Z",
+        "demographics": {
+          "id": "pat_1788931262703",
+          "fullName": "Ramesh Kumar",
+          "age": 45,
+          "gender": "male",
+          "phone": "",
+          "abha": {
+            "abhaNumber": "",
+            "abhaAddress": "",
+            "status": "pending",
+            "kycStatus": "SELF_DECLARED"
+          },
+          "preferredLanguage": "en"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-09T05:21:21.969Z",
+          "method": "biometric_touch",
+          "languageUsed": "en",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "Chest Pain / Heaviness",
+          "description": "Patient reported acute symptoms",
+          "onsetDuration": "7/10 severity",
+          "voiceInputTranscript": ""
+        },
+        "documents": [],
+        "timeline": [],
+        "triagePriority": "urgent",
+        "triageRationale": "Chest pain presentation requires triage ECG exclusion.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: Ramesh Kumar, 45Y/MALE)",
+          "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
+          "pastMedicalHistory": [
+            "None explicitly documented in uploaded records"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "Penicillin / Amoxicillin",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            },
+            {
+              "allergen": "NSAIDs (Brufen/Diclofenac)",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+          "vitals": {
+            "bp": "120/80",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "doctorReview": {
+          "verified": true,
+          "status": "verified",
+          "verifiedBy": "Attending Doctor",
+          "verifiedAt": "2026-09-09T05:22:33.513Z",
+          "finalImpression": "",
+          "doctorNotes": "",
+          "doctorAdvice": "• Drink 2.5L warm fluids daily. Maintain hydration.\n• Take prescribed medications strictly after meals.\n• Adequate bed rest for 48 hours. Avoid cold/spicy diet.\n• Immediate Return Warning: If chest pain, breathlessness, or persistent high fever occurs, report to Emergency.",
+          "prescribedMedications": []
+        },
+        "savedToHis": true,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10031-OPD-MED-786",
+        "excelStoredAt": "2026-09-09T05:22:33.584Z",
+        "hisSyncTimestamp": "2026-09-09T05:22:33.550Z",
+        "receiptToken": "cfb422976dc3b38ed0234ce2239e29236ee66eea7fb8c81a",
+        "receiptUrl": "http://localhost:5173/receipt/cfb422976dc3b38ed0234ce2239e29236ee66eea7fb8c81a"
+      }
+    ],
+    "abha": {
+      "abhaNumber": "91-4661-1269-10031",
+      "abhaAddress": "ramesh.kumarp10031@abdm",
+      "status": "pending",
+      "kycStatus": "SELF_DECLARED"
+    }
+  },
+  {
+    "patientId": "P10030",
+    "fullName": "aman",
+    "age": 45,
+    "gender": "male",
+    "phone": "3636222",
+    "address": "District Catchment Area",
+    "emergencyContact": "",
+    "registeredAt": "2026-09-07T15:35:37.964Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_1788795337881",
+        "patientId": "P10030",
+        "visitId": "V001",
+        "visitDate": "2026-09-07",
+        "attendingDoctor": "Dr. S. K. Verma, MD",
+        "opdToken": "OPD-MED-189",
+        "opdRoom": "Room 1 (Emergency Resus / Med)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2026-09-07T15:35:37.881Z",
+        "demographics": {
+          "id": "pat_1788795311516",
+          "fullName": "aman",
+          "age": 45,
+          "gender": "male",
+          "phone": "3636222",
+          "abha": {
+            "abhaNumber": "2u3736252",
+            "abhaAddress": "2u3736252",
+            "status": "pending",
+            "kycStatus": "SELF_DECLARED"
+          },
+          "preferredLanguage": "en"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-07T15:35:37.881Z",
+          "method": "biometric_touch",
+          "languageUsed": "en",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "Chest Pain / Heaviness",
+          "description": "Patient reported acute symptoms",
+          "onsetDuration": "7/10 severity",
+          "voiceInputTranscript": ""
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "cp_duration",
+            "questionText": "When did the chest pain start?",
+            "answerText": "Not specified",
+            "category": "duration",
+            "isRedFlagIndicator": false
+          },
+          {
+            "questionId": "cp_character",
+            "questionText": "How would you describe the chest pain?",
+            "answerText": "Sharp pricking pain that worsens on deep breathing or coughing",
+            "answerValue": "sharp_breathing",
+            "category": "character",
+            "isRedFlagIndicator": false
+          },
+          {
+            "questionId": "cp_radiation",
+            "questionText": "Does the pain spread or radiate anywhere else?",
+            "answerText": "Yes, radiates to Left Arm, Jaw, Neck or Back",
+            "answerValue": "rad_left_arm_jaw",
+            "category": "radiation",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_associated",
+            "questionText": "What other symptoms are you experiencing together with it?",
+            "answerText": "Profuse cold sweating (Diaphoresis)",
+            "answerValue": [
+              "assoc_cold_sweats"
+            ],
+            "category": "associated",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "pain_severity_scale",
+            "questionText": "Pain / Discomfort Intensity (1-10)",
+            "answerText": "7 / 10 (Severe)",
+            "answerValue": 7,
+            "category": "severity",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [],
+        "triagePriority": "emergency",
+        "triageRationale": "High suspicion of Acute Myocardial Infarction / Unstable Angina.",
+        "redFlags": [
+          {
+            "id": "rf_cp_radiation",
+            "title": "Suspected Acute Coronary Syndrome (ACS / MI)",
+            "severity": "critical",
+            "description": "Patient reports: Yes, radiates to Left Arm, Jaw, Neck or Back. Retrosternal pressure radiating to left arm/jaw with diaphoresis.",
+            "clinicalActionNeeded": "Perform 12-lead ECG within 10 minutes. Establish IV access, monitor vitals, notify cardiology team."
+          }
+        ],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: aman, 45Y/MALE)",
+          "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: When did the chest pain start?: Not specified; How would you describe the chest pain?: Sharp pricking pain that worsens on deep breathing or coughing; Does the pain spread or radiate anywhere else?: Yes, radiates to Left Arm, Jaw, Neck or Back; What other symptoms are you experiencing together with it?: Profuse cold sweating (Diaphoresis); Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
+          "pastMedicalHistory": [
+            "None explicitly documented in uploaded records"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "Penicillin / Amoxicillin",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            },
+            {
+              "allergen": "NSAIDs (Brufen/Diclofenac)",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+          "vitals": {
+            "bp": "120/80",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "doctorReview": {
+          "verified": true,
+          "status": "verified",
+          "verifiedBy": "Dr. S. K. Verma, MD",
+          "verifiedAt": "2026-09-07T15:37:10.122Z",
+          "finalImpression": "",
+          "doctorNotes": "",
+          "doctorAdvice": "• Drink 2.5L warm fluids daily. Maintain hydration.\n• Take prescribed medications strictly after meals.\n• Adequate bed rest for 48 hours. Avoid cold/spicy diet.\n• Immediate Return Warning: If chest pain, breathlessness, or persistent high fever occurs, report to Emergency.",
+          "prescribedMedications": []
+        },
+        "savedToHis": true,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10030-OPD-MED-189",
+        "hisSyncTimestamp": "2026-09-07T15:37:10.137Z"
+      }
+    ],
+    "abha": {
+      "abhaNumber": "2u3736252",
+      "abhaAddress": "2u3736252",
+      "status": "verified",
+      "kycStatus": "KYC_VERIFIED"
+    }
+  },
+  {
+    "patientId": "P10029",
+    "fullName": "aman",
+    "age": 45,
+    "gender": "male",
+    "phone": "3762524241",
+    "address": "District Catchment Area",
+    "emergencyContact": "",
+    "registeredAt": "2026-09-07T15:16:28.138Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_1788794187975",
+        "patientId": "P10029",
+        "visitId": "V001",
+        "visitDate": "2026-09-07",
+        "attendingDoctor": "Dr. S. K. Verma, MD",
+        "opdToken": "OPD-MED-971",
+        "opdRoom": "Room 1 (Emergency Resus / Med)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2026-09-07T15:16:27.976Z",
+        "demographics": {
+          "id": "pat_p10029",
+          "fullName": "aman",
+          "age": 45,
+          "gender": "male",
+          "phone": "3762524241",
+          "abha": {
+            "abhaNumber": "272725242",
+            "abhaAddress": "272725242",
+            "status": "verified",
+            "kycStatus": "KYC_VERIFIED"
+          },
+          "address": "District Catchment Area",
+          "preferredLanguage": "en",
+          "emergencyContact": ""
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-07T15:16:27.976Z",
+          "method": "biometric_touch",
+          "languageUsed": "en",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "Chest Pain / Heaviness",
+          "description": "Patient reported acute symptoms",
+          "onsetDuration": "7/10 severity",
+          "voiceInputTranscript": ""
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "cp_duration",
+            "questionText": "When did the chest pain start?",
+            "answerText": "Within the last 1-4 hours (Sudden onset)",
+            "answerValue": "acute_hours",
+            "category": "duration",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_character",
+            "questionText": "How would you describe the chest pain?",
+            "answerText": "Crushing heavy pressure / tight squeezing sensation",
+            "answerValue": "crushing_pressure",
+            "category": "character",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_radiation",
+            "questionText": "Does the pain spread or radiate anywhere else?",
+            "answerText": "Yes, radiates to Left Arm, Jaw, Neck or Back",
+            "answerValue": "rad_left_arm_jaw",
+            "category": "radiation",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_associated",
+            "questionText": "What other symptoms are you experiencing together with it?",
+            "answerText": "Profuse cold sweating (Diaphoresis)",
+            "answerValue": [
+              "assoc_cold_sweats"
+            ],
+            "category": "associated",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "pain_severity_scale",
+            "questionText": "Pain / Discomfort Intensity (1-10)",
+            "answerText": "7 / 10 (Severe)",
+            "answerValue": 7,
+            "category": "severity",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [],
+        "triagePriority": "emergency",
+        "triageRationale": "High suspicion of Acute Myocardial Infarction / Unstable Angina. High suspicion of Acute Myocardial Infarction / Unstable Angina.",
+        "redFlags": [
+          {
+            "id": "rf_cp_character",
+            "title": "Suspected Acute Coronary Syndrome (ACS / MI)",
+            "severity": "critical",
+            "description": "Patient reports: Crushing heavy pressure / tight squeezing sensation. Retrosternal pressure radiating to left arm/jaw with diaphoresis.",
+            "clinicalActionNeeded": "Perform 12-lead ECG within 10 minutes. Establish IV access, monitor vitals, notify cardiology team."
+          },
+          {
+            "id": "rf_cp_radiation",
+            "title": "Suspected Acute Coronary Syndrome (ACS / MI)",
+            "severity": "critical",
+            "description": "Patient reports: Yes, radiates to Left Arm, Jaw, Neck or Back. Retrosternal pressure radiating to left arm/jaw with diaphoresis.",
+            "clinicalActionNeeded": "Perform 12-lead ECG within 10 minutes. Establish IV access, monitor vitals, notify cardiology team."
+          }
+        ],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: aman, 45Y/MALE)",
+          "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: When did the chest pain start?: Within the last 1-4 hours (Sudden onset); How would you describe the chest pain?: Crushing heavy pressure / tight squeezing sensation; Does the pain spread or radiate anywhere else?: Yes, radiates to Left Arm, Jaw, Neck or Back; What other symptoms are you experiencing together with it?: Profuse cold sweating (Diaphoresis); Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
+          "pastMedicalHistory": [
+            "None explicitly documented in uploaded records"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "Penicillin / Amoxicillin",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            },
+            {
+              "allergen": "NSAIDs (Brufen/Diclofenac)",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+          "vitals": {
+            "bp": "120/80",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "medicines": [],
+        "doctorReview": {
+          "verified": false,
+          "status": "pending"
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10029-V1062"
+      }
+    ],
+    "abha": {
+      "abhaNumber": "272725242",
+      "abhaAddress": "272725242",
+      "status": "verified",
+      "kycStatus": "KYC_VERIFIED"
+    }
+  },
+  {
+    "patientId": "P10025",
+    "fullName": "Rahul Sharma",
+    "age": 25,
+    "gender": "male",
+    "phone": "9876500001",
+    "abha": {
+      "abhaNumber": "91-8899-4455-1025",
+      "abhaAddress": "rahul.sharma25@abdm",
+      "status": "verified",
+      "kycStatus": "KYC_VERIFIED",
+      "linkedCareContextsCount": 2
+    },
+    "address": "Flat 302, Green Avenue, District Catchment",
+    "emergencyContact": "Mohan Sharma (Father) - 9876500002",
+    "registeredAt": "2026-07-10T10:00:00.000Z",
+    "totalVisits": 2,
+    "visits": [
+      {
+        "id": "enc_rahul_v2",
+        "patientId": "P10025",
+        "visitId": "V002",
+        "visitDate": "2026-09-07",
+        "attendingDoctor": "Dr. S. K. Verma, MD",
+        "opdToken": "OPD-MED-041",
+        "opdRoom": "Room 4 (General Medicine)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2026-09-07T13:27:43.120Z",
+        "demographics": {
+          "id": "pat_rahul_sharma",
+          "fullName": "Rahul Sharma",
+          "age": 25,
+          "gender": "male",
+          "phone": "9876500001",
+          "abha": {
+            "abhaNumber": "91-8899-4455-1025",
+            "abhaAddress": "rahul.sharma25@abdm",
+            "status": "verified",
+            "kycStatus": "KYC_VERIFIED",
+            "linkedCareContextsCount": 2
+          },
+          "address": "Flat 302, Green Avenue, District Catchment",
+          "preferredLanguage": "hi",
+          "emergencyContact": "Mohan Sharma (Father) - 9876500002"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-07T13:29:43.121Z",
+          "method": "audio_verbal",
+          "languageUsed": "hi",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "headache",
+          "title": "गंभीर सिरदर्द और भारीपन (Severe Throbbing Headache)",
+          "description": "पिछले 2 दिनों से दोनों कनपटी में लगातार तेज सिरदर्द है, जो स्क्रीन देखने पर बढ़ जाता है।",
+          "onsetDuration": "2 days",
+          "voiceInputTranscript": "दो दिन से सिर में बहुत तेज दर्द हो रहा है, माथा फटा जा रहा है और आंखों में भी भारीपन महसूस हो रहा है।"
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "ha_duration",
+            "questionText": "When did the headache start?",
+            "answerText": "2 days ago (Gradual increase in intensity)",
+            "category": "duration",
+            "isRedFlagIndicator": false
+          },
+          {
+            "questionId": "ha_character",
+            "questionText": "Type of headache",
+            "answerText": "Throbbing frontal / bitemporal pressure",
+            "category": "character",
+            "isRedFlagIndicator": false
+          },
+          {
+            "questionId": "ha_severity",
+            "questionText": "Severity on 1-10 scale",
+            "answerText": "7 / 10 (Moderate to Severe)",
+            "category": "severity",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [
+          {
+            "id": "tl_rs_1",
+            "date": "2026-07-10",
+            "title": "Previous Visit V001: Acute Bronchitis",
+            "category": "opd_visit",
+            "details": "Treated with Paracetamol & Amoxyclav by Dr. R. K. Sharma. Fully resolved.",
+            "confidenceScore": 1
+          },
+          {
+            "id": "tl_rs_2",
+            "date": "2026-09-07",
+            "title": "Current Visit V002: Tension Headache / Migraine without aura",
+            "category": "diagnosis",
+            "details": "Patient reports 2-day frontal throbbing headache aggravated by visual strain.",
+            "confidenceScore": 0.95
+          }
+        ],
+        "triagePriority": "urgent",
+        "triageRationale": "URGENT: Moderate-to-severe cephalea (7/10 intensity) lasting 48 hours requiring clinical evaluation and neurological exclusion.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Severe frontal throbbing headache for 2 days (Rahul Sharma, 25Y/M)",
+          "historyOfPresentIllness": "25-year-old male returns to OPD (Visit 2). Previous visit on 10 July 2026 for acute bronchitis successfully resolved. Currently presents with acute throbbing headache since 2 days, rated 7/10. Pain is bilateral frontal and temporal, aggravated by digital screens. Denies photophobia, fever, vomiting, neck rigidity, or focal neuro deficits.",
+          "pastMedicalHistory": [
+            "Seasonal allergic rhinitis",
+            "Past acute bronchitis (July 2026, resolved)"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "Penicillin",
+              "reaction": "Tolerated Amoxyclav in July 2026 without reaction",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "BP: 126/82 mmHg. Pulse: 76 bpm. Pupils equal and reactive. Neck supple, no meningeal signs.",
+          "vitals": {
+            "bp": "126/82",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.4",
+            "rr": "16"
+          }
+        },
+        "medicines": [
+          {
+            "id": "med_rs_v2_1",
+            "visitId": "V002",
+            "patientId": "P10025",
+            "name": "Naproxen",
+            "dosage": "250 mg",
+            "frequency": "Twice daily SOS (1-0-1)",
+            "duration": "3 days",
+            "instructions": "Take strictly after meals with antacid",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          },
+          {
+            "id": "med_rs_v2_2",
+            "visitId": "V002",
+            "patientId": "P10025",
+            "name": "Tab Pantoprazole",
+            "dosage": "40 mg",
+            "frequency": "Once daily morning (1-0-0)",
+            "duration": "5 days",
+            "instructions": "Take empty stomach before breakfast",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          }
+        ],
+        "doctorReview": {
+          "verified": false,
+          "status": "pending",
+          "doctorNotes": "",
+          "differentialDiagnosis": [
+            "Tension-Type Headache",
+            "Migraine without aura",
+            "Eyestrain Asthenopia"
+          ],
+          "finalImpression": "Tension-type headache with asthenopia",
+          "prescribedMedications": [
+            {
+              "name": "Naproxen",
+              "dosage": "250 mg",
+              "frequency": "Twice daily SOS (1-0-1)",
+              "duration": "3 days",
+              "instructions": "Take strictly after meals with antacid"
+            },
+            {
+              "name": "Tab Pantoprazole",
+              "dosage": "40 mg",
+              "frequency": "Once daily morning (1-0-0)",
+              "duration": "5 days",
+              "instructions": "Take empty stomach before breakfast"
+            }
+          ]
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10025-V002"
+      },
+      {
+        "id": "enc_rahul_v1",
+        "patientId": "P10025",
+        "visitId": "V001",
+        "visitDate": "2026-07-10",
+        "attendingDoctor": "Dr. R. K. Sharma, MD",
+        "opdToken": "OPD-MED-019",
+        "opdRoom": "Room 4 (General Medicine)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2026-07-10T10:15:00.000Z",
+        "demographics": {
+          "id": "pat_rahul_sharma",
+          "fullName": "Rahul Sharma",
+          "age": 25,
+          "gender": "male",
+          "phone": "9876500001",
+          "abha": {
+            "abhaNumber": "91-8899-4455-1025",
+            "abhaAddress": "rahul.sharma25@abdm",
+            "status": "verified",
+            "kycStatus": "KYC_VERIFIED",
+            "linkedCareContextsCount": 1
+          },
+          "address": "Flat 302, Green Avenue, District Catchment",
+          "preferredLanguage": "hi",
+          "emergencyContact": "Mohan Sharma (Father) - 9876500002"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-07-10T10:12:00.000Z",
+          "method": "audio_verbal",
+          "languageUsed": "hi",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "fever",
+          "title": "Chest Congestion & Cough",
+          "description": "3 दिनों से मध्यम बुखार, गले में खराश और बलगम वाली खांसी।",
+          "onsetDuration": "3 days",
+          "voiceInputTranscript": "तीन दिन से हल्का बुखार और बलगम वाली खांसी आ रही है, गले में दर्द है।"
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "fv_duration",
+            "questionText": "How many days have you had the fever?",
+            "answerText": "3 days",
+            "category": "duration",
+            "isRedFlagIndicator": false
+          },
+          {
+            "questionId": "cough_type",
+            "questionText": "Nature of cough",
+            "answerText": "Productive with yellow phlegm, sore throat",
+            "category": "character",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [
+          {
+            "id": "tl_rs_1",
+            "date": "2026-07-10",
+            "title": "OPD Consultation: Acute Bronchitis",
+            "category": "opd_visit",
+            "details": "Evaluated for 3-day fever and cough. Chest clear, throat congested. Prescribed oral antibiotics and antipyretics.",
+            "confidenceScore": 1
+          }
+        ],
+        "triagePriority": "routine",
+        "triageRationale": "ROUTINE: Acute upper respiratory tract infection / bronchitis without respiratory distress or red-flag warning signs.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Fever and productive cough for 3 days (Rahul Sharma, 25Y/M)",
+          "historyOfPresentIllness": "Patient presented with acute respiratory symptoms now stabilized.",
+          "pastMedicalHistory": [
+            "Seasonal allergic rhinitis"
+          ],
+          "activeMedications": [
+            "Amoxicillin 500mg 500mg - 1-0-1 (5 days)",
+            "Paracetamol 650mg 650mg - SOS (3 days)"
+          ],
+          "allergies": [
+            {
+              "allergen": "None reported",
+              "reaction": "No drug allergies",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "Patient recovering well from acute bronchitis.",
+          "vitals": {
+            "bp": "120/78",
+            "pulse": "74",
+            "spo2": "99",
+            "temp": "99.4",
+            "rr": "16"
+          }
+        },
+        "medicines": [
+          {
+            "id": "rx_P10025_V001_0",
+            "visitId": "V001",
+            "patientId": "P10025",
+            "name": "Amoxicillin 500mg",
+            "dosage": "500mg",
+            "frequency": "1-0-1",
+            "duration": "5 days",
+            "instructions": "After food",
+            "datePrescribed": "2026-07-10",
+            "doctor": "Dr. S. K. Verma, MD"
+          },
+          {
+            "id": "rx_P10025_V001_1",
+            "visitId": "V001",
+            "patientId": "P10025",
+            "name": "Paracetamol 650mg",
+            "dosage": "650mg",
+            "frequency": "SOS",
+            "duration": "3 days",
+            "instructions": "When fever > 100 F",
+            "datePrescribed": "2026-07-10",
+            "doctor": "Dr. S. K. Verma, MD"
+          }
+        ],
+        "doctorReview": {
+          "verified": true,
+          "verifiedBy": "Dr. S. K. Verma, MD",
+          "verifiedAt": "2026-09-07T16:12:07.080Z",
+          "status": "verified",
+          "doctorNotes": "Patient recovering well from acute bronchitis.",
+          "differentialDiagnosis": [
+            "Acute Bronchitis",
+            "Viral Pharyngitis"
+          ],
+          "finalImpression": "Acute Bronchitis - stable",
+          "prescribedMedications": [
+            {
+              "name": "Amoxicillin 500mg",
+              "dosage": "500mg",
+              "frequency": "1-0-1",
+              "duration": "5 days",
+              "instructions": "After food"
+            },
+            {
+              "name": "Paracetamol 650mg",
+              "dosage": "650mg",
+              "frequency": "SOS",
+              "duration": "3 days",
+              "instructions": "When fever > 100 F"
+            }
+          ],
+          "doctorAdvice": "Drink 2.5L warm water daily. Complete full antibiotic course."
+        },
+        "savedToHis": true,
+        "hisSyncTimestamp": "2026-09-07T16:12:07.081Z",
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10025-V001",
+        "receiptToken": "e591c145093f910fe728e9ecef84078bd740ef0ea9c19005",
+        "receiptUrl": "http://localhost:5173/receipt/e591c145093f910fe728e9ecef84078bd740ef0ea9c19005"
+      }
+    ]
+  },
+  {
+    "patientId": "P10026",
+    "fullName": "Ramesh Kumar",
+    "age": 58,
+    "gender": "male",
+    "phone": "9876543210",
+    "abha": {
+      "abhaNumber": "91-4521-8890-1234",
+      "abhaAddress": "ramesh.kumar@abdm",
+      "status": "verified",
+      "kycStatus": "KYC_VERIFIED",
+      "linkedCareContextsCount": 3
+    },
+    "address": "Village Shahpur, Block 3, District Catchment",
+    "emergencyContact": "Suresh Kumar (Son) - 9876543211",
+    "registeredAt": "2025-11-15T09:00:00.000Z",
+    "totalVisits": 2,
+    "visits": [
+      {
+        "id": "enc_ramesh_kumar",
+        "patientId": "P10026",
+        "visitId": "V002",
+        "visitDate": "2026-09-07",
+        "attendingDoctor": "Dr. S. K. Verma, MD",
+        "opdToken": "OPD-MED-042",
+        "opdRoom": "Room 4 (General Medicine / Emergency)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2026-09-07T14:02:43.134Z",
+        "demographics": {
+          "id": "pat_ramesh",
+          "fullName": "Ramesh Kumar",
+          "age": 58,
+          "gender": "male",
+          "phone": "9876543210",
+          "abha": {
+            "abhaNumber": "91-4521-8890-1234",
+            "abhaAddress": "ramesh.kumar@abdm",
+            "status": "verified",
+            "kycStatus": "KYC_VERIFIED",
+            "linkedCareContextsCount": 3
+          },
+          "address": "Village Shahpur, Block 3, District Catchment",
+          "preferredLanguage": "hi",
+          "emergencyContact": "Suresh Kumar (Son) - 9876543211"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-07T14:03:43.134Z",
+          "method": "audio_verbal",
+          "languageUsed": "hi",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "सीने में भारीपन व पसीना (Acute Chest Heaviness)",
+          "description": "पिछले 2 घंटों से सीने में अचानक भारी दबाव महसूस हो रहा है, जो बाएं हाथ तक जा रहा है और ठंडा पसीना आ रहा है।",
+          "onsetDuration": "2 hours",
+          "voiceInputTranscript": "डॉक्टर साहब, दो घंटे से छाती में बहुत तेज भारीपन है, जैसे पत्थर रखा हो। दर्द बाएं कंधे और हाथ में भी जा रहा है और बहुत ठंडा पसीना छूट रहा है।"
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "cp_duration",
+            "questionText": "When did the chest pain start?",
+            "answerText": "Within the last 1-4 hours (Sudden onset)",
+            "category": "duration",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_character",
+            "questionText": "How would you describe the chest pain?",
+            "answerText": "Crushing heavy pressure / tight squeezing sensation",
+            "category": "character",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_radiation",
+            "questionText": "Does the pain spread anywhere else?",
+            "answerText": "Yes, radiates to Left Arm, Jaw, Neck or Back",
+            "category": "radiation",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "cp_associated",
+            "questionText": "Associated symptoms:",
+            "answerText": "Profuse cold sweating (Diaphoresis), Breathlessness",
+            "category": "associated",
+            "isRedFlagIndicator": true
+          }
+        ],
+        "documents": [
+          {
+            "id": "doc_sample_prescription",
+            "name": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "type": "prescription",
+            "uploadTimestamp": "2025-11-14T10:30:00Z",
+            "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23fffdfa;font-family:sans-serif;\">\n  <!-- Hospital Header -->\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"110\" fill=\"%230f766e\"/>\n  <text x=\"300\" y=\"42\" font-size=\"20\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">DISTRICT CIVIL HOSPITAL &amp; MEDICAL COLLEGE</text>\n  <text x=\"300\" y=\"68\" font-size=\"13\" fill=\"%23ccfbef\" text-anchor=\"middle\">Government of India - National Health Mission</text>\n  <text x=\"300\" y=\"90\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">OPD Outpatient Clinical Record | ABHA Enabled</text>\n\n  <!-- Patient Details Line -->\n  <rect x=\"20\" y=\"125\" width=\"560\" height=\"60\" fill=\"%23f8fafc\" stroke=\"%23cbd5e1\" rx=\"4\"/>\n  <text x=\"35\" y=\"148\" font-size=\"13\" font-weight=\"bold\" fill=\"%231e293b\">Dr. S. K. Verma, MD (Internal Medicine)</text>\n  <text x=\"400\" y=\"148\" font-size=\"12\" fill=\"%2364748b\">Reg No: MCI-28491</text>\n  <text x=\"35\" y=\"170\" font-size=\"12\" fill=\"%23334155\">Date: 14/11/2025 | BP: 154/96 mmHg | Pulse: 82/min | Wt: 74 kg</text>\n\n  <!-- Rx Symbol -->\n  <text x=\"35\" y=\"235\" font-size=\"36\" font-style=\"italic\" font-weight=\"bold\" fill=\"%230f766e\">℞</text>\n\n  <!-- Diagnoses box -->\n  <rect x=\"35\" y=\"255\" width=\"530\" height=\"80\" fill=\"%23eff6ff\" stroke=\"%23bfdbfe\" rx=\"4\"/>\n  <text x=\"50\" y=\"280\" font-size=\"13\" font-weight=\"bold\" fill=\"%231e40af\">CLINICAL DIAGNOSES / PROVISIONAL ASSESSMENT:</text>\n  <text x=\"50\" y=\"302\" font-size=\"13\" fill=\"%231e3a8a\">• Type-2 Diabetes Mellitus (Uncontrolled - HbA1c 8.8%)</text>\n  <text x=\"50\" y=\"322\" font-size=\"13\" fill=\"%231e3a8a\">• Essential Hypertension (Stage 2) &amp; Mixed Dyslipidemia</text>\n\n  <!-- Medications table -->\n  <text x=\"35\" y=\"365\" font-size=\"14\" font-weight=\"bold\" fill=\"%230f766e\">PRESCRIPTION / MEDICATIONS:</text>\n  <line x1=\"35\" y1=\"375\" x2=\"565\" y2=\"375\" stroke=\"%230f766e\" stroke-width=\"2\"/>\n  \n  <text x=\"45\" y=\"405\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">1. Tab Metformin 500 mg</text>\n  <text x=\"350\" y=\"405\" font-size=\"13\" fill=\"%23475569\">1 - 0 - 1 (After meals)</text>\n  <text x=\"45\" y=\"425\" font-size=\"11\" fill=\"%2364748b\">   Continue for 60 days</text>\n\n  <text x=\"45\" y=\"455\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">2. Tab Telmisartan 40 mg</text>\n  <text x=\"350\" y=\"455\" font-size=\"13\" fill=\"%23475569\">1 - 0 - 0 (Morning empty stomach)</text>\n  <text x=\"45\" y=\"475\" font-size=\"11\" fill=\"%2364748b\">   Daily for BP control</text>\n\n  <text x=\"45\" y=\"505\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">3. Tab Atorvastatin 20 mg</text>\n  <text x=\"350\" y=\"505\" font-size=\"13\" fill=\"%23475569\">0 - 0 - 1 (At Bedtime / HS)</text>\n  <text x=\"45\" y=\"525\" font-size=\"11\" fill=\"%2364748b\">   For high cholesterol</text>\n\n  <text x=\"45\" y=\"555\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">4. Tab Aspirin 75 mg EC</text>\n  <text x=\"350\" y=\"555\" font-size=\"13\" fill=\"%23475569\">0 - 1 - 0 (Post lunch)</text>\n\n  <!-- Lab instructions -->\n  <rect x=\"35\" y=\"595\" width=\"530\" height=\"90\" fill=\"%23fef3c7\" stroke=\"%23fde68a\" rx=\"4\"/>\n  <text x=\"50\" y=\"620\" font-size=\"12\" font-weight=\"bold\" fill=\"%2392400e\">ADVICE &amp; INVESTIGATIONS ORDERED:</text>\n  <text x=\"50\" y=\"640\" font-size=\"12\" fill=\"%2378350f\">• Repeat Fasting Blood Sugar (FBS), Serum Creatinine, Lipid Profile in 1 month</text>\n  <text x=\"50\" y=\"660\" font-size=\"12\" fill=\"%2378350f\">• Salt restricted diet &lt; 5g/day, brisk walking 30 mins daily</text>\n  <text x=\"50\" y=\"675\" font-size=\"12\" fill=\"%23b45309\">• Warning: Report immediately if chest heaviness or sudden shortness of breath occurs</text>\n\n  <!-- Hospital Stamp & Signature -->\n  <circle cx=\"480\" cy=\"730\" r=\"35\" fill=\"none\" stroke=\"%23dc2626\" stroke-width=\"2\" stroke-dasharray=\"4,2\"/>\n  <text x=\"480\" y=\"730\" font-size=\"9\" fill=\"%23dc2626\" text-anchor=\"middle\" font-weight=\"bold\">CIVIL HOSPITAL OPD</text>\n  <text x=\"480\" y=\"742\" font-size=\"8\" fill=\"%23dc2626\" text-anchor=\"middle\">VERIFIED 14-NOV-2025</text>\n  <path d=\"M 430 710 Q 450 690 480 720 T 520 705\" stroke=\"%231e40af\" stroke-width=\"2\" fill=\"none\"/>\n  <text x=\"475\" y=\"775\" font-size=\"11\" fill=\"%23334155\" text-anchor=\"middle\">Dr. S. K. Verma</text>\n</svg>",
+            "doctorName": "Dr. S. K. Verma, MD (Internal Medicine)",
+            "facilityName": "District Civil Hospital & Medical College",
+            "documentDate": "2025-11-14",
+            "isSamplePreset": true,
+            "ocrRawText": "DISTRICT CIVIL HOSPITAL OPD RECORD\nDate: 14/11/2025\nDr. S. K. Verma, MD (Internal Medicine)\nReg No: MCI-28491\nPatient: Ramesh Kumar, 58/M\nBP: 154/96 mmHg, Pulse: 82/min\nDiagnoses:\n- Type-2 Diabetes Mellitus (Uncontrolled - HbA1c 8.8%)\n- Essential Hypertension (Stage 2) & Mixed Dyslipidemia\nRx:\n1. Tab Metformin 500 mg - 1-0-1 (after meals)\n2. Tab Telmisartan 40 mg - 1-0-0 (morning)\n3. Tab Atorvastatin 20 mg - 0-0-1 (bedtime)\n4. Tab Aspirin 75 mg EC - 0-1-0 (post lunch)\nAdvice: Repeat FBS, Serum Creatinine in 1 month. Salt restricted diet.",
+            "extractedDiagnoses": [
+              {
+                "id": "diag_1",
+                "condition": "Type 2 Diabetes Mellitus",
+                "date": "2025-11-14",
+                "icd10Estimate": "E11.9",
+                "confidence": 0.96,
+                "status": "active"
+              },
+              {
+                "id": "diag_2",
+                "condition": "Essential Hypertension (Stage 2)",
+                "date": "2025-11-14",
+                "icd10Estimate": "I10",
+                "confidence": 0.94,
+                "status": "active"
+              },
+              {
+                "id": "diag_3",
+                "condition": "Mixed Dyslipidemia",
+                "date": "2025-11-14",
+                "icd10Estimate": "E78.2",
+                "confidence": 0.89,
+                "status": "active"
+              }
+            ],
+            "extractedMedications": [
+              {
+                "id": "med_1",
+                "name": "Metformin",
+                "dosage": "500 mg",
+                "frequency": "1-0-1 (Twice daily after meals)",
+                "duration": "60 days",
+                "purpose": "Glycemic Control (Diabetes)",
+                "confidence": 0.98,
+                "sourceDocName": "District Civil Hospital Prescription"
+              },
+              {
+                "id": "med_2",
+                "name": "Telmisartan",
+                "dosage": "40 mg",
+                "frequency": "1-0-0 (Once daily morning)",
+                "duration": "Continuous",
+                "purpose": "Blood Pressure Control (HTN)",
+                "confidence": 0.97,
+                "sourceDocName": "District Civil Hospital Prescription"
+              },
+              {
+                "id": "med_3",
+                "name": "Atorvastatin",
+                "dosage": "20 mg",
+                "frequency": "0-0-1 (Once daily at bedtime)",
+                "duration": "Continuous",
+                "purpose": "Lipid Lowering / Plaque Stabilization",
+                "confidence": 0.95,
+                "sourceDocName": "District Civil Hospital Prescription"
+              },
+              {
+                "id": "med_4",
+                "name": "Aspirin (Enteric Coated)",
+                "dosage": "75 mg",
+                "frequency": "0-1-0 (Once daily after lunch)",
+                "duration": "Continuous",
+                "purpose": "Antiplatelet Cardiovascular Prophylaxis",
+                "confidence": 0.93,
+                "sourceDocName": "District Civil Hospital Prescription"
+              }
+            ],
+            "extractedLabValues": [
+              {
+                "id": "lab_1",
+                "testName": "Blood Pressure (Clinic SBP/DBP)",
+                "value": "154/96",
+                "unit": "mmHg",
+                "referenceRange": "< 120/80",
+                "status": "abnormal",
+                "confidence": 0.96,
+                "date": "2025-11-14"
+              },
+              {
+                "id": "lab_2",
+                "testName": "HbA1c (Historical in note)",
+                "value": "8.8",
+                "unit": "%",
+                "referenceRange": "< 5.7",
+                "status": "abnormal",
+                "confidence": 0.91,
+                "date": "2025-11-14"
+              }
+            ]
+          }
+        ],
+        "timeline": [
+          {
+            "id": "ev_visit_doc_sample_prescription",
+            "date": "2025-11-14",
+            "title": "OPD Prescription",
+            "category": "opd_visit",
+            "details": "District Civil Hospital & Medical College (Dr. S. K. Verma, MD (Internal Medicine))",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.95
+          },
+          {
+            "id": "ev_diag_diag_1",
+            "date": "2025-11-14",
+            "title": "Diagnosis: Type 2 Diabetes Mellitus",
+            "category": "diagnosis",
+            "details": "Identified with 96% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.96
+          },
+          {
+            "id": "ev_diag_diag_2",
+            "date": "2025-11-14",
+            "title": "Diagnosis: Essential Hypertension (Stage 2)",
+            "category": "diagnosis",
+            "details": "Identified with 94% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.94
+          },
+          {
+            "id": "ev_diag_diag_3",
+            "date": "2025-11-14",
+            "title": "Diagnosis: Mixed Dyslipidemia",
+            "category": "diagnosis",
+            "details": "Identified with 89% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.89
+          },
+          {
+            "id": "ev_lab_lab_1",
+            "date": "2025-11-14",
+            "title": "Blood Pressure (Clinic SBP/DBP): 154/96 mmHg",
+            "category": "lab_result",
+            "details": "Ref: < 120/80 | Evaluated Status: ABNORMAL",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "criticalFlag": false,
+            "confidenceScore": 0.96
+          },
+          {
+            "id": "ev_lab_lab_2",
+            "date": "2025-11-14",
+            "title": "HbA1c (Historical in note): 8.8 %",
+            "category": "lab_result",
+            "details": "Ref: < 5.7 | Evaluated Status: ABNORMAL",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "criticalFlag": false,
+            "confidenceScore": 0.91
+          },
+          {
+            "id": "ev_meds_doc_sample_prescription",
+            "date": "2025-11-14",
+            "title": "Medication Regimen (4 drugs)",
+            "category": "medication",
+            "details": "Metformin 500 mg (1-0-1 (Twice daily after meals)), Telmisartan 40 mg (1-0-0 (Once daily morning)), Atorvastatin 20 mg (0-0-1 (Once daily at bedtime)), Aspirin (Enteric Coated) 75 mg (0-1-0 (Once daily after lunch))",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.92
+          }
+        ],
+        "triagePriority": "emergency",
+        "triageRationale": "RED FLAG: High suspicion of Acute Coronary Syndrome (Inferior/Anterior STEMI) with diaphoresis and radiation to left arm in a known Diabetic/Hypertensive patient.",
+        "redFlags": [
+          {
+            "id": "rf_1",
+            "title": "Suspected Acute Myocardial Infarction / ACS",
+            "severity": "critical",
+            "description": "Crushing retrosternal chest pain of acute onset radiating to left arm with profuse cold diaphoresis.",
+            "clinicalActionNeeded": "Perform urgent 12-lead ECG immediately. Stat loading dose (Aspirin 300mg + Clopidogrel 300mg + Atorvastatin 80mg). Keep oxygen and IV line ready."
+          },
+          {
+            "id": "rf_2",
+            "title": "High Vascular Risk Profile",
+            "severity": "warning",
+            "description": "History of Uncontrolled Type 2 Diabetes (HbA1c 8.8%) and Essential Hypertension (BP 154/96 recorded in Nov 2025 visit).",
+            "clinicalActionNeeded": "Bedside capillary blood sugar and cardiac enzymes (Troponin-I stat)."
+          }
+        ],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Acute retrosternal chest pressure radiating to left arm with diaphoresis (2 hours)",
+          "historyOfPresentIllness": "58-year-old male with prior hospital records (Visit 1, Nov 2025 for T2DM/HTN) returns with sudden onset crushing retrosternal chest heaviness since 2 hours. Pain radiates to left arm and shoulder, associated with severe cold diaphoresis. Prior medications documented: Metformin 500mg BD, Telmisartan 40mg OD, Atorvastatin 20mg HS.",
+          "pastMedicalHistory": [
+            "Type 2 Diabetes Mellitus (Uncontrolled)",
+            "Essential Hypertension (Stage 2)",
+            "Mixed Dyslipidemia"
+          ],
+          "activeMedications": [
+            {
+              "id": "med_1",
+              "name": "Metformin",
+              "dosage": "500 mg",
+              "frequency": "1-0-1 (Twice daily after meals)",
+              "duration": "60 days",
+              "purpose": "Glycemic Control (Diabetes)",
+              "confidence": 0.98,
+              "sourceDocName": "District Civil Hospital Prescription"
+            },
+            {
+              "id": "med_2",
+              "name": "Telmisartan",
+              "dosage": "40 mg",
+              "frequency": "1-0-0 (Once daily morning)",
+              "duration": "Continuous",
+              "purpose": "Blood Pressure Control (HTN)",
+              "confidence": 0.97,
+              "sourceDocName": "District Civil Hospital Prescription"
+            },
+            {
+              "id": "med_3",
+              "name": "Atorvastatin",
+              "dosage": "20 mg",
+              "frequency": "0-0-1 (Once daily at bedtime)",
+              "duration": "Continuous",
+              "purpose": "Lipid Lowering / Plaque Stabilization",
+              "confidence": 0.95,
+              "sourceDocName": "District Civil Hospital Prescription"
+            },
+            {
+              "id": "med_4",
+              "name": "Aspirin (Enteric Coated)",
+              "dosage": "75 mg",
+              "frequency": "0-1-0 (Once daily after lunch)",
+              "duration": "Continuous",
+              "purpose": "Antiplatelet Cardiovascular Prophylaxis",
+              "confidence": 0.93,
+              "sourceDocName": "District Civil Hospital Prescription"
+            }
+          ],
+          "allergies": [
+            {
+              "allergen": "Penicillin",
+              "reaction": "No known allergy",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "BP recorded at 154/96 mmHg in previous visit. Fasting blood sugar 184 mg/dL.",
+          "vitals": {
+            "bp": "148/92",
+            "pulse": "92",
+            "spo2": "96",
+            "temp": "98.6",
+            "rr": "22"
+          }
+        },
+        "medicines": [
+          {
+            "id": "med_rk_v2_1",
+            "visitId": "V002",
+            "patientId": "P10026",
+            "name": "Tab Ecosprin (Dispersible)",
+            "dosage": "300 mg",
+            "frequency": "Stat chewable",
+            "duration": "1 day",
+            "instructions": "Chew immediately for acute coronary syndrome loading",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          },
+          {
+            "id": "med_rk_v2_2",
+            "visitId": "V002",
+            "patientId": "P10026",
+            "name": "Tab Clopidogrel",
+            "dosage": "300 mg",
+            "frequency": "Stat oral",
+            "duration": "1 day",
+            "instructions": "Loading dose taken immediately with water",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          },
+          {
+            "id": "med_rk_v2_3",
+            "visitId": "V002",
+            "patientId": "P10026",
+            "name": "Tab Sorbitrate (Sublingual)",
+            "dosage": "5 mg",
+            "frequency": "SOS Sublingual",
+            "duration": "Stat",
+            "instructions": "Place under tongue if chest heaviness recurs",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          },
+          {
+            "id": "med_rk_v2_4",
+            "visitId": "V002",
+            "patientId": "P10026",
+            "name": "Tab Atorvastatin",
+            "dosage": "80 mg",
+            "frequency": "Stat bedtime",
+            "duration": "1 day",
+            "instructions": "High-intensity statin loading",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          }
+        ],
+        "doctorReview": {
+          "verified": false,
+          "status": "pending",
+          "doctorNotes": "",
+          "differentialDiagnosis": [
+            "Acute ST-Elevation Myocardial Infarction (STEMI)",
+            "Unstable Angina",
+            "Acute Aortic Dissection"
+          ],
+          "finalImpression": "Suspected ACS - Acute Inferior Wall STEMI",
+          "prescribedMedications": [
+            {
+              "name": "Tab Ecosprin (Dispersible)",
+              "dosage": "300 mg",
+              "frequency": "Stat chewable",
+              "duration": "1 day",
+              "instructions": "Chew immediately for acute coronary syndrome loading"
+            },
+            {
+              "name": "Tab Clopidogrel",
+              "dosage": "300 mg",
+              "frequency": "Stat oral",
+              "duration": "1 day",
+              "instructions": "Loading dose taken immediately with water"
+            },
+            {
+              "name": "Tab Sorbitrate (Sublingual)",
+              "dosage": "5 mg",
+              "frequency": "SOS Sublingual",
+              "duration": "Stat",
+              "instructions": "Place under tongue if chest heaviness recurs"
+            },
+            {
+              "name": "Tab Atorvastatin",
+              "dosage": "80 mg",
+              "frequency": "Stat bedtime",
+              "duration": "1 day",
+              "instructions": "High-intensity statin loading"
+            }
+          ],
+          "recommendedTests": [
+            "12-Lead Electrocardiogram (ECG) Stat",
+            "Serum Troponin-I Rapid Card",
+            "Blood Glucose Random (CBG)"
+          ]
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10026-V002"
+      },
+      {
+        "id": "enc_ramesh_v1",
+        "patientId": "P10026",
+        "visitId": "V001",
+        "visitDate": "2025-11-15",
+        "attendingDoctor": "Dr. A. Gupta, MD",
+        "opdToken": "OPD-MED-104",
+        "opdRoom": "Room 2 (Endocrinology / Medicine)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2025-11-15T09:30:00.000Z",
+        "demographics": {
+          "id": "pat_ramesh",
+          "fullName": "Ramesh Kumar",
+          "age": 58,
+          "gender": "male",
+          "phone": "9876543210",
+          "abha": {
+            "abhaNumber": "91-4521-8890-1234",
+            "abhaAddress": "ramesh.kumar@abdm",
+            "status": "verified",
+            "kycStatus": "KYC_VERIFIED",
+            "linkedCareContextsCount": 3
+          },
+          "address": "Village Shahpur, Block 3, District Catchment",
+          "preferredLanguage": "hi",
+          "emergencyContact": "Suresh Kumar (Son) - 9876543211"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2025-11-15T09:28:00.000Z",
+          "method": "audio_verbal",
+          "languageUsed": "hi",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "diabetes_review",
+          "title": "डायबिटीज और बीपी चेकअप (Diabetes & BP Follow-up)",
+          "description": "रूटीन 3 महीने का चेकअप और दवाओं का रीफिल।",
+          "onsetDuration": "Chronic review"
+        },
+        "adaptiveAnswers": [],
+        "documents": [
+          {
+            "id": "doc_sample_prescription",
+            "name": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "type": "prescription",
+            "uploadTimestamp": "2025-11-14T10:30:00Z",
+            "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23fffdfa;font-family:sans-serif;\">\n  <!-- Hospital Header -->\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"110\" fill=\"%230f766e\"/>\n  <text x=\"300\" y=\"42\" font-size=\"20\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">DISTRICT CIVIL HOSPITAL &amp; MEDICAL COLLEGE</text>\n  <text x=\"300\" y=\"68\" font-size=\"13\" fill=\"%23ccfbef\" text-anchor=\"middle\">Government of India - National Health Mission</text>\n  <text x=\"300\" y=\"90\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">OPD Outpatient Clinical Record | ABHA Enabled</text>\n\n  <!-- Patient Details Line -->\n  <rect x=\"20\" y=\"125\" width=\"560\" height=\"60\" fill=\"%23f8fafc\" stroke=\"%23cbd5e1\" rx=\"4\"/>\n  <text x=\"35\" y=\"148\" font-size=\"13\" font-weight=\"bold\" fill=\"%231e293b\">Dr. S. K. Verma, MD (Internal Medicine)</text>\n  <text x=\"400\" y=\"148\" font-size=\"12\" fill=\"%2364748b\">Reg No: MCI-28491</text>\n  <text x=\"35\" y=\"170\" font-size=\"12\" fill=\"%23334155\">Date: 14/11/2025 | BP: 154/96 mmHg | Pulse: 82/min | Wt: 74 kg</text>\n\n  <!-- Rx Symbol -->\n  <text x=\"35\" y=\"235\" font-size=\"36\" font-style=\"italic\" font-weight=\"bold\" fill=\"%230f766e\">℞</text>\n\n  <!-- Diagnoses box -->\n  <rect x=\"35\" y=\"255\" width=\"530\" height=\"80\" fill=\"%23eff6ff\" stroke=\"%23bfdbfe\" rx=\"4\"/>\n  <text x=\"50\" y=\"280\" font-size=\"13\" font-weight=\"bold\" fill=\"%231e40af\">CLINICAL DIAGNOSES / PROVISIONAL ASSESSMENT:</text>\n  <text x=\"50\" y=\"302\" font-size=\"13\" fill=\"%231e3a8a\">• Type-2 Diabetes Mellitus (Uncontrolled - HbA1c 8.8%)</text>\n  <text x=\"50\" y=\"322\" font-size=\"13\" fill=\"%231e3a8a\">• Essential Hypertension (Stage 2) &amp; Mixed Dyslipidemia</text>\n\n  <!-- Medications table -->\n  <text x=\"35\" y=\"365\" font-size=\"14\" font-weight=\"bold\" fill=\"%230f766e\">PRESCRIPTION / MEDICATIONS:</text>\n  <line x1=\"35\" y1=\"375\" x2=\"565\" y2=\"375\" stroke=\"%230f766e\" stroke-width=\"2\"/>\n  \n  <text x=\"45\" y=\"405\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">1. Tab Metformin 500 mg</text>\n  <text x=\"350\" y=\"405\" font-size=\"13\" fill=\"%23475569\">1 - 0 - 1 (After meals)</text>\n  <text x=\"45\" y=\"425\" font-size=\"11\" fill=\"%2364748b\">   Continue for 60 days</text>\n\n  <text x=\"45\" y=\"455\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">2. Tab Telmisartan 40 mg</text>\n  <text x=\"350\" y=\"455\" font-size=\"13\" fill=\"%23475569\">1 - 0 - 0 (Morning empty stomach)</text>\n  <text x=\"45\" y=\"475\" font-size=\"11\" fill=\"%2364748b\">   Daily for BP control</text>\n\n  <text x=\"45\" y=\"505\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">3. Tab Atorvastatin 20 mg</text>\n  <text x=\"350\" y=\"505\" font-size=\"13\" fill=\"%23475569\">0 - 0 - 1 (At Bedtime / HS)</text>\n  <text x=\"45\" y=\"525\" font-size=\"11\" fill=\"%2364748b\">   For high cholesterol</text>\n\n  <text x=\"45\" y=\"555\" font-size=\"13\" font-weight=\"bold\" fill=\"%230f172a\">4. Tab Aspirin 75 mg EC</text>\n  <text x=\"350\" y=\"555\" font-size=\"13\" fill=\"%23475569\">0 - 1 - 0 (Post lunch)</text>\n\n  <!-- Lab instructions -->\n  <rect x=\"35\" y=\"595\" width=\"530\" height=\"90\" fill=\"%23fef3c7\" stroke=\"%23fde68a\" rx=\"4\"/>\n  <text x=\"50\" y=\"620\" font-size=\"12\" font-weight=\"bold\" fill=\"%2392400e\">ADVICE &amp; INVESTIGATIONS ORDERED:</text>\n  <text x=\"50\" y=\"640\" font-size=\"12\" fill=\"%2378350f\">• Repeat Fasting Blood Sugar (FBS), Serum Creatinine, Lipid Profile in 1 month</text>\n  <text x=\"50\" y=\"660\" font-size=\"12\" fill=\"%2378350f\">• Salt restricted diet &lt; 5g/day, brisk walking 30 mins daily</text>\n  <text x=\"50\" y=\"675\" font-size=\"12\" fill=\"%23b45309\">• Warning: Report immediately if chest heaviness or sudden shortness of breath occurs</text>\n\n  <!-- Hospital Stamp & Signature -->\n  <circle cx=\"480\" cy=\"730\" r=\"35\" fill=\"none\" stroke=\"%23dc2626\" stroke-width=\"2\" stroke-dasharray=\"4,2\"/>\n  <text x=\"480\" y=\"730\" font-size=\"9\" fill=\"%23dc2626\" text-anchor=\"middle\" font-weight=\"bold\">CIVIL HOSPITAL OPD</text>\n  <text x=\"480\" y=\"742\" font-size=\"8\" fill=\"%23dc2626\" text-anchor=\"middle\">VERIFIED 14-NOV-2025</text>\n  <path d=\"M 430 710 Q 450 690 480 720 T 520 705\" stroke=\"%231e40af\" stroke-width=\"2\" fill=\"none\"/>\n  <text x=\"475\" y=\"775\" font-size=\"11\" fill=\"%23334155\" text-anchor=\"middle\">Dr. S. K. Verma</text>\n</svg>",
+            "doctorName": "Dr. S. K. Verma, MD (Internal Medicine)",
+            "facilityName": "District Civil Hospital & Medical College",
+            "documentDate": "2025-11-14",
+            "isSamplePreset": true,
+            "ocrRawText": "DISTRICT CIVIL HOSPITAL OPD RECORD\nDate: 14/11/2025\nDr. S. K. Verma, MD (Internal Medicine)\nReg No: MCI-28491\nPatient: Ramesh Kumar, 58/M\nBP: 154/96 mmHg, Pulse: 82/min\nDiagnoses:\n- Type-2 Diabetes Mellitus (Uncontrolled - HbA1c 8.8%)\n- Essential Hypertension (Stage 2) & Mixed Dyslipidemia\nRx:\n1. Tab Metformin 500 mg - 1-0-1 (after meals)\n2. Tab Telmisartan 40 mg - 1-0-0 (morning)\n3. Tab Atorvastatin 20 mg - 0-0-1 (bedtime)\n4. Tab Aspirin 75 mg EC - 0-1-0 (post lunch)\nAdvice: Repeat FBS, Serum Creatinine in 1 month. Salt restricted diet.",
+            "extractedDiagnoses": [
+              {
+                "id": "diag_1",
+                "condition": "Type 2 Diabetes Mellitus",
+                "date": "2025-11-14",
+                "icd10Estimate": "E11.9",
+                "confidence": 0.96,
+                "status": "active"
+              },
+              {
+                "id": "diag_2",
+                "condition": "Essential Hypertension (Stage 2)",
+                "date": "2025-11-14",
+                "icd10Estimate": "I10",
+                "confidence": 0.94,
+                "status": "active"
+              },
+              {
+                "id": "diag_3",
+                "condition": "Mixed Dyslipidemia",
+                "date": "2025-11-14",
+                "icd10Estimate": "E78.2",
+                "confidence": 0.89,
+                "status": "active"
+              }
+            ],
+            "extractedMedications": [
+              {
+                "id": "med_1",
+                "name": "Metformin",
+                "dosage": "500 mg",
+                "frequency": "1-0-1 (Twice daily after meals)",
+                "duration": "60 days",
+                "purpose": "Glycemic Control (Diabetes)",
+                "confidence": 0.98,
+                "sourceDocName": "District Civil Hospital Prescription"
+              },
+              {
+                "id": "med_2",
+                "name": "Telmisartan",
+                "dosage": "40 mg",
+                "frequency": "1-0-0 (Once daily morning)",
+                "duration": "Continuous",
+                "purpose": "Blood Pressure Control (HTN)",
+                "confidence": 0.97,
+                "sourceDocName": "District Civil Hospital Prescription"
+              },
+              {
+                "id": "med_3",
+                "name": "Atorvastatin",
+                "dosage": "20 mg",
+                "frequency": "0-0-1 (Once daily at bedtime)",
+                "duration": "Continuous",
+                "purpose": "Lipid Lowering / Plaque Stabilization",
+                "confidence": 0.95,
+                "sourceDocName": "District Civil Hospital Prescription"
+              },
+              {
+                "id": "med_4",
+                "name": "Aspirin (Enteric Coated)",
+                "dosage": "75 mg",
+                "frequency": "0-1-0 (Once daily after lunch)",
+                "duration": "Continuous",
+                "purpose": "Antiplatelet Cardiovascular Prophylaxis",
+                "confidence": 0.93,
+                "sourceDocName": "District Civil Hospital Prescription"
+              }
+            ],
+            "extractedLabValues": [
+              {
+                "id": "lab_1",
+                "testName": "Blood Pressure (Clinic SBP/DBP)",
+                "value": "154/96",
+                "unit": "mmHg",
+                "referenceRange": "< 120/80",
+                "status": "abnormal",
+                "confidence": 0.96,
+                "date": "2025-11-14"
+              },
+              {
+                "id": "lab_2",
+                "testName": "HbA1c (Historical in note)",
+                "value": "8.8",
+                "unit": "%",
+                "referenceRange": "< 5.7",
+                "status": "abnormal",
+                "confidence": 0.91,
+                "date": "2025-11-14"
+              }
+            ]
+          }
+        ],
+        "timeline": [
+          {
+            "id": "ev_visit_doc_sample_prescription",
+            "date": "2025-11-14",
+            "title": "OPD Prescription",
+            "category": "opd_visit",
+            "details": "District Civil Hospital & Medical College (Dr. S. K. Verma, MD (Internal Medicine))",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.95
+          },
+          {
+            "id": "ev_diag_diag_1",
+            "date": "2025-11-14",
+            "title": "Diagnosis: Type 2 Diabetes Mellitus",
+            "category": "diagnosis",
+            "details": "Identified with 96% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.96
+          },
+          {
+            "id": "ev_diag_diag_2",
+            "date": "2025-11-14",
+            "title": "Diagnosis: Essential Hypertension (Stage 2)",
+            "category": "diagnosis",
+            "details": "Identified with 94% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.94
+          },
+          {
+            "id": "ev_diag_diag_3",
+            "date": "2025-11-14",
+            "title": "Diagnosis: Mixed Dyslipidemia",
+            "category": "diagnosis",
+            "details": "Identified with 89% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.89
+          },
+          {
+            "id": "ev_lab_lab_1",
+            "date": "2025-11-14",
+            "title": "Blood Pressure (Clinic SBP/DBP): 154/96 mmHg",
+            "category": "lab_result",
+            "details": "Ref: < 120/80 | Evaluated Status: ABNORMAL",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "criticalFlag": false,
+            "confidenceScore": 0.96
+          },
+          {
+            "id": "ev_lab_lab_2",
+            "date": "2025-11-14",
+            "title": "HbA1c (Historical in note): 8.8 %",
+            "category": "lab_result",
+            "details": "Ref: < 5.7 | Evaluated Status: ABNORMAL",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "criticalFlag": false,
+            "confidenceScore": 0.91
+          },
+          {
+            "id": "ev_meds_doc_sample_prescription",
+            "date": "2025-11-14",
+            "title": "Medication Regimen (4 drugs)",
+            "category": "medication",
+            "details": "Metformin 500 mg (1-0-1 (Twice daily after meals)), Telmisartan 40 mg (1-0-0 (Once daily morning)), Atorvastatin 20 mg (0-0-1 (Once daily at bedtime)), Aspirin (Enteric Coated) 75 mg (0-1-0 (Once daily after lunch))",
+            "sourceDocName": "District_Civil_Hospital_Prescription_Nov2025.jpg",
+            "confidenceScore": 0.92
+          }
+        ],
+        "triagePriority": "routine",
+        "triageRationale": "ROUTINE: Outpatient review for established Type 2 DM and Stage 2 Hypertension.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Routine review for T2DM and Hypertension (Ramesh Kumar, 58Y/M)",
+          "historyOfPresentIllness": "58-year-old male attended for chronic disease monitoring. Reports compliance with oral hypoglycemics and antihypertensives. Recent HbA1c 8.8%.",
+          "pastMedicalHistory": [
+            "Type 2 Diabetes Mellitus (Uncontrolled)",
+            "Essential Hypertension (Stage 2)"
+          ],
+          "activeMedications": [
+            {
+              "id": "med_1",
+              "name": "Metformin",
+              "dosage": "500 mg",
+              "frequency": "1-0-1 (Twice daily after meals)",
+              "duration": "60 days",
+              "purpose": "Glycemic Control (Diabetes)",
+              "confidence": 0.98,
+              "sourceDocName": "District Civil Hospital Prescription"
+            },
+            {
+              "id": "med_2",
+              "name": "Telmisartan",
+              "dosage": "40 mg",
+              "frequency": "1-0-0 (Once daily morning)",
+              "duration": "Continuous",
+              "purpose": "Blood Pressure Control (HTN)",
+              "confidence": 0.97,
+              "sourceDocName": "District Civil Hospital Prescription"
+            },
+            {
+              "id": "med_3",
+              "name": "Atorvastatin",
+              "dosage": "20 mg",
+              "frequency": "0-0-1 (Once daily at bedtime)",
+              "duration": "Continuous",
+              "purpose": "Lipid Lowering / Plaque Stabilization",
+              "confidence": 0.95,
+              "sourceDocName": "District Civil Hospital Prescription"
+            },
+            {
+              "id": "med_4",
+              "name": "Aspirin (Enteric Coated)",
+              "dosage": "75 mg",
+              "frequency": "0-1-0 (Once daily after lunch)",
+              "duration": "Continuous",
+              "purpose": "Antiplatelet Cardiovascular Prophylaxis",
+              "confidence": 0.93,
+              "sourceDocName": "District Civil Hospital Prescription"
+            }
+          ],
+          "allergies": [
+            {
+              "allergen": "Penicillin",
+              "reaction": "No known adverse reaction",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "HbA1c: 8.8%. BP: 154/96 mmHg. Prescribed triple therapy.",
+          "vitals": {
+            "bp": "154/96",
+            "pulse": "78",
+            "spo2": "97",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "medicines": [
+          {
+            "id": "med_rk_v1_1",
+            "visitId": "V001",
+            "patientId": "P10026",
+            "name": "Telmisartan",
+            "dosage": "40 mg",
+            "frequency": "Once daily morning (1-0-0)",
+            "duration": "90 days",
+            "instructions": "Take in morning with water for blood pressure",
+            "datePrescribed": "2025-11-15",
+            "doctor": "Dr. A. Gupta, MD"
+          },
+          {
+            "id": "med_rk_v1_2",
+            "visitId": "V001",
+            "patientId": "P10026",
+            "name": "Metformin",
+            "dosage": "500 mg",
+            "frequency": "Twice daily (1-0-1)",
+            "duration": "90 days",
+            "instructions": "Take after breakfast and dinner for blood sugar",
+            "datePrescribed": "2025-11-15",
+            "doctor": "Dr. A. Gupta, MD"
+          },
+          {
+            "id": "med_rk_v1_3",
+            "visitId": "V001",
+            "patientId": "P10026",
+            "name": "Atorvastatin",
+            "dosage": "20 mg",
+            "frequency": "Once daily bedtime (0-0-1)",
+            "duration": "90 days",
+            "instructions": "Take at night for cholesterol control",
+            "datePrescribed": "2025-11-15",
+            "doctor": "Dr. A. Gupta, MD"
+          }
+        ],
+        "doctorReview": {
+          "verified": true,
+          "verifiedBy": "Dr. A. Gupta, MD",
+          "verifiedAt": "2025-11-15T10:00:00.000Z",
+          "status": "verified",
+          "doctorNotes": "Glycemic control suboptimal (HbA1c 8.8%). Advised dietary moderation and continued compliance.",
+          "finalImpression": "T2DM uncontrolled, Stage 2 Hypertension",
+          "prescribedMedications": [
+            {
+              "name": "Telmisartan",
+              "dosage": "40 mg",
+              "frequency": "Once daily morning (1-0-0)",
+              "duration": "90 days",
+              "instructions": "Take in morning with water for blood pressure"
+            },
+            {
+              "name": "Metformin",
+              "dosage": "500 mg",
+              "frequency": "Twice daily (1-0-1)",
+              "duration": "90 days",
+              "instructions": "Take after breakfast and dinner for blood sugar"
+            },
+            {
+              "name": "Atorvastatin",
+              "dosage": "20 mg",
+              "frequency": "Once daily bedtime (0-0-1)",
+              "duration": "90 days",
+              "instructions": "Take at night for cholesterol control"
+            }
+          ]
+        },
+        "savedToHis": true,
+        "hisSyncTimestamp": "2025-11-15T10:05:00.000Z",
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10026-V001"
+      }
+    ]
+  },
+  {
+    "patientId": "P10027",
+    "fullName": "Sunita Devi",
+    "age": 42,
+    "gender": "female",
+    "phone": "9845123670",
+    "abha": {
+      "abhaNumber": "91-3312-7740-9981",
+      "abhaAddress": "sunita.devi42@abdm",
+      "status": "verified",
+      "kycStatus": "KYC_VERIFIED",
+      "linkedCareContextsCount": 1
+    },
+    "address": "Ward 12, Rampur Nagar",
+    "registeredAt": "2026-09-07T08:30:00.000Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_sunita_devi",
+        "patientId": "P10027",
+        "visitId": "V001",
+        "visitDate": "2026-09-07",
+        "attendingDoctor": "Dr. S. K. Verma, MD",
+        "opdToken": "OPD-MED-043",
+        "opdRoom": "Room 4 (General Medicine)",
+        "specialty": "Internal Medicine",
+        "createdAt": "2026-09-07T13:42:43.135Z",
+        "demographics": {
+          "id": "pat_sunita",
+          "fullName": "Sunita Devi",
+          "age": 42,
+          "gender": "female",
+          "phone": "9845123670",
+          "abha": {
+            "abhaNumber": "91-3312-7740-9981",
+            "abhaAddress": "sunita.devi42@abdm",
+            "status": "verified",
+            "kycStatus": "KYC_VERIFIED",
+            "linkedCareContextsCount": 1
+          },
+          "address": "Ward 12, Rampur Nagar",
+          "preferredLanguage": "hi"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-07T13:43:43.135Z",
+          "method": "audio_verbal",
+          "languageUsed": "hi",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "fever",
+          "title": "5 दिनों से तेज बुखार व कंपकंपी (High Grade Fever with Chills)",
+          "description": "5 दिनों से तेज बुखार आ रहा है, आंखों के पीछे दर्द है और आज सुबह नाक से थोड़ा खून आया था।",
+          "onsetDuration": "5 days",
+          "voiceInputTranscript": "पांच दिन से बहुत तेज बुखार और बदन में असहनीय दर्द है। आज सुबह ब्रश करते समय मसूड़े से खून आ रहा था।"
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "fv_duration",
+            "questionText": "How many days have you had the fever?",
+            "answerText": "3 to 7 days (High continuous fever)",
+            "category": "duration",
+            "isRedFlagIndicator": false
+          },
+          {
+            "questionId": "fv_chills",
+            "questionText": "Shaking chills or bone breaking pain?",
+            "answerText": "Yes, severe chills, rigors and pain behind eyes / joints",
+            "category": "character",
+            "isRedFlagIndicator": true
+          },
+          {
+            "questionId": "fv_warning_signs",
+            "questionText": "Critical warning signs:",
+            "answerText": "Bleeding from gums/nose or tiny red skin spots (Petechiae)",
+            "category": "red_flag",
+            "isRedFlagIndicator": true
+          }
+        ],
+        "documents": [
+          {
+            "id": "doc_sample_lab_report",
+            "name": "National_Lab_Hematology_Feb2026.pdf",
+            "type": "lab_report",
+            "uploadTimestamp": "2026-02-18T14:15:00Z",
+            "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23ffffff;font-family:sans-serif;\">\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"100\" fill=\"%231e3a8a\"/>\n  <text x=\"300\" y=\"40\" font-size=\"20\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">NATIONAL CLINICAL REFERENCE LAB</text>\n  <text x=\"300\" y=\"65\" font-size=\"12\" fill=\"%2393c5fd\" text-anchor=\"middle\">NABL ACCREDITED &amp; ICMR APPROVED TESTING FACILITY</text>\n  <text x=\"300\" y=\"85\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">Automated Hematology &amp; Biochemistry Report</text>\n\n  <!-- Patient banner -->\n  <rect x=\"25\" y=\"115\" width=\"550\" height=\"65\" fill=\"%23f1f5f9\" stroke=\"%23cbd5e1\" rx=\"4\"/>\n  <text x=\"40\" y=\"138\" font-size=\"12\" fill=\"%23334155\">Patient ID: <tspan font-weight=\"bold\">NC-2026-8941</tspan> | Age: <tspan font-weight=\"bold\">42 Yrs / Female</tspan></text>\n  <text x=\"40\" y=\"160\" font-size=\"12\" fill=\"%23334155\">Date: <tspan font-weight=\"bold\">18-Feb-2026</tspan> | Ref Doctor: <tspan font-weight=\"bold\">Dr. R. K. Mukherjee</tspan></text>\n\n  <!-- Table Header -->\n  <rect x=\"25\" y=\"195\" width=\"550\" height=\"30\" fill=\"%23e2e8f0\"/>\n  <text x=\"40\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">TEST PARAMETER</text>\n  <text x=\"260\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">OBSERVED VALUE</text>\n  <text x=\"390\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">REFERENCE RANGE</text>\n  <text x=\"520\" y=\"215\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">STATUS</text>\n\n  <!-- Row 1: Platelets CRITICAL LOW -->\n  <rect x=\"25\" y=\"235\" width=\"550\" height=\"42\" fill=\"%23fef2f2\"/>\n  <text x=\"40\" y=\"260\" font-size=\"13\" font-weight=\"bold\" fill=\"%23991b1b\">Platelet Count (PLT)</text>\n  <text x=\"260\" y=\"260\" font-size=\"14\" font-weight=\"bold\" fill=\"%23dc2626\">58,000 /uL</text>\n  <text x=\"390\" y=\"260\" font-size=\"12\" fill=\"%2364748b\">150,000 - 450,000</text>\n  <rect x=\"505\" y=\"244\" width=\"60\" height=\"24\" fill=\"%23dc2626\" rx=\"3\"/>\n  <text x=\"535\" y=\"260\" font-size=\"10\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">CRITICAL</text>\n\n  <!-- Row 2: Dengue NS1 -->\n  <rect x=\"25\" y=\"280\" width=\"550\" height=\"38\" fill=\"%23fff1f2\"/>\n  <text x=\"40\" y=\"304\" font-size=\"13\" font-weight=\"bold\" fill=\"%239f1239\">Dengue NS1 Antigen</text>\n  <text x=\"260\" y=\"304\" font-size=\"14\" font-weight=\"bold\" fill=\"%23e11d48\">POSITIVE (Reactive)</text>\n  <text x=\"390\" y=\"304\" font-size=\"12\" fill=\"%2364748b\">Non-Reactive</text>\n  <text x=\"520\" y=\"304\" font-size=\"12\" font-weight=\"bold\" fill=\"%23e11d48\">POSITIVE</text>\n\n  <!-- Row 3: Total WBC -->\n  <rect x=\"25\" y=\"322\" width=\"550\" height=\"38\" fill=\"%23f8fafc\"/>\n  <text x=\"40\" y=\"346\" font-size=\"12\" fill=\"%231e293b\">Total Leukocyte Count (TLC)</text>\n  <text x=\"260\" y=\"346\" font-size=\"13\" font-weight=\"bold\" fill=\"%23b45309\">3,200 /uL</text>\n  <text x=\"390\" y=\"346\" font-size=\"12\" fill=\"%2364748b\">4,000 - 11,000</text>\n  <text x=\"520\" y=\"346\" font-size=\"11\" font-weight=\"bold\" fill=\"%23d97706\">LOW (Leukopenia)</text>\n\n  <!-- Row 4: Hemoglobin -->\n  <rect x=\"25\" y=\"364\" width=\"550\" height=\"38\" fill=\"%23ffffff\"/>\n  <text x=\"40\" y=\"388\" font-size=\"12\" fill=\"%231e293b\">Hemoglobin (Hb)</text>\n  <text x=\"260\" y=\"388\" font-size=\"13\" fill=\"%231e293b\">11.4 g/dL</text>\n  <text x=\"390\" y=\"388\" font-size=\"12\" fill=\"%2364748b\">12.0 - 15.5</text>\n  <text x=\"520\" y=\"388\" font-size=\"11\" fill=\"%2364748b\">Mild Low</text>\n\n  <!-- Row 5: Fasting Blood Sugar -->\n  <rect x=\"25\" y=\"406\" width=\"550\" height=\"38\" fill=\"%23f8fafc\"/>\n  <text x=\"40\" y=\"430\" font-size=\"12\" fill=\"%231e293b\">Fasting Blood Glucose</text>\n  <text x=\"260\" y=\"430\" font-size=\"13\" font-weight=\"bold\" fill=\"%23b45309\">184 mg/dL</text>\n  <text x=\"390\" y=\"430\" font-size=\"12\" fill=\"%2364748b\">70 - 100</text>\n  <text x=\"520\" y=\"430\" font-size=\"11\" font-weight=\"bold\" fill=\"%23d97706\">HIGH</text>\n\n  <!-- Row 6: HbA1c -->\n  <rect x=\"25\" y=\"448\" width=\"550\" height=\"38\" fill=\"%23ffffff\"/>\n  <text x=\"40\" y=\"472\" font-size=\"12\" fill=\"%231e293b\">Glycated Hemoglobin (HbA1c)</text>\n  <text x=\"260\" y=\"472\" font-size=\"13\" font-weight=\"bold\" fill=\"%23b45309\">9.2 %</text>\n  <text x=\"390\" y=\"472\" font-size=\"12\" fill=\"%2364748b\">&lt; 5.7 (Good control)</text>\n  <text x=\"520\" y=\"472\" font-size=\"11\" font-weight=\"bold\" fill=\"%23d97706\">UNCONTROLLED</text>\n\n  <!-- Row 7: Creatinine -->\n  <rect x=\"25\" y=\"490\" width=\"550\" height=\"38\" fill=\"%23f8fafc\"/>\n  <text x=\"40\" y=\"514\" font-size=\"12\" fill=\"%231e293b\">Serum Creatinine</text>\n  <text x=\"260\" y=\"514\" font-size=\"13\" fill=\"%231e293b\">1.0 mg/dL</text>\n  <text x=\"390\" y=\"514\" font-size=\"12\" fill=\"%2364748b\">0.6 - 1.2</text>\n  <text x=\"520\" y=\"514\" font-size=\"11\" fill=\"%2316a34a\">NORMAL</text>\n\n  <!-- Pathologist Critical Note -->\n  <rect x=\"25\" y=\"555\" width=\"550\" height=\"85\" fill=\"%23fef2f2\" stroke=\"%23fca5a5\" rx=\"4\"/>\n  <text x=\"40\" y=\"580\" font-size=\"12\" font-weight=\"bold\" fill=\"%23991b1b\">CRITICAL ALERT (PANIC VALUE TELEPHONED):</text>\n  <text x=\"40\" y=\"602\" font-size=\"12\" fill=\"%237f1d1d\">Platelet count 58,000 /uL with Dengue NS1 Reactive. High risk of bleeding diathesis.</text>\n  <text x=\"40\" y=\"622\" font-size=\"12\" fill=\"%237f1d1d\">Immediate clinical correlation &amp; daily platelet monitoring advised.</text>\n\n  <text x=\"450\" y=\"740\" font-size=\"12\" font-weight=\"bold\" fill=\"%231e293b\">Dr. A. Sen, MD</text>\n  <text x=\"450\" y=\"756\" font-size=\"11\" fill=\"%2364748b\">Consultant Pathologist</text>\n</svg>",
+            "doctorName": "Dr. A. Sen, MD (Pathologist)",
+            "facilityName": "National Clinical Reference Lab",
+            "documentDate": "2026-02-18",
+            "isSamplePreset": true,
+            "ocrRawText": "NATIONAL CLINICAL REFERENCE LAB\nPatient: Sunita Devi, 42/F\nDate: 18-Feb-2026\nPlatelet Count (PLT): 58,000 /uL (Reference: 150,000 - 450,000) [CRITICAL LOW]\nDengue NS1 Antigen: POSITIVE (Reactive)\nTotal Leukocyte Count: 3,200 /uL (Low Leukopenia)\nHemoglobin: 11.4 g/dL (Mild Anemia)\nFasting Blood Glucose: 184 mg/dL (High)\nHbA1c: 9.2 % (Uncontrolled Diabetes)\nSerum Creatinine: 1.0 mg/dL (Normal)\nCritical alert: Platelet count 58,000 /uL. Risk of hemorrhage. Immediate clinical review required.",
+            "extractedDiagnoses": [
+              {
+                "id": "diag_4",
+                "condition": "Dengue Viral Fever with Thrombocytopenia",
+                "date": "2026-02-18",
+                "icd10Estimate": "A97.0",
+                "confidence": 0.98,
+                "status": "active"
+              }
+            ],
+            "extractedMedications": [],
+            "extractedLabValues": [
+              {
+                "id": "lab_3",
+                "testName": "Platelet Count",
+                "value": "58,000",
+                "unit": "/uL",
+                "referenceRange": "150,000 - 450,000",
+                "status": "critical",
+                "confidence": 0.99,
+                "date": "2026-02-18"
+              },
+              {
+                "id": "lab_4",
+                "testName": "Dengue NS1 Antigen",
+                "value": "POSITIVE",
+                "unit": "Qualitative",
+                "referenceRange": "Negative / Non-Reactive",
+                "status": "critical",
+                "confidence": 0.99,
+                "date": "2026-02-18"
+              },
+              {
+                "id": "lab_5",
+                "testName": "Total WBC Count (TLC)",
+                "value": "3,200",
+                "unit": "/uL",
+                "referenceRange": "4,000 - 11,000",
+                "status": "abnormal",
+                "confidence": 0.95,
+                "date": "2026-02-18"
+              },
+              {
+                "id": "lab_6",
+                "testName": "Fasting Blood Glucose",
+                "value": "184",
+                "unit": "mg/dL",
+                "referenceRange": "70 - 100",
+                "status": "abnormal",
+                "confidence": 0.96,
+                "date": "2026-02-18"
+              },
+              {
+                "id": "lab_7",
+                "testName": "HbA1c",
+                "value": "9.2",
+                "unit": "%",
+                "referenceRange": "< 5.7",
+                "status": "critical",
+                "confidence": 0.97,
+                "date": "2026-02-18"
+              },
+              {
+                "id": "lab_8",
+                "testName": "Serum Creatinine",
+                "value": "1.0",
+                "unit": "mg/dL",
+                "referenceRange": "0.6 - 1.2",
+                "status": "normal",
+                "confidence": 0.94,
+                "date": "2026-02-18"
+              }
+            ]
+          }
+        ],
+        "timeline": [
+          {
+            "id": "ev_visit_doc_sample_lab_report",
+            "date": "2026-02-18",
+            "title": "Laboratory Investigations",
+            "category": "opd_visit",
+            "details": "National Clinical Reference Lab (Dr. A. Sen, MD (Pathologist))",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "confidenceScore": 0.95
+          },
+          {
+            "id": "ev_diag_diag_4",
+            "date": "2026-02-18",
+            "title": "Diagnosis: Dengue Viral Fever with Thrombocytopenia",
+            "category": "diagnosis",
+            "details": "Identified with 98% clinical confidence. Status: ACTIVE",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "confidenceScore": 0.98
+          },
+          {
+            "id": "ev_lab_lab_3",
+            "date": "2026-02-18",
+            "title": "Platelet Count: 58,000 /uL",
+            "category": "lab_result",
+            "details": "Ref: 150,000 - 450,000 | Evaluated Status: CRITICAL",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "criticalFlag": true,
+            "confidenceScore": 0.99
+          },
+          {
+            "id": "ev_lab_lab_4",
+            "date": "2026-02-18",
+            "title": "Dengue NS1 Antigen: POSITIVE Qualitative",
+            "category": "lab_result",
+            "details": "Ref: Negative / Non-Reactive | Evaluated Status: CRITICAL",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "criticalFlag": true,
+            "confidenceScore": 0.99
+          },
+          {
+            "id": "ev_lab_lab_5",
+            "date": "2026-02-18",
+            "title": "Total WBC Count (TLC): 3,200 /uL",
+            "category": "lab_result",
+            "details": "Ref: 4,000 - 11,000 | Evaluated Status: ABNORMAL",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "criticalFlag": false,
+            "confidenceScore": 0.95
+          },
+          {
+            "id": "ev_lab_lab_6",
+            "date": "2026-02-18",
+            "title": "Fasting Blood Glucose: 184 mg/dL",
+            "category": "lab_result",
+            "details": "Ref: 70 - 100 | Evaluated Status: ABNORMAL",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "criticalFlag": false,
+            "confidenceScore": 0.96
+          },
+          {
+            "id": "ev_lab_lab_7",
+            "date": "2026-02-18",
+            "title": "HbA1c: 9.2 %",
+            "category": "lab_result",
+            "details": "Ref: < 5.7 | Evaluated Status: CRITICAL",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "criticalFlag": true,
+            "confidenceScore": 0.97
+          },
+          {
+            "id": "ev_lab_lab_8",
+            "date": "2026-02-18",
+            "title": "Serum Creatinine: 1.0 mg/dL",
+            "category": "lab_result",
+            "details": "Ref: 0.6 - 1.2 | Evaluated Status: NORMAL",
+            "sourceDocName": "National_Lab_Hematology_Feb2026.pdf",
+            "criticalFlag": false,
+            "confidenceScore": 0.94
+          }
+        ],
+        "triagePriority": "emergency",
+        "triageRationale": "RED FLAG PANIC VALUE: Dengue NS1 Reactive with Severe Thrombocytopenia (Platelet count 58,000 /uL) and gum bleeding. High risk of Dengue Hemorrhagic Fever.",
+        "redFlags": [
+          {
+            "id": "rf_dengue_bleed",
+            "title": "Dengue with Warning Signs & Thrombocytopenia",
+            "severity": "critical",
+            "description": "Platelet count 58,000/uL with mucosal bleeding (epistaxis/gingival bleeding).",
+            "clinicalActionNeeded": "Admit to medical ward/HDU. Start isotonic crystalloid IV fluids (Normal Saline / Ringer Lactate). Avoid NSAIDs / Aspirin strictly."
+          }
+        ],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "High-grade fever with chills, retro-orbital pain and gum bleeding (5 days)",
+          "historyOfPresentIllness": "42-year-old female presents with 5-day history of acute high-grade fever accompanied by severe chills, retro-orbital ache, and generalized myalgia. Uploaded NABL lab report dated 18-Feb-2026 confirms Dengue NS1 Antigen Reactive with critical Platelet count of 58,000 /uL.",
+          "pastMedicalHistory": [
+            "Type-2 Diabetes (HbA1c 9.2% detected on recent panel)"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "NSAIDs (Diclofenac/Ibuprofen)",
+              "reaction": "Avoid strictly due to bleeding risk in Dengue",
+              "severity": "severe"
+            }
+          ],
+          "investigationsSummary": "Patient admitted for dengue monitoring.",
+          "vitals": {
+            "bp": "108/70",
+            "pulse": "102",
+            "spo2": "98",
+            "temp": "102.2",
+            "rr": "20"
+          }
+        },
+        "medicines": [
+          {
+            "id": "med_sd_v1_1",
+            "visitId": "V001",
+            "patientId": "P10027",
+            "name": "Tab Paracetamol",
+            "dosage": "650 mg",
+            "frequency": "1-1-1-1 (TDS/QID SOS)",
+            "duration": "5 days",
+            "instructions": "Take only for fever > 100°F. STRICTLY AVOID NSAIDs / BRUFEN",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          },
+          {
+            "id": "med_sd_v1_2",
+            "visitId": "V001",
+            "patientId": "P10027",
+            "name": "Sachet ORS (Oral Rehydration Salts)",
+            "dosage": "1 Packet in 1L water",
+            "frequency": "Sip frequently",
+            "duration": "5 days",
+            "instructions": "Drink 2.5 to 3 Litres of fluids daily",
+            "datePrescribed": "2026-09-07",
+            "doctor": "Dr. S. K. Verma, MD"
+          }
+        ],
+        "doctorReview": {
+          "verified": true,
+          "status": "verified",
+          "doctorNotes": "Patient admitted for dengue monitoring.",
+          "differentialDiagnosis": [
+            "Dengue Fever with Warning Signs",
+            "Severe Thrombocytopenia",
+            "Chikungunya"
+          ],
+          "finalImpression": "Dengue fever with thrombocytopenia and mucosal bleeding",
+          "prescribedMedications": [
+            {
+              "name": "Tab Paracetamol",
+              "dosage": "650 mg",
+              "frequency": "1-1-1-1 (TDS/QID SOS)",
+              "duration": "5 days",
+              "instructions": "Take only for fever > 100°F. STRICTLY AVOID NSAIDs / BRUFEN"
+            },
+            {
+              "name": "Sachet ORS (Oral Rehydration Salts)",
+              "dosage": "1 Packet in 1L water",
+              "frequency": "Sip frequently",
+              "duration": "5 days",
+              "instructions": "Drink 2.5 to 3 Litres of fluids daily"
+            }
+          ],
+          "recommendedTests": [
+            "Repeat Complete Blood Count (CBC) with Hematocrit Stat",
+            "Liver Function Test (LFT)",
+            "Serum Electrolytes"
+          ],
+          "verifiedBy": "Dr. S. K. Verma, MD",
+          "verifiedAt": "2026-09-07T17:10:16.162Z"
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10027-V001",
+        "excelStoredAt": "2026-09-07T17:10:16.185Z",
+        "receiptToken": "ac507d7c187c806b1acc8273f9ed35935091810fda0aeda3",
+        "receiptUrl": "http://localhost:5173/receipt/ac507d7c187c806b1acc8273f9ed35935091810fda0aeda3"
+      }
+    ]
+  }
+]

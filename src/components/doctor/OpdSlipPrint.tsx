@@ -54,9 +54,9 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
                 🏥
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-black tracking-tight uppercase">
-                  District Civil Hospital &amp; Medical College
-                </h2>
+                <h1 className="text-xl font-black uppercase tracking-wider text-slate-900">
+                  {encounter.hospitalName?.toUpperCase() || (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).hospitalName?.toUpperCase() : 'HOSPITAL NAME NOT SET')}
+                </h1>
                 <p className="text-xs font-semibold text-slate-700">
                   Department of Outpatient Clinical Services • Government of India
                 </p>
@@ -250,7 +250,7 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
 
             <div className="text-right space-y-1">
               <div className="font-bold text-xs text-slate-900">
-                {encounter.doctorReview.verifiedBy || 'Dr. S. K. Verma, MD'}
+                Attending Doctor: {encounter.doctorReview.verifiedBy === 'Attending Doctor' || encounter.doctorReview.verifiedBy === 'Attending Physician' ? (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).name : 'Not Assigned') : encounter.doctorReview.verifiedBy}
               </div>
               <div className="text-[10px] text-slate-500">
                 Medical Officer / Consultant Physician

@@ -2,17 +2,71 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/common/Header';
 import { PatientKiosk } from './components/patient/PatientKiosk';
 import { DoctorDashboard } from './components/doctor/DoctorDashboard';
-import type { LanguageCode } from './types/clinical';
+import { ReceptionDashboard } from './components/reception/ReceptionDashboard';
+import { PatientReceiptPage } from './components/patient/PatientReceiptPage';
+import { LoginPage } from './components/common/LoginModal';
+import type { LanguageCode, AuthUser } from './types/clinical';
 import { storage } from './services/storage';
 
 export const App: React.FC = () => {
-  const [currentMode, setCurrentMode] = useState<'kiosk' | 'doctor'>('kiosk');
+  // Check if patient opened a secure receipt link (/receipt/:token or ?receipt=:token)
+  const [receiptToken, setReceiptToken] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path.startsWith('/receipt/')) {
+        return path.split('/receipt/')[1]?.split('/')[0]?.split('?')[0] || null;
+      }
+      const params = new URLSearchParams(window.location.search);
+      return params.get('receipt') || null;
+    }
+    return null;
+  });
+
+  // Listen to browser navigation popstate
+  useEffect(() => {
+    const handleLocation = () => {
+      const path = window.location.pathname;
+      if (path.startsWith('/receipt/')) {
+        setReceiptToken(path.split('/receipt/')[1]?.split('/')[0]?.split('?')[0] || null);
+      } else {
+        const params = new URLSearchParams(window.location.search);
+        setReceiptToken(params.get('receipt') || null);
+      }
+    };
+    window.addEventListener('popstate', handleLocation);
+    return () => window.removeEventListener('popstate', handleLocation);
+  }, []);
+
+  const [currentMode, setCurrentMode] = useState<'kiosk' | 'reception' | 'doctor'>('kiosk');
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('hi');
-  const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
+  
   const [highContrast, setHighContrast] = useState<boolean>(false);
   const isSpeaking = false;
   const [waitingCount, setWaitingCount] = useState<number>(0);
   const [emergencyCount, setEmergencyCount] = useState<number>(0);
+
+  // Staff Authentication State
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem('medico_auth_user');
+        if (saved) {
+          const user = JSON.parse(saved);
+          return user;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (currentUser) {
+      setCurrentMode(currentUser.role === 'doctor' ? 'doctor' : 'reception');
+    }
+  }, []);
+
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('aarogyavani_theme');
@@ -53,6 +107,35 @@ export const App: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  const handleLoginSuccess = (user: AuthUser) => {
+    setCurrentUser(user);
+    try {
+      sessionStorage.setItem('medico_auth_user', JSON.stringify(user));
+    } catch {
+      // ignore
+    }
+    setCurrentMode(user.role === 'doctor' ? 'doctor' : 'reception');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    try {
+      sessionStorage.removeItem('medico_auth_user');
+    } catch {
+      // ignore
+    }
+    setCurrentMode('kiosk');
+  };
+
+  // Dedicated Mobile Patient Receipt View (Direct Link - No Login Required)
+  if (receiptToken) {
+    return <PatientReceiptPage token={receiptToken} />;
+  }
+
+  if (!currentUser) {
+    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
+  }
+
   return (
     <div
       className={`min-h-screen flex flex-col bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 ${
@@ -63,10 +146,11 @@ export const App: React.FC = () => {
       <Header
         currentMode={currentMode}
         onModeChange={setCurrentMode}
+        currentUser={currentUser}
+        onRequestLogin={() => {}}
+        onLogout={handleLogout}
         currentLanguage={currentLanguage}
         onLanguageChange={setCurrentLanguage}
-        audioEnabled={audioEnabled}
-        onToggleAudio={() => setAudioEnabled(!audioEnabled)}
         highContrast={highContrast}
         onToggleHighContrast={() => setHighContrast(!highContrast)}
         theme={theme}
@@ -78,14 +162,24 @@ export const App: React.FC = () => {
 
       {/* Main View Area */}
       <main className="flex-1 pb-12">
-        {currentMode === 'kiosk' ? (
+        {currentMode === 'kiosk' && (
           <PatientKiosk
             currentLanguage={currentLanguage}
             onLanguageChange={setCurrentLanguage}
-            audioEnabled={audioEnabled}
+            
+            hospitalName={currentUser?.hospitalName}
             onPatientCompleted={() => {}}
           />
-        ) : (
+        )}
+
+        {currentMode === 'reception' && (
+          <ReceptionDashboard
+            onSendToKiosk={() => setCurrentMode('kiosk')}
+            currentUser={currentUser}
+          />
+        )}
+
+        {currentMode === 'doctor' && (
           <DoctorDashboard />
         )}
       </main>
@@ -96,7 +190,7 @@ export const App: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-extrabold text-teal-700 dark:text-teal-400">Medico</span>
             <span>•</span>
-            <span className="text-slate-600 dark:text-slate-300 font-medium">AI Clinical Case-Taking &amp; Triage Engine</span>
+            <span className="text-slate-600 dark:text-slate-300 font-medium">Hospital Patient-Record &amp; AI Clinical Case-Taking System</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-[11px] text-teal-800 dark:text-teal-300 font-semibold bg-teal-50 dark:bg-teal-950/60 px-2.5 py-0.5 rounded-full border border-teal-200 dark:border-teal-800">
@@ -105,7 +199,7 @@ export const App: React.FC = () => {
             <span className="text-[11px] text-blue-800 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
               HL7 FHIR R4 Standard
             </span>
-            <span className="text-slate-500 dark:text-slate-400 font-medium">National Health Authority Standard</span>
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Central Hospital Database Ready</span>
           </div>
         </div>
       </footer>

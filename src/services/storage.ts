@@ -1,37 +1,12 @@
-import type { PatientCaseEncounter, DoctorVerification } from '../types/clinical';
-import { INITIAL_PATIENTS } from '../data/samplePatients';
+import type { PatientCaseEncounter, DoctorVerification, PatientRecord } from '../types/clinical';
 import { api } from './api';
-
-const STORAGE_KEY = 'aarogyavani_opd_encounters_v1';
+import { hospitalDb } from './hospitalDatabase';
 
 class StorageService {
-  private encounters: PatientCaseEncounter[] = [];
-  private listeners: Array<() => void> = [];
   private backendOnline = false;
 
   constructor() {
-    this.loadFromStorage();
     this.initBackendSync();
-  }
-
-  private loadFromStorage(): void {
-    if (typeof window === 'undefined') {
-      this.encounters = [...INITIAL_PATIENTS];
-      return;
-    }
-
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        this.encounters = JSON.parse(stored);
-      } else {
-        this.encounters = [...INITIAL_PATIENTS];
-        this.persist();
-      }
-    } catch (e) {
-      console.warn('Failed to load encounters from localStorage, using initial defaults:', e);
-      this.encounters = [...INITIAL_PATIENTS];
-    }
   }
 
   private initBackendSync(): void {
@@ -43,37 +18,22 @@ class StorageService {
     // 2. Track connection status
     api.onStatusChange((online) => {
       this.backendOnline = online;
-      this.notifyListeners();
     });
 
     // 3. Real-time SSE subscription (instant triage updates without refresh)
-    api.subscribeToRealtimeEvents((eventType, payload: unknown) => {
+    api.subscribeToRealtimeEvents((eventType, _payload: unknown) => {
       console.log(`[Realtime Sync] Event received: ${eventType}`);
 
-      if (eventType === 'PATIENT_REGISTERED') {
-        const { patient } = payload as { patient: PatientCaseEncounter };
-        if (patient) {
-          const exists = this.encounters.some((e) => e.id === patient.id);
-          if (!exists) {
-            this.encounters.unshift(patient);
-            this.persist();
-          }
-        }
-      } else if (eventType === 'PATIENT_UPDATED' || eventType === 'DOCTOR_VERIFIED') {
-        const { patient } = payload as { patient: PatientCaseEncounter };
-        if (patient) {
-          const idx = this.encounters.findIndex((e) => e.id === patient.id);
-          if (idx >= 0) {
-            this.encounters[idx] = patient;
-            this.persist();
-          }
-        }
+      if (
+        eventType === 'PATIENT_REGISTERED' ||
+        eventType === 'VISIT_CREATED' ||
+        eventType === 'HOSPITAL_PATIENTS_UPDATED' ||
+        eventType === 'DOCTOR_VERIFIED'
+      ) {
+        // Strictly read-only sync: NEVER call createVisit or registerPatient in SSE listener
+        hospitalDb.syncFromBackend();
       } else if (eventType === 'QUEUE_RESET') {
-        const { encounters } = payload as { encounters: PatientCaseEncounter[] };
-        if (encounters && Array.isArray(encounters)) {
-          this.encounters = encounters;
-          this.persist();
-        }
+        hospitalDb.resetToDefaults();
       }
     });
   }
@@ -82,44 +42,36 @@ class StorageService {
     try {
       const response = await api.getPatients();
       if (response && Array.isArray(response.data) && response.data.length > 0) {
-        this.encounters = response.data;
         this.backendOnline = true;
-        this.persist();
       }
-    } catch (err) {
-      console.log('[Storage] Backend not reachable yet, using offline local cache:', err);
+    } catch {
       this.backendOnline = false;
     }
   }
 
-  private persist(): void {
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.encounters));
-      } catch (e) {
-        console.warn('Failed to persist to localStorage:', e);
-      }
-    }
-    this.notifyListeners();
-  }
-
   public subscribe(callback: () => void): () => void {
-    this.listeners.push(callback);
-    return () => {
-      this.listeners = this.listeners.filter((cb) => cb !== callback);
-    };
-  }
-
-  private notifyListeners(): void {
-    this.listeners.forEach((cb) => cb());
+    return hospitalDb.subscribe(callback);
   }
 
   public getPatients(): PatientCaseEncounter[] {
-    return [...this.encounters];
+    return hospitalDb.getActiveEncounters();
+  }
+
+  public getAllHospitalPatients(): PatientRecord[] {
+    return hospitalDb.getPatients();
   }
 
   public getPatientById(id: string): PatientCaseEncounter | undefined {
-    return this.encounters.find((e) => e.id === id);
+    // Check by visit/encounter ID or by patient ID
+    const active = hospitalDb.getActiveEncounters().find((e) => e.id === id || e.patientId === id);
+    if (active) return active;
+
+    // Search inside all visits
+    for (const p of hospitalDb.getPatients()) {
+      const found = p.visits.find((v) => v.id === id || v.visitId === id);
+      if (found) return found;
+    }
+    return undefined;
   }
 
   public isBackendOnline(): boolean {
@@ -127,74 +79,80 @@ class StorageService {
   }
 
   public savePatient(patient: PatientCaseEncounter): void {
-    // 1. Optimistic local update
-    const existingIndex = this.encounters.findIndex((e) => e.id === patient.id);
-    if (existingIndex >= 0) {
-      this.encounters[existingIndex] = patient;
+    // 1. Check if patient already exists in Hospital DB by phone or patientId
+    const existing = hospitalDb.findExistingPatient(
+      patient.patientId || patient.demographics.phone || patient.demographics.id
+    );
+
+    let assignedPatientId: string;
+
+    if (existing) {
+      // Existing patient found! Attach as new visit under same Patient ID
+      assignedPatientId = existing.patientId;
+      patient.patientId = assignedPatientId;
+      hospitalDb.createVisit(assignedPatientId, patient);
     } else {
-      this.encounters.unshift(patient);
+      // Brand new patient: register first to generate Patient ID (e.g. P10028)
+      const registered = hospitalDb.registerPatient({
+        fullName: patient.demographics.fullName,
+        age: patient.demographics.age,
+        gender: patient.demographics.gender,
+        phone: patient.demographics.phone,
+        address: patient.demographics.address,
+        emergencyContact: patient.demographics.emergencyContact,
+        abhaNumber: patient.demographics.abha?.abhaNumber,
+        abhaAddress: patient.demographics.abha?.abhaAddress,
+      });
+      assignedPatientId = registered.patientId;
+      patient.patientId = assignedPatientId;
+      hospitalDb.createVisit(assignedPatientId, patient);
     }
-    this.persist();
 
     // 2. Push to backend API
     api
       .createPatient(patient)
-      .then((created) => {
-        if (created && created.id) {
-          const idx = this.encounters.findIndex((e) => e.id === created.id);
-          if (idx >= 0) {
-            this.encounters[idx] = created;
-            this.persist();
-          }
-        }
-      })
       .catch((err) => {
-        console.warn('[Storage] Could not persist to backend (queued in local storage):', err);
+        console.warn('[Storage] Could not persist to backend (stored locally):', err);
       });
   }
 
   public updateDoctorReview(
-    patientId: string,
+    patientOrEncounterId: string,
     doctorReview: DoctorVerification,
     saveToHis = false
   ): void {
-    // 1. Optimistic local update
-    const patient = this.encounters.find((e) => e.id === patientId);
-    if (patient) {
-      patient.doctorReview = { ...patient.doctorReview, ...doctorReview };
-      if (saveToHis) {
-        patient.savedToHis = true;
-        patient.hisSyncTimestamp = new Date().toISOString();
+    // Find matching visit and patient
+    let targetPatientId = patientOrEncounterId;
+    let targetVisitId = 'V001';
+
+    const patientDirect = hospitalDb.getPatientById(patientOrEncounterId);
+    if (patientDirect && patientDirect.visits.length > 0) {
+      targetPatientId = patientDirect.patientId;
+      targetVisitId = patientDirect.visits[0].visitId || 'V001';
+    } else {
+      for (const p of hospitalDb.getPatients()) {
+        const v = p.visits.find((vis) => vis.id === patientOrEncounterId || vis.visitId === patientOrEncounterId);
+        if (v) {
+          targetPatientId = p.patientId;
+          targetVisitId = v.visitId || 'V001';
+          break;
+        }
       }
-      this.persist();
     }
+
+    hospitalDb.updateDoctorReview(targetPatientId, targetVisitId, doctorReview, saveToHis);
 
     // 2. Push to backend API
     api
-      .updateDoctorReview(patientId, doctorReview, saveToHis)
-      .then((updated) => {
-        if (updated) {
-          const idx = this.encounters.findIndex((e) => e.id === updated.id);
-          if (idx >= 0) {
-            this.encounters[idx] = updated;
-            this.persist();
-          }
-        }
-      })
+      .updateDoctorReview(patientOrEncounterId, doctorReview, saveToHis)
       .catch((err) => {
-        console.warn('[Storage] Could not sync doctor review to backend (queued locally):', err);
+        console.warn('[Storage] Could not sync doctor review to backend (stored locally):', err);
       });
   }
 
   public resetToDefaults(): void {
-    // 1. Local reset
-    this.encounters = [...INITIAL_PATIENTS];
-    this.persist();
-
-    // 2. Backend reset
-    api.resetPatients().catch((err) => {
-      console.warn('[Storage] Could not reset backend patients:', err);
-    });
+    hospitalDb.resetToDefaults();
+    api.resetPatients().catch(() => {});
   }
 }
 

@@ -1,19 +1,23 @@
 [
   {
-    "id": "enc_1788701715666",
-    "opdToken": "OPD-MED-970",
-    "opdRoom": "Room 1 (Emergency Resus / Med)",
+    "id": "enc_1788931281969",
+    "patientId": "P10031",
+    "visitId": "V001",
+    "visitDate": "2026-09-09",
+    "opdToken": "OPD-MED-786",
+    "opdRoom": "Room 4 (General Medicine)",
     "specialty": "Internal Medicine",
-    "createdAt": "2026-09-06T13:35:15.666Z",
+    "hospitalName": "ABC Hospital",
+    "createdAt": "2026-09-09T05:21:21.969Z",
     "demographics": {
-      "id": "pat_1788701671462",
-      "fullName": "sunil",
+      "id": "pat_1788931262703",
+      "fullName": "Ramesh Kumar",
       "age": 45,
       "gender": "male",
-      "phone": "3738282",
+      "phone": "",
       "abha": {
-        "abhaNumber": "27472274722",
-        "abhaAddress": "27472274722",
+        "abhaNumber": "",
+        "abhaAddress": "",
         "status": "pending",
         "kycStatus": "SELF_DECLARED"
       },
@@ -21,7 +25,233 @@
     },
     "consent": {
       "granted": true,
-      "timestamp": "2026-09-06T13:35:15.666Z",
+      "timestamp": "2026-09-09T05:21:21.969Z",
+      "method": "biometric_touch",
+      "languageUsed": "en",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "chest_pain",
+      "title": "Chest Pain / Heaviness",
+      "description": "Patient reported acute symptoms",
+      "onsetDuration": "7/10 severity",
+      "voiceInputTranscript": ""
+    },
+    "documents": [],
+    "timeline": [],
+    "triagePriority": "urgent",
+    "triageRationale": "Chest pain presentation requires triage ECG exclusion.",
+    "redFlags": [],
+    "clinicalSummary": {
+      "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: Ramesh Kumar, 45Y/MALE)",
+      "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
+      "pastMedicalHistory": [
+        "None explicitly documented in uploaded records"
+      ],
+      "activeMedications": [],
+      "allergies": [
+        {
+          "allergen": "Penicillin / Amoxicillin",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        },
+        {
+          "allergen": "NSAIDs (Brufen/Diclofenac)",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        }
+      ],
+      "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "76",
+        "spo2": "98",
+        "temp": "98.6",
+        "rr": "18"
+      }
+    },
+    "doctorReview": {
+      "verified": true,
+      "status": "verified",
+      "verifiedBy": "Attending Doctor",
+      "verifiedAt": "2026-09-09T05:22:33.513Z",
+      "finalImpression": "",
+      "doctorNotes": "",
+      "doctorAdvice": "• Drink 2.5L warm fluids daily. Maintain hydration.\n• Take prescribed medications strictly after meals.\n• Adequate bed rest for 48 hours. Avoid cold/spicy diet.\n• Immediate Return Warning: If chest pain, breathlessness, or persistent high fever occurs, report to Emergency.",
+      "prescribedMedications": []
+    },
+    "savedToHis": true,
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-P10031-OPD-MED-786",
+    "excelStoredAt": "2026-09-09T05:22:33.550Z",
+    "hisSyncTimestamp": "2026-09-09T05:22:33.550Z"
+  },
+  {
+    "id": "enc_1788795337881",
+    "patientId": "P10030",
+    "visitId": "V001",
+    "visitDate": "2026-09-07",
+    "attendingDoctor": "Dr. S. K. Verma, MD",
+    "opdToken": "OPD-MED-189",
+    "opdRoom": "Room 1 (Emergency Resus / Med)",
+    "specialty": "Internal Medicine",
+    "createdAt": "2026-09-07T15:35:37.881Z",
+    "demographics": {
+      "id": "pat_1788795311516",
+      "fullName": "aman",
+      "age": 45,
+      "gender": "male",
+      "phone": "3636222",
+      "abha": {
+        "abhaNumber": "2u3736252",
+        "abhaAddress": "2u3736252",
+        "status": "pending",
+        "kycStatus": "SELF_DECLARED"
+      },
+      "preferredLanguage": "en"
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-07T15:35:37.881Z",
+      "method": "biometric_touch",
+      "languageUsed": "en",
+      "abdmLinkConsent": true
+    },
+    "chiefComplaint": {
+      "id": "chest_pain",
+      "title": "Chest Pain / Heaviness",
+      "description": "Patient reported acute symptoms",
+      "onsetDuration": "7/10 severity",
+      "voiceInputTranscript": ""
+    },
+    "adaptiveAnswers": [
+      {
+        "questionId": "cp_duration",
+        "questionText": "When did the chest pain start?",
+        "answerText": "Not specified",
+        "category": "duration",
+        "isRedFlagIndicator": false
+      },
+      {
+        "questionId": "cp_character",
+        "questionText": "How would you describe the chest pain?",
+        "answerText": "Sharp pricking pain that worsens on deep breathing or coughing",
+        "answerValue": "sharp_breathing",
+        "category": "character",
+        "isRedFlagIndicator": false
+      },
+      {
+        "questionId": "cp_radiation",
+        "questionText": "Does the pain spread or radiate anywhere else?",
+        "answerText": "Yes, radiates to Left Arm, Jaw, Neck or Back",
+        "answerValue": "rad_left_arm_jaw",
+        "category": "radiation",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "cp_associated",
+        "questionText": "What other symptoms are you experiencing together with it?",
+        "answerText": "Profuse cold sweating (Diaphoresis)",
+        "answerValue": [
+          "assoc_cold_sweats"
+        ],
+        "category": "associated",
+        "isRedFlagIndicator": true
+      },
+      {
+        "questionId": "pain_severity_scale",
+        "questionText": "Pain / Discomfort Intensity (1-10)",
+        "answerText": "7 / 10 (Severe)",
+        "answerValue": 7,
+        "category": "severity",
+        "isRedFlagIndicator": false
+      }
+    ],
+    "documents": [],
+    "timeline": [],
+    "triagePriority": "emergency",
+    "triageRationale": "High suspicion of Acute Myocardial Infarction / Unstable Angina.",
+    "redFlags": [
+      {
+        "id": "rf_cp_radiation",
+        "title": "Suspected Acute Coronary Syndrome (ACS / MI)",
+        "severity": "critical",
+        "description": "Patient reports: Yes, radiates to Left Arm, Jaw, Neck or Back. Retrosternal pressure radiating to left arm/jaw with diaphoresis.",
+        "clinicalActionNeeded": "Perform 12-lead ECG within 10 minutes. Establish IV access, monitor vitals, notify cardiology team."
+      }
+    ],
+    "clinicalSummary": {
+      "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: aman, 45Y/MALE)",
+      "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: When did the chest pain start?: Not specified; How would you describe the chest pain?: Sharp pricking pain that worsens on deep breathing or coughing; Does the pain spread or radiate anywhere else?: Yes, radiates to Left Arm, Jaw, Neck or Back; What other symptoms are you experiencing together with it?: Profuse cold sweating (Diaphoresis); Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
+      "pastMedicalHistory": [
+        "None explicitly documented in uploaded records"
+      ],
+      "activeMedications": [],
+      "allergies": [
+        {
+          "allergen": "Penicillin / Amoxicillin",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        },
+        {
+          "allergen": "NSAIDs (Brufen/Diclofenac)",
+          "reaction": "No known allergy",
+          "severity": "mild"
+        }
+      ],
+      "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "76",
+        "spo2": "98",
+        "temp": "98.6",
+        "rr": "18"
+      }
+    },
+    "doctorReview": {
+      "verified": true,
+      "status": "verified",
+      "verifiedBy": "Dr. S. K. Verma, MD",
+      "verifiedAt": "2026-09-07T15:37:10.122Z",
+      "finalImpression": "",
+      "doctorNotes": "",
+      "doctorAdvice": "• Drink 2.5L warm fluids daily. Maintain hydration.\n• Take prescribed medications strictly after meals.\n• Adequate bed rest for 48 hours. Avoid cold/spicy diet.\n• Immediate Return Warning: If chest pain, breathlessness, or persistent high fever occurs, report to Emergency.",
+      "prescribedMedications": []
+    },
+    "savedToHis": true,
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-P10030-OPD-MED-189",
+    "hisSyncTimestamp": "2026-09-07T15:37:10.137Z"
+  },
+  {
+    "id": "enc_1788794187975",
+    "patientId": "P10029",
+    "visitId": "V1062",
+    "visitDate": "2026-09-07",
+    "attendingDoctor": "Dr. S. K. Verma, MD",
+    "opdToken": "OPD-MED-971",
+    "opdRoom": "Room 1 (Emergency Resus / Med)",
+    "specialty": "Internal Medicine",
+    "createdAt": "2026-09-07T15:16:27.976Z",
+    "demographics": {
+      "id": "pat_p10029",
+      "fullName": "aman",
+      "age": 45,
+      "gender": "male",
+      "phone": "3762524241",
+      "abha": {
+        "abhaNumber": "272725242",
+        "abhaAddress": "272725242",
+        "status": "verified",
+        "kycStatus": "KYC_VERIFIED"
+      },
+      "address": "District Catchment Area",
+      "preferredLanguage": "en",
+      "emergencyContact": ""
+    },
+    "consent": {
+      "granted": true,
+      "timestamp": "2026-09-07T15:16:27.976Z",
       "method": "biometric_touch",
       "languageUsed": "en",
       "abdmLinkConsent": true
@@ -98,7 +328,7 @@
       }
     ],
     "clinicalSummary": {
-      "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: sunil, 45Y/MALE)",
+      "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: aman, 45Y/MALE)",
       "historyOfPresentIllness": "45-year-old male presented to the Outpatient Department with primary complaint of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: When did the chest pain start?: Within the last 1-4 hours (Sudden onset); How would you describe the chest pain?: Crushing heavy pressure / tight squeezing sensation; Does the pain spread or radiate anywhere else?: Yes, radiates to Left Arm, Jaw, Neck or Back; What other symptoms are you experiencing together with it?: Profuse cold sweating (Diaphoresis); Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Review of prior medical documentation identified: No documented prior chronic morbidities.",
       "pastMedicalHistory": [
         "None explicitly documented in uploaded records"
@@ -116,88 +346,34 @@
           "severity": "mild"
         }
       ],
-      "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated."
+      "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "76",
+        "spo2": "98",
+        "temp": "98.6",
+        "rr": "18"
+      }
     },
-    "doctorReview": {
-      "verified": true,
-      "status": "verified",
-      "verifiedBy": "Dr. S. K. Verma, MD",
-      "verifiedAt": "2026-09-06T13:35:49.979Z",
-      "finalImpression": "",
-      "doctorNotes": "",
-      "prescribedMedications": []
-    },
-    "savedToHis": true,
-    "abdmCareContextLinked": true,
-    "abdmCareContextRef": "CARE-CTX-OPD-MED-970",
-    "hisSyncTimestamp": "2026-09-06T13:35:49.991Z"
-  },
-  {
-    "id": "enc_test_1788700912198",
-    "opdRoom": "Room 2",
-    "specialty": "Internal Medicine",
-    "triagePriority": "urgent",
-    "demographics": {
-      "id": "pat_test",
-      "fullName": "Asha Sharma",
-      "age": 45,
-      "gender": "female",
-      "phone": "9812345678",
-      "abha": {
-        "abhaNumber": "91-1122-3344-5566",
-        "abhaAddress": "asha.sharma@abdm",
-        "status": "verified",
-        "kycStatus": "KYC_VERIFIED",
-        "linkedCareContextsCount": 1
-      },
-      "address": "Ward 4, Civil Line",
-      "preferredLanguage": "hi"
-    },
-    "consent": {
-      "granted": true,
-      "timestamp": "2026-09-06T13:21:52.198Z",
-      "method": "audio_verbal",
-      "languageUsed": "hi",
-      "abdmLinkConsent": true
-    },
-    "chiefComplaint": {
-      "id": "fever",
-      "title": "High Grade Fever",
-      "description": "Fever with chills for 3 days",
-      "onsetDuration": "3 days"
-    },
-    "adaptiveAnswers": [],
-    "documents": [],
-    "timeline": [],
-    "clinicalSummary": {
-      "historyOfPresentIllness": "Patient presents with 3 days of high-grade fever accompanied by severe chills.",
-      "pastMedicalHistory": [],
-      "activeMedications": [],
-      "allergies": [
-        "Sulfa drugs"
-      ],
-      "redFlagSymptoms": []
-    },
+    "medicines": [],
     "doctorReview": {
       "verified": false,
-      "verifiedBy": "",
-      "verifiedAt": "",
-      "clinicalImpression": "",
-      "differentialDiagnosis": [],
-      "prescribedMedications": [],
-      "doctorNotes": "",
-      "followUpAdvice": ""
+      "status": "pending"
     },
     "savedToHis": false,
-    "opdToken": "OPD-MED-043",
-    "createdAt": "2026-09-06T13:21:52.914Z"
+    "abdmCareContextLinked": true,
+    "abdmCareContextRef": "CARE-CTX-P10029-V1062"
   },
   {
     "id": "enc_ramesh_kumar",
+    "patientId": "P10026",
+    "visitId": "V002",
+    "visitDate": "2026-09-07",
+    "attendingDoctor": "Dr. S. K. Verma, MD",
     "opdToken": "OPD-MED-042",
     "opdRoom": "Room 4 (General Medicine / Emergency)",
     "specialty": "Internal Medicine",
-    "createdAt": "2026-09-06T13:04:17.849Z",
+    "createdAt": "2026-09-07T14:02:43.134Z",
     "demographics": {
       "id": "pat_ramesh",
       "fullName": "Ramesh Kumar",
@@ -211,13 +387,13 @@
         "kycStatus": "KYC_VERIFIED",
         "linkedCareContextsCount": 3
       },
-      "address": "Village Shahpur, Block 3, District Hospital Catchment",
+      "address": "Village Shahpur, Block 3, District Catchment",
       "preferredLanguage": "hi",
       "emergencyContact": "Suresh Kumar (Son) - 9876543211"
     },
     "consent": {
       "granted": true,
-      "timestamp": "2026-09-06T13:05:17.850Z",
+      "timestamp": "2026-09-07T14:03:43.134Z",
       "method": "audio_verbal",
       "languageUsed": "hi",
       "abdmLinkConsent": true
@@ -438,19 +614,19 @@
         "title": "Suspected Acute Myocardial Infarction / ACS",
         "severity": "critical",
         "description": "Crushing retrosternal chest pain of acute onset radiating to left arm with profuse cold diaphoresis.",
-        "clinicalActionNeeded": "Perform urgent 12-lead ECG immediately. Stat loading dose (Aspirin 300mg + Clopidogrel 300mg + Atorvastatin 80mg) if indicated. Keep oxygen and IV line ready."
+        "clinicalActionNeeded": "Perform urgent 12-lead ECG immediately. Stat loading dose (Aspirin 300mg + Clopidogrel 300mg + Atorvastatin 80mg). Keep oxygen and IV line ready."
       },
       {
         "id": "rf_2",
         "title": "High Vascular Risk Profile",
         "severity": "warning",
-        "description": "History of Uncontrolled Type 2 Diabetes (HbA1c 8.8%) and Essential Hypertension (BP 154/96).",
+        "description": "History of Uncontrolled Type 2 Diabetes (HbA1c 8.8%) and Essential Hypertension (BP 154/96 recorded in Nov 2025 visit).",
         "clinicalActionNeeded": "Bedside capillary blood sugar and cardiac enzymes (Troponin-I stat)."
       }
     ],
     "clinicalSummary": {
       "chiefComplaintFormatted": "Acute retrosternal chest pressure radiating to left arm with diaphoresis (2 hours)",
-      "historyOfPresentIllness": "58-year-old male, known diabetic and hypertensive, presents with sudden onset crushing retrosternal chest heaviness since 2 hours. Pain radiates to left arm and shoulder, associated with severe cold sweating (diaphoresis) and mild dyspnea. Prior records confirm ongoing treatment with Metformin 500mg BD, Telmisartan 40mg OD, Atorvastatin 20mg HS.",
+      "historyOfPresentIllness": "58-year-old male with prior hospital records (Visit 1, Nov 2025 for T2DM/HTN) returns with sudden onset crushing retrosternal chest heaviness since 2 hours. Pain radiates to left arm and shoulder, associated with severe cold diaphoresis. Prior medications documented: Metformin 500mg BD, Telmisartan 40mg OD, Atorvastatin 20mg HS.",
       "pastMedicalHistory": [
         "Type 2 Diabetes Mellitus (Uncontrolled)",
         "Essential Hypertension (Stage 2)",
@@ -505,8 +681,65 @@
           "severity": "mild"
         }
       ],
-      "investigationsSummary": "BP recorded at 154/96 mmHg in previous visit. HbA1c 8.8% documented in Nov 2025."
+      "investigationsSummary": "BP recorded at 154/96 mmHg in previous visit. Fasting blood sugar 184 mg/dL.",
+      "vitals": {
+        "bp": "148/92",
+        "pulse": "92",
+        "spo2": "96",
+        "temp": "98.6",
+        "rr": "22"
+      }
     },
+    "medicines": [
+      {
+        "id": "med_rk_v2_1",
+        "visitId": "V002",
+        "patientId": "P10026",
+        "name": "Tab Ecosprin (Dispersible)",
+        "dosage": "300 mg",
+        "frequency": "Stat chewable",
+        "duration": "1 day",
+        "instructions": "Chew immediately for acute coronary syndrome loading",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      },
+      {
+        "id": "med_rk_v2_2",
+        "visitId": "V002",
+        "patientId": "P10026",
+        "name": "Tab Clopidogrel",
+        "dosage": "300 mg",
+        "frequency": "Stat oral",
+        "duration": "1 day",
+        "instructions": "Loading dose taken immediately with water",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      },
+      {
+        "id": "med_rk_v2_3",
+        "visitId": "V002",
+        "patientId": "P10026",
+        "name": "Tab Sorbitrate (Sublingual)",
+        "dosage": "5 mg",
+        "frequency": "SOS Sublingual",
+        "duration": "Stat",
+        "instructions": "Place under tongue if chest heaviness recurs",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      },
+      {
+        "id": "med_rk_v2_4",
+        "visitId": "V002",
+        "patientId": "P10026",
+        "name": "Tab Atorvastatin",
+        "dosage": "80 mg",
+        "frequency": "Stat bedtime",
+        "duration": "1 day",
+        "instructions": "High-intensity statin loading",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      }
+    ],
     "doctorReview": {
       "verified": false,
       "status": "pending",
@@ -516,34 +749,35 @@
         "Unstable Angina",
         "Acute Aortic Dissection"
       ],
+      "finalImpression": "Suspected ACS - Acute Inferior Wall STEMI",
       "prescribedMedications": [
-        {
-          "name": "Tab Sorbitrate (Sublingual)",
-          "dosage": "5 mg",
-          "frequency": "SOS",
-          "duration": "Stat",
-          "instructions": "Dissolve under tongue if chest pain persists"
-        },
         {
           "name": "Tab Ecosprin (Dispersible)",
           "dosage": "300 mg",
-          "frequency": "Stat",
+          "frequency": "Stat chewable",
           "duration": "1 day",
-          "instructions": "Chew immediately"
+          "instructions": "Chew immediately for acute coronary syndrome loading"
         },
         {
           "name": "Tab Clopidogrel",
           "dosage": "300 mg",
-          "frequency": "Stat",
+          "frequency": "Stat oral",
           "duration": "1 day",
-          "instructions": "Take with water stat"
+          "instructions": "Loading dose taken immediately with water"
+        },
+        {
+          "name": "Tab Sorbitrate (Sublingual)",
+          "dosage": "5 mg",
+          "frequency": "SOS Sublingual",
+          "duration": "Stat",
+          "instructions": "Place under tongue if chest heaviness recurs"
         },
         {
           "name": "Tab Atorvastatin",
           "dosage": "80 mg",
-          "frequency": "Stat",
+          "frequency": "Stat bedtime",
           "duration": "1 day",
-          "instructions": "Bedtime stat"
+          "instructions": "High-intensity statin loading"
         }
       ],
       "recommendedTests": [
@@ -552,17 +786,20 @@
         "Blood Glucose Random (CBG)"
       ]
     },
-    "savedToHis": true,
+    "savedToHis": false,
     "abdmCareContextLinked": true,
-    "abdmCareContextRef": "CARE-CTX-OPD-MED-042",
-    "hisSyncTimestamp": "2026-09-06T13:22:12.207Z"
+    "abdmCareContextRef": "CARE-CTX-P10026-V002"
   },
   {
     "id": "enc_sunita_devi",
+    "patientId": "P10027",
+    "visitId": "V001",
+    "visitDate": "2026-09-07",
+    "attendingDoctor": "Dr. S. K. Verma, MD",
     "opdToken": "OPD-MED-043",
     "opdRoom": "Room 4 (General Medicine)",
     "specialty": "Internal Medicine",
-    "createdAt": "2026-09-06T12:44:17.867Z",
+    "createdAt": "2026-09-07T13:42:43.135Z",
     "demographics": {
       "id": "pat_sunita",
       "fullName": "Sunita Devi",
@@ -581,7 +818,7 @@
     },
     "consent": {
       "granted": true,
-      "timestamp": "2026-09-06T12:45:17.867Z",
+      "timestamp": "2026-09-07T13:43:43.135Z",
       "method": "audio_verbal",
       "languageUsed": "hi",
       "abdmLinkConsent": true
@@ -791,12 +1028,12 @@
         "title": "Dengue with Warning Signs & Thrombocytopenia",
         "severity": "critical",
         "description": "Platelet count 58,000/uL with mucosal bleeding (epistaxis/gingival bleeding).",
-        "clinicalActionNeeded": "Admit to medical ward/HDU. Start isotonic crystalloid IV fluids (Normal Saline / Ringer Lactate) as per NVBDCP guidelines. Avoid NSAIDs / Aspirin strictly. Monitor Hematocrit and Platelets every 12 hours."
+        "clinicalActionNeeded": "Admit to medical ward/HDU. Start isotonic crystalloid IV fluids (Normal Saline / Ringer Lactate). Avoid NSAIDs / Aspirin strictly."
       }
     ],
     "clinicalSummary": {
       "chiefComplaintFormatted": "High-grade fever with chills, retro-orbital pain and gum bleeding (5 days)",
-      "historyOfPresentIllness": "42-year-old female presents with 5-day history of acute high-grade fever accompanied by severe chills, retro-orbital ache, and generalized myalgia (\"break-bone pain\"). Patient reports episode of gingival bleeding today. Uploaded NABL lab report dated 18-Feb-2026 confirms Dengue NS1 Antigen Reactive with critical Platelet count of 58,000 /uL and TLC 3,200 /uL.",
+      "historyOfPresentIllness": "42-year-old female presents with 5-day history of acute high-grade fever accompanied by severe chills, retro-orbital ache, and generalized myalgia. Uploaded NABL lab report dated 18-Feb-2026 confirms Dengue NS1 Antigen Reactive with critical Platelet count of 58,000 /uL.",
       "pastMedicalHistory": [
         "Type-2 Diabetes (HbA1c 9.2% detected on recent panel)"
       ],
@@ -808,312 +1045,245 @@
           "severity": "severe"
         }
       ],
-      "investigationsSummary": "Platelets: 58,000 /uL (CRITICAL LOW). Dengue NS1: POSITIVE. HbA1c: 9.2%. Fasting Blood Sugar: 184 mg/dL."
+      "investigationsSummary": "Patient admitted for dengue monitoring.",
+      "vitals": {
+        "bp": "108/70",
+        "pulse": "102",
+        "spo2": "98",
+        "temp": "102.2",
+        "rr": "20"
+      }
     },
+    "medicines": [
+      {
+        "id": "med_sd_v1_1",
+        "visitId": "V001",
+        "patientId": "P10027",
+        "name": "Tab Paracetamol",
+        "dosage": "650 mg",
+        "frequency": "1-1-1-1 (TDS/QID SOS)",
+        "duration": "5 days",
+        "instructions": "Take only for fever > 100°F. STRICTLY AVOID NSAIDs / BRUFEN",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      },
+      {
+        "id": "med_sd_v1_2",
+        "visitId": "V001",
+        "patientId": "P10027",
+        "name": "Sachet ORS (Oral Rehydration Salts)",
+        "dosage": "1 Packet in 1L water",
+        "frequency": "Sip frequently",
+        "duration": "5 days",
+        "instructions": "Drink 2.5 to 3 Litres of fluids daily",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      }
+    ],
     "doctorReview": {
-      "verified": false,
-      "status": "pending",
-      "doctorNotes": "",
+      "verified": true,
+      "status": "verified",
+      "doctorNotes": "Patient admitted for dengue monitoring.",
       "differentialDiagnosis": [
         "Dengue Fever with Warning Signs",
         "Severe Thrombocytopenia",
         "Chikungunya"
       ],
+      "finalImpression": "Dengue fever with thrombocytopenia and mucosal bleeding",
       "prescribedMedications": [
         {
           "name": "Tab Paracetamol",
           "dosage": "650 mg",
-          "frequency": "1-1-1-1 (TDS/QID)",
+          "frequency": "1-1-1-1 (TDS/QID SOS)",
           "duration": "5 days",
-          "instructions": "Take only for fever > 100°F. DO NOT TAKE IBUPROFEN/DICLOFENAC"
+          "instructions": "Take only for fever > 100°F. STRICTLY AVOID NSAIDs / BRUFEN"
         },
         {
           "name": "Sachet ORS (Oral Rehydration Salts)",
           "dosage": "1 Packet in 1L water",
           "frequency": "Sip frequently",
           "duration": "5 days",
-          "instructions": "Drink 2.5 - 3 Litres of fluids daily"
+          "instructions": "Drink 2.5 to 3 Litres of fluids daily"
         }
       ],
       "recommendedTests": [
         "Repeat Complete Blood Count (CBC) with Hematocrit Stat",
         "Liver Function Test (LFT)",
         "Serum Electrolytes"
-      ]
+      ],
+      "verifiedBy": "Dr. S. K. Verma, MD",
+      "verifiedAt": "2026-09-07T17:10:16.162Z"
     },
     "savedToHis": false,
     "abdmCareContextLinked": true,
-    "abdmCareContextRef": "CARE-CTX-OPD-MED-043"
+    "abdmCareContextRef": "CARE-CTX-P10027-V001",
+    "excelStoredAt": "2026-09-07T17:10:16.162Z"
   },
   {
-    "id": "enc_mohd_rafiq",
-    "opdToken": "OPD-MED-044",
-    "opdRoom": "Room 4 (General Medicine / Cardiology)",
-    "specialty": "Cardiology",
-    "createdAt": "2026-09-06T12:19:17.867Z",
+    "id": "enc_rahul_v2",
+    "patientId": "P10025",
+    "visitId": "V002",
+    "visitDate": "2026-09-07",
+    "attendingDoctor": "Dr. S. K. Verma, MD",
+    "opdToken": "OPD-MED-041",
+    "opdRoom": "Room 4 (General Medicine)",
+    "specialty": "Internal Medicine",
+    "createdAt": "2026-09-07T13:27:43.120Z",
     "demographics": {
-      "id": "pat_rafiq",
-      "fullName": "Mohd. Rafiq",
-      "age": 64,
+      "id": "pat_rahul_sharma",
+      "fullName": "Rahul Sharma",
+      "age": 25,
       "gender": "male",
-      "phone": "9811223344",
+      "phone": "9876500001",
       "abha": {
-        "abhaNumber": "91-7714-2209-4455",
-        "abhaAddress": "mohd.rafiq64@abdm",
+        "abhaNumber": "91-8899-4455-1025",
+        "abhaAddress": "rahul.sharma25@abdm",
         "status": "verified",
         "kycStatus": "KYC_VERIFIED",
-        "linkedCareContextsCount": 4
+        "linkedCareContextsCount": 2
       },
-      "address": "Mohalla Qazi, Old City",
-      "preferredLanguage": "hi"
+      "address": "Flat 302, Green Avenue, District Catchment",
+      "preferredLanguage": "hi",
+      "emergencyContact": "Mohan Sharma (Father) - 9876500002"
     },
     "consent": {
       "granted": true,
-      "timestamp": "2026-09-06T12:21:17.867Z",
+      "timestamp": "2026-09-07T13:29:43.121Z",
       "method": "audio_verbal",
       "languageUsed": "hi",
       "abdmLinkConsent": true
     },
     "chiefComplaint": {
-      "id": "diabetes_review",
-      "title": "नियमित दवा रीफिल और चेकअप (Routine Post-PCI & HTN Refill)",
-      "description": "दिल के स्टेंट की नियमित दवाएं खत्म हो गई हैं और रूटीन चेकअप कराना है। कोई नया दर्द या सांस की तकलीफ नहीं है।",
-      "onsetDuration": "Chronic follow-up",
-      "voiceInputTranscript": "डॉक्टर साहब, 6 महीने पहले स्टेंट डला था। सारी दवाएं खत्म हो गई हैं, वही दवाएं आगे लिखवानी हैं। अभी कोई तकलीफ नहीं है।"
+      "id": "headache",
+      "title": "गंभीर सिरदर्द और भारीपन (Severe Throbbing Headache)",
+      "description": "पिछले 2 दिनों से दोनों कनपटी में लगातार तेज सिरदर्द है, जो स्क्रीन देखने पर बढ़ जाता है।",
+      "onsetDuration": "2 days",
+      "voiceInputTranscript": "दो दिन से सिर में बहुत तेज दर्द हो रहा है, माथा फटा जा रहा है और आंखों में भी भारीपन महसूस हो रहा है।"
     },
     "adaptiveAnswers": [
       {
-        "questionId": "dm_history",
-        "questionText": "How long have you had chronic condition?",
-        "answerText": "More than 10 years",
+        "questionId": "ha_duration",
+        "questionText": "When did the headache start?",
+        "answerText": "2 days ago (Gradual increase in intensity)",
+        "category": "duration",
+        "isRedFlagIndicator": false
+      },
+      {
+        "questionId": "ha_character",
+        "questionText": "Type of headache",
+        "answerText": "Throbbing frontal / bitemporal pressure",
         "category": "character",
         "isRedFlagIndicator": false
       },
       {
-        "questionId": "dm_symptoms",
-        "questionText": "Any complications or red flags?",
-        "answerText": "No complications, just routine refill and checkup",
-        "category": "associated",
+        "questionId": "ha_severity",
+        "questionText": "Severity on 1-10 scale",
+        "answerText": "7 / 10 (Moderate to Severe)",
+        "category": "severity",
         "isRedFlagIndicator": false
       }
     ],
-    "documents": [
-      {
-        "id": "doc_sample_discharge",
-        "name": "Apex_Cardiology_Discharge_June2025.pdf",
-        "type": "discharge_summary",
-        "uploadTimestamp": "2025-06-10T16:00:00Z",
-        "previewUrl": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\" viewBox=\"0 0 600 800\" style=\"background:%23ffffff;font-family:sans-serif;\">\n  <rect x=\"0\" y=\"0\" width=\"600\" height=\"100\" fill=\"%23047857\"/>\n  <text x=\"300\" y=\"42\" font-size=\"19\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\">APEX INSTITUTE OF CARDIOVASCULAR SCIENCES</text>\n  <text x=\"300\" y=\"66\" font-size=\"13\" fill=\"%23a7f3d0\" text-anchor=\"middle\">Tertiary Care Cardiac &amp; Emergency Center</text>\n  <text x=\"300\" y=\"88\" font-size=\"11\" fill=\"white\" text-anchor=\"middle\">DISCHARGE SUMMARY &amp; OPERATIVE RECORD</text>\n\n  <!-- IPD info -->\n  <rect x=\"25\" y=\"115\" width=\"550\" height=\"55\" fill=\"%23f0fdf4\" stroke=\"%23bbf7d0\" rx=\"4\"/>\n  <text x=\"40\" y=\"136\" font-size=\"12\" fill=\"%2314532d\">Admission Date: <tspan font-weight=\"bold\">05-Jun-2025</tspan> | Discharge Date: <tspan font-weight=\"bold\">10-Jun-2025</tspan></text>\n  <text x=\"40\" y=\"156\" font-size=\"12\" fill=\"%2314532d\">Department: <tspan font-weight=\"bold\">Interventional Cardiology</tspan> | Ward: CCU Bed 04</text>\n\n  <text x=\"25\" y=\"195\" font-size=\"13\" font-weight=\"bold\" fill=\"%23047857\">FINAL DIAGNOSIS:</text>\n  <rect x=\"25\" y=\"205\" width=\"550\" height=\"50\" fill=\"%23f8fafc\" stroke=\"%23e2e8f0\" rx=\"4\"/>\n  <text x=\"38\" y=\"226\" font-size=\"12\" font-weight=\"bold\" fill=\"%230f172a\">• ACUTE INFERIOR WALL MYOCARDIAL INFARCTION (STEMI)</text>\n  <text x=\"38\" y=\"244\" font-size=\"12\" fill=\"%23334155\">• S/P PRIMARY PCI WITH DRUG ELUTING STENT (DES) TO RIGHT CORONARY ARTERY</text>\n\n  <text x=\"25\" y=\"280\" font-size=\"13\" font-weight=\"bold\" fill=\"%23047857\">PROCEDURE NOTE:</text>\n  <text x=\"25\" y=\"302\" font-size=\"12\" fill=\"%23334155\">Coronary Angiography revealed 100% thrombotic occlusion of mid RCA. Successful primary angioplasty</text>\n  <text x=\"25\" y=\"320\" font-size=\"12\" fill=\"%23334155\">with DES (3.0 x 28 mm) deployed with TIMI 3 distal flow. 2D Echo: LVEF 45%, mild hypokinesia.</text>\n\n  <text x=\"25\" y=\"360\" font-size=\"13\" font-weight=\"bold\" fill=\"%23047857\">DISCHARGE MEDICATIONS (MANDATORY CARDIAC DRUGS):</text>\n  <rect x=\"25\" y=\"370\" width=\"550\" height=\"190\" fill=\"%23f9fafb\" stroke=\"%23e5e7eb\" rx=\"4\"/>\n  <text x=\"38\" y=\"395\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">1. Tab Ticagrelor 90 mg — 1 tab Twice daily (1-0-1) - DO NOT STOP (DAPT)</text>\n  <text x=\"38\" y=\"425\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">2. Tab Ecosprin 75 mg — 1 tab Once daily post lunch (0-1-0)</text>\n  <text x=\"38\" y=\"455\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">3. Tab Metoprolol Succinate 25 mg — 1 tab Morning (1-0-0) [Beta Blocker]</text>\n  <text x=\"38\" y=\"485\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">4. Tab Rosuvastatin 40 mg — 1 tab Bedtime (0-0-1) [High-Intensity Statin]</text>\n  <text x=\"38\" y=\"515\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">5. Tab Pantoprazole 40 mg — 1 tab Before breakfast (1-0-0)</text>\n  <text x=\"38\" y=\"545\" font-size=\"11\" fill=\"%23dc2626\" font-weight=\"bold\">CRITICAL: Dual Antiplatelet Therapy (Ticagrelor + Aspirin) MUST NOT BE STOPPED</text>\n\n  <rect x=\"25\" y=\"580\" width=\"550\" height=\"60\" fill=\"%23ecfdf5\" stroke=\"%23a7f3d0\" rx=\"4\"/>\n  <text x=\"40\" y=\"605\" font-size=\"12\" font-weight=\"bold\" fill=\"%23065f46\">FOLLOW UP ADVICE:</text>\n  <text x=\"40\" y=\"625\" font-size=\"12\" fill=\"%23065f46\">Cardiology OPD visit after 2 weeks or immediately in Emergency if chest pain recurs.</text>\n\n  <text x=\"420\" y=\"730\" font-size=\"12\" font-weight=\"bold\" fill=\"%23111827\">Dr. Vikramaditya Rathore</text>\n  <text x=\"420\" y=\"746\" font-size=\"11\" fill=\"%234b5563\">Director, Interventional Cardiology</text>\n</svg>",
-        "doctorName": "Dr. Vikramaditya Rathore, DM (Cardiology)",
-        "facilityName": "Apex Institute of Cardiovascular Sciences",
-        "documentDate": "2025-06-10",
-        "isSamplePreset": true,
-        "ocrRawText": "APEX INSTITUTE OF CARDIOVASCULAR SCIENCES\nDischarge Summary\nPatient: Mohd. Rafiq, 64/M\nAdmission: 05-Jun-2025 | Discharge: 10-Jun-2025\nDiagnosis:\n- Acute Inferior Wall Myocardial Infarction (STEMI)\n- S/P Primary PCI to Right Coronary Artery (RCA) with DES (Drug Eluting Stent)\n2D Echo: LVEF 45%, regional wall motion abnormality in RCA territory.\nDischarge Medications:\n1. Tab Ticagrelor 90 mg - 1-0-1 (Twice daily) - Mandatory DAPT\n2. Tab Ecosprin 75 mg - 0-1-0 (After lunch)\n3. Tab Metoprolol Succinate 25 mg - 1-0-0 (Morning)\n4. Tab Rosuvastatin 40 mg - 0-0-1 (Bedtime)\n5. Tab Pantoprazole 40 mg - 1-0-0 (Empty stomach)\nWarning: Do not discontinue Ticagrelor or Aspirin without consulting cardiologist.",
-        "extractedDiagnoses": [
-          {
-            "id": "diag_5",
-            "condition": "Acute Inferior Wall STEMI (Post Primary PCI to RCA)",
-            "date": "2025-06-10",
-            "icd10Estimate": "I21.1",
-            "confidence": 0.99,
-            "status": "active"
-          },
-          {
-            "id": "diag_6",
-            "condition": "Coronary Artery Disease with Drug Eluting Stent",
-            "date": "2025-06-10",
-            "icd10Estimate": "Z95.5",
-            "confidence": 0.97,
-            "status": "active"
-          }
-        ],
-        "extractedMedications": [
-          {
-            "id": "med_5",
-            "name": "Ticagrelor",
-            "dosage": "90 mg",
-            "frequency": "1-0-1 (Twice daily)",
-            "duration": "12 Months Mandatory",
-            "purpose": "Antiplatelet Stent Thrombosis Prevention",
-            "confidence": 0.99,
-            "sourceDocName": "Apex Cardiology Discharge"
-          },
-          {
-            "id": "med_6",
-            "name": "Rosuvastatin",
-            "dosage": "40 mg",
-            "frequency": "0-0-1 (Bedtime)",
-            "duration": "Lifelong",
-            "purpose": "High Intensity Statin Therapy",
-            "confidence": 0.98,
-            "sourceDocName": "Apex Cardiology Discharge"
-          },
-          {
-            "id": "med_7",
-            "name": "Metoprolol Succinate",
-            "dosage": "25 mg",
-            "frequency": "1-0-0 (Morning)",
-            "duration": "Lifelong",
-            "purpose": "Beta Blocker Post-MI Cardioprotection",
-            "confidence": 0.96,
-            "sourceDocName": "Apex Cardiology Discharge"
-          }
-        ],
-        "extractedLabValues": [
-          {
-            "id": "lab_9",
-            "testName": "Echocardiography LVEF",
-            "value": "45",
-            "unit": "%",
-            "referenceRange": "55 - 70",
-            "status": "abnormal",
-            "confidence": 0.95,
-            "date": "2025-06-08"
-          }
-        ]
-      }
-    ],
+    "documents": [],
     "timeline": [
       {
-        "id": "ev_visit_doc_sample_discharge",
-        "date": "2025-06-10",
-        "title": "Hospital Discharge Summary",
+        "id": "tl_rs_1",
+        "date": "2026-07-10",
+        "title": "Previous Visit V001: Acute Bronchitis",
         "category": "opd_visit",
-        "details": "Apex Institute of Cardiovascular Sciences (Dr. Vikramaditya Rathore, DM (Cardiology))",
-        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
-        "confidenceScore": 0.95
+        "details": "Treated with Paracetamol & Amoxyclav by Dr. R. K. Sharma. Fully resolved.",
+        "confidenceScore": 1
       },
       {
-        "id": "ev_diag_diag_5",
-        "date": "2025-06-10",
-        "title": "Diagnosis: Acute Inferior Wall STEMI (Post Primary PCI to RCA)",
+        "id": "tl_rs_2",
+        "date": "2026-09-07",
+        "title": "Current Visit V002: Tension Headache / Migraine without aura",
         "category": "diagnosis",
-        "details": "Identified with 99% clinical confidence. Status: ACTIVE",
-        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
-        "confidenceScore": 0.99
-      },
-      {
-        "id": "ev_diag_diag_6",
-        "date": "2025-06-10",
-        "title": "Diagnosis: Coronary Artery Disease with Drug Eluting Stent",
-        "category": "diagnosis",
-        "details": "Identified with 97% clinical confidence. Status: ACTIVE",
-        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
-        "confidenceScore": 0.97
-      },
-      {
-        "id": "ev_meds_doc_sample_discharge",
-        "date": "2025-06-10",
-        "title": "Medication Regimen (3 drugs)",
-        "category": "medication",
-        "details": "Ticagrelor 90 mg (1-0-1 (Twice daily)), Rosuvastatin 40 mg (0-0-1 (Bedtime)), Metoprolol Succinate 25 mg (1-0-0 (Morning))",
-        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
-        "confidenceScore": 0.92
-      },
-      {
-        "id": "ev_lab_lab_9",
-        "date": "2025-06-08",
-        "title": "Echocardiography LVEF: 45 %",
-        "category": "lab_result",
-        "details": "Ref: 55 - 70 | Evaluated Status: ABNORMAL",
-        "sourceDocName": "Apex_Cardiology_Discharge_June2025.pdf",
-        "criticalFlag": false,
+        "details": "Patient reports 2-day frontal throbbing headache aggravated by visual strain.",
         "confidenceScore": 0.95
       }
     ],
-    "triagePriority": "routine",
-    "triageRationale": "ROUTINE: Asymptomatic post-PCI patient presenting for chronic medication reconciliation and prescription refill.",
+    "triagePriority": "urgent",
+    "triageRationale": "URGENT: Moderate-to-severe cephalea (7/10 intensity) lasting 48 hours requiring clinical evaluation and neurological exclusion.",
     "redFlags": [],
     "clinicalSummary": {
-      "chiefComplaintFormatted": "Routine medication refill for CAD Post-Primary PCI to RCA (Stent in-situ)",
-      "historyOfPresentIllness": "64-year-old male with history of Acute Inferior Wall STEMI status post primary angioplasty with DES to RCA in June 2025. Currently asymptomatic, denies chest pain, palpitations, or orthopnea. Adherent to Dual Antiplatelet Therapy (Ticagrelor 90mg BD + Aspirin 75mg OD), Metoprolol Succinate 25mg, and Rosuvastatin 40mg.",
+      "chiefComplaintFormatted": "Severe frontal throbbing headache for 2 days (Rahul Sharma, 25Y/M)",
+      "historyOfPresentIllness": "25-year-old male returns to OPD (Visit 2). Previous visit on 10 July 2026 for acute bronchitis successfully resolved. Currently presents with acute throbbing headache since 2 days, rated 7/10. Pain is bilateral frontal and temporal, aggravated by digital screens. Denies photophobia, fever, vomiting, neck rigidity, or focal neuro deficits.",
       "pastMedicalHistory": [
-        "Acute Inferior Wall STEMI (Post Primary PCI to RCA)",
-        "Coronary Artery Disease with Drug Eluting Stent"
+        "Seasonal allergic rhinitis",
+        "Past acute bronchitis (July 2026, resolved)"
       ],
-      "activeMedications": [
+      "activeMedications": [],
+      "allergies": [
         {
-          "id": "med_5",
-          "name": "Ticagrelor",
-          "dosage": "90 mg",
-          "frequency": "1-0-1 (Twice daily)",
-          "duration": "12 Months Mandatory",
-          "purpose": "Antiplatelet Stent Thrombosis Prevention",
-          "confidence": 0.99,
-          "sourceDocName": "Apex Cardiology Discharge"
-        },
-        {
-          "id": "med_6",
-          "name": "Rosuvastatin",
-          "dosage": "40 mg",
-          "frequency": "0-0-1 (Bedtime)",
-          "duration": "Lifelong",
-          "purpose": "High Intensity Statin Therapy",
-          "confidence": 0.98,
-          "sourceDocName": "Apex Cardiology Discharge"
-        },
-        {
-          "id": "med_7",
-          "name": "Metoprolol Succinate",
-          "dosage": "25 mg",
-          "frequency": "1-0-0 (Morning)",
-          "duration": "Lifelong",
-          "purpose": "Beta Blocker Post-MI Cardioprotection",
-          "confidence": 0.96,
-          "sourceDocName": "Apex Cardiology Discharge"
+          "allergen": "Penicillin",
+          "reaction": "Tolerated Amoxyclav in July 2026 without reaction",
+          "severity": "mild"
         }
       ],
-      "allergies": [],
-      "investigationsSummary": "Previous 2D Echo showed LVEF 45% with regional wall motion abnormality in RCA territory."
+      "investigationsSummary": "BP: 126/82 mmHg. Pulse: 76 bpm. Pupils equal and reactive. Neck supple, no meningeal signs.",
+      "vitals": {
+        "bp": "126/82",
+        "pulse": "76",
+        "spo2": "98",
+        "temp": "98.4",
+        "rr": "16"
+      }
     },
+    "medicines": [
+      {
+        "id": "med_rs_v2_1",
+        "visitId": "V002",
+        "patientId": "P10025",
+        "name": "Naproxen",
+        "dosage": "250 mg",
+        "frequency": "Twice daily SOS (1-0-1)",
+        "duration": "3 days",
+        "instructions": "Take strictly after meals with antacid",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      },
+      {
+        "id": "med_rs_v2_2",
+        "visitId": "V002",
+        "patientId": "P10025",
+        "name": "Tab Pantoprazole",
+        "dosage": "40 mg",
+        "frequency": "Once daily morning (1-0-0)",
+        "duration": "5 days",
+        "instructions": "Take empty stomach before breakfast",
+        "datePrescribed": "2026-09-07",
+        "doctor": "Dr. S. K. Verma, MD"
+      }
+    ],
     "doctorReview": {
-      "verified": true,
-      "verifiedBy": "Dr. S. K. Verma, MD",
-      "verifiedAt": "2026-09-06T13:09:17.867Z",
-      "status": "verified",
-      "doctorNotes": "Patient doing well post-stenting. Vitals stable (BP 128/78, PR 68/min). Advised to strictly continue DAPT without missing any dose.",
+      "verified": false,
+      "status": "pending",
+      "doctorNotes": "",
       "differentialDiagnosis": [
-        "Stable Ischemic Heart Disease (Post-PCI)"
+        "Tension-Type Headache",
+        "Migraine without aura",
+        "Eyestrain Asthenopia"
       ],
-      "finalImpression": "Status Post RCA Stenting (June 2025) - Clinically stable on guideline-directed medical therapy.",
+      "finalImpression": "Tension-type headache with asthenopia",
       "prescribedMedications": [
         {
-          "name": "Tab Ticagrelor",
-          "dosage": "90 mg",
-          "frequency": "1-0-1 (BD)",
-          "duration": "60 days",
-          "instructions": "Take strictly after food - Mandatory DAPT"
+          "name": "Naproxen",
+          "dosage": "250 mg",
+          "frequency": "Twice daily SOS (1-0-1)",
+          "duration": "3 days",
+          "instructions": "Take strictly after meals with antacid"
         },
         {
-          "name": "Tab Ecosprin",
-          "dosage": "75 mg",
-          "frequency": "0-1-0 (OD)",
-          "duration": "60 days",
-          "instructions": "Take after lunch"
-        },
-        {
-          "name": "Tab Metoprolol Succinate",
-          "dosage": "25 mg",
-          "frequency": "1-0-0 (OD)",
-          "duration": "60 days",
-          "instructions": "Take morning after breakfast"
-        },
-        {
-          "name": "Tab Rosuvastatin",
+          "name": "Tab Pantoprazole",
           "dosage": "40 mg",
-          "frequency": "0-0-1 (HS)",
-          "duration": "60 days",
-          "instructions": "Take at bedtime"
+          "frequency": "Once daily morning (1-0-0)",
+          "duration": "5 days",
+          "instructions": "Take empty stomach before breakfast"
         }
-      ],
-      "recommendedTests": [
-        "Lipid Profile",
-        "Serum Creatinine in 3 months"
       ]
     },
-    "savedToHis": true,
-    "hisSyncTimestamp": "2026-09-06T13:09:17.867Z",
+    "savedToHis": false,
     "abdmCareContextLinked": true,
-    "abdmCareContextRef": "CARE-CTX-OPD-MED-044"
+    "abdmCareContextRef": "CARE-CTX-P10025-V002"
   }
 ]

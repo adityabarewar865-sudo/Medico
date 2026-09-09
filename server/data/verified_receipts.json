@@ -1,0 +1,36 @@
+[
+  {
+    "receiptToken": "e591c145093f910fe728e9ecef84078bd740ef0ea9c19005",
+    "patientId": "P10025",
+    "visitId": "V001",
+    "patientName": "Rahul Sharma",
+    "phone": "9876500001",
+    "doctorName": "Dr. S. K. Verma, MD",
+    "verifiedAt": "2026-09-07T16:12:07.080Z",
+    "receiptUrl": "http://localhost:5173/receipt/e591c145093f910fe728e9ecef84078bd740ef0ea9c19005",
+    "pdfPath": "D:\\Hackathon 2026\\prototype 2\\server\\data\\receipts\\Receipt_P10025_V001_e591c145.pdf",
+    "pdfBase64Preview": "JVBERi0xLjQgTW9jayBSZWNlaXB0IGZvciBUZXN0..."
+  },
+  {
+    "receiptToken": "ac507d7c187c806b1acc8273f9ed35935091810fda0aeda3",
+    "patientId": "P10027",
+    "visitId": "V001",
+    "patientName": "Sunita Devi",
+    "phone": "9845123670",
+    "doctorName": "Dr. S. K. Verma, MD",
+    "verifiedAt": "2026-09-07T17:10:16.162Z",
+    "receiptUrl": "http://localhost:5173/receipt/ac507d7c187c806b1acc8273f9ed35935091810fda0aeda3"
+  },
+  {
+    "receiptToken": "cfb422976dc3b38ed0234ce2239e29236ee66eea7fb8c81a",
+    "patientId": "P10031",
+    "visitId": "V001",
+    "patientName": "Ramesh Kumar",
+    "phone": "",
+    "doctorName": "Attending Doctor",
+    "verifiedAt": "2026-09-09T05:22:33.513Z",
+    "receiptUrl": "http://localhost:5173/receipt/cfb422976dc3b38ed0234ce2239e29236ee66eea7fb8c81a",
+    "pdfPath": "D:\\Hackathon 2026\\prototype 2\\server\\data\\receipts\\Receipt_P10031_V001_cfb42297.pdf",
+    "pdfBase64Preview": "data:application/pdf;filename=generated.pdf;base64,JVBERi0xLjMKJbrfrOAKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL1Jlc291cmNlcyAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUuMjc5OTk5OTk5OTk5OTcyNyA4NDEuODg5O..."
+  }
+]

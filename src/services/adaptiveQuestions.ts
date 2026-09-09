@@ -13,7 +13,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'छातीत दुखणे कधीपासून सुरू झाले आहे?',
         te: 'ఛాతీ నొప్పి ఎప్పుడు ప్రారంభమైంది?',
         ta: 'நெஞ்சு வலி எப்போது தொடங்கியது?',
-      },
+          pa: 'When did the chest pain start?',
+  },
       options: [
         {
           id: 'acute_hours',
@@ -24,7 +25,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'गेल्या १-४ तासांत (अचानक सुरू)',
             te: 'గత 1-4 గంటల్లో (అకస్మాత్తుగా)',
             ta: 'கடந்த 1-4 மணி நேரத்திற்குள் (திடீரென)',
-          },
+                pa: 'Within the last 1-4 hours (Sudden onset)',
+    },
           isRedFlag: true,
         },
         {
@@ -36,7 +38,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '१-३ दिवसांपासून कमी-जास्त होत आहे',
             te: '1-3 రోజులుగా వస్తూ పోతోంది',
             ta: '1-3 நாட்களாக வந்து போகிறது',
-          },
+                pa: 'Coming and going for 1-3 days',
+    },
         },
         {
           id: 'chronic_weeks',
@@ -47,7 +50,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'काही आठवड्यांपासून फक्त चालताना होते',
             te: 'కొన్ని వారాలుగా నడిచినప్పుడు మాత్రమే',
             ta: 'பல வாரங்களாக நடக்கும் போது மட்டும்',
-          },
+                pa: 'For weeks/months only when walking or climbing stairs',
+    },
         },
       ],
     },
@@ -62,7 +66,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'वेदना कशा प्रकारची जाणवत आहे?',
         te: 'నొప్పి ఏ విధంగా అనిపిస్తోంది?',
         ta: 'வலி எந்த மாதிரி உணர்கிறது?',
-      },
+          pa: 'How would you describe the chest pain?',
+  },
       options: [
         {
           id: 'crushing_pressure',
@@ -73,7 +78,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'छातीवर जड वजन किंवा दाबल्यासारखे वाटणे',
             te: 'ఛాతీపై బరువైన రాయి పెట్టినట్లుగా నలిపివేసే నొప్పి',
             ta: 'நெஞ்சில் பாரமான அழுத்தம் / பிசையும் உணர்வு',
-          },
+                pa: 'Crushing heavy pressure / tight squeezing sensation',
+    },
           isRedFlag: true,
         },
         {
@@ -85,7 +91,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'छातीत जळजळ किंवा ॲसिडिटी',
             te: 'ఛాతీలో మంట / ఎసిడిటీ',
             ta: 'நெஞ்செரிச்சல் / அசிடிட்டி',
-          },
+                pa: 'Burning sensation in the center / acid reflux',
+    },
         },
         {
           id: 'sharp_breathing',
@@ -96,7 +103,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'सुई टोचल्यासारखे दुखणे जे श्वास घेतल्यावर वाढते',
             te: 'సూది గుచ్చినట్లుగా ఊపిరి తీసుకుంటే ఎక్కువయ్యే నొప్పి',
             ta: 'ஊசி குத்துவது போன்ற வலி (மூச்சு விடும் போது கூடும்)',
-          },
+                pa: 'Sharp pricking pain that worsens on deep breathing or coughing',
+    },
         },
       ],
     },
@@ -111,7 +119,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'हा त्रास छातीतून इतरत्र कुठे पसरत आहे का?',
         te: 'ఈ నొప్పి ఛాతీ నుండి మరెక్కడికైనా వ్యాపిస్తోందా?',
         ta: 'இந்த வலி நெஞ்சிலிருந்து வேறு எங்காவது பரவுகிறதா?',
-      },
+          pa: 'Does the pain spread or radiate anywhere else?',
+  },
       options: [
         {
           id: 'rad_left_arm_jaw',
@@ -122,7 +131,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'होय, डावा हात, जबडा, मान किंवा पाठीत',
             te: 'అవును, ఎడమ చేయి, దవడ, మెడ లేదా వీపుకు',
             ta: 'ஆம், இடது கை, தாடை, கழுத்து அல்லது முதுகுக்கு',
-          },
+                pa: 'Yes, radiates to Left Arm, Jaw, Neck or Back',
+    },
           isRedFlag: true,
         },
         {
@@ -134,7 +144,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'नाही, फक्त छातीतच आहे',
             te: 'లేదు, ఛాతీ వద్ద మాత్రమే ఉంది',
             ta: 'இல்லை, நெஞ்சில் மட்டுமே உள்ளது',
-          },
+                pa: 'No, localized to the chest only',
+    },
         },
       ],
     },
@@ -149,7 +160,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'यासोबत आणखी काय त्रास होत आहे?',
         te: 'దీనితో పాటు మీకు ఇంకా ఏ సమస్యలు ఉన్నాయి?',
         ta: 'இதனுடன் வேறு என்ன அறிகுறிகள் உள்ளன?',
-      },
+          pa: 'What other symptoms are you experiencing together with it?',
+  },
       options: [
         {
           id: 'assoc_cold_sweats',
@@ -160,7 +172,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'गार घाम येणे',
             te: 'చల్లని చెమటలు పట్టడం',
             ta: 'குளிர்ந்த வியர்வை கொட்டுதல்',
-          },
+                pa: 'Profuse cold sweating (Diaphoresis)',
+    },
           isRedFlag: true,
         },
         {
@@ -172,7 +185,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'धाप लागणे किंवा धडधडणे',
             te: 'ఆయాసం లేదా దడ',
             ta: 'மூச்சுத்திணறல் / படபடப்பு',
-          },
+                pa: 'Shortness of breath / severe palpitations',
+    },
           isRedFlag: true,
         },
         {
@@ -184,7 +198,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'मळमळ किंवा चक्कर येणे',
             te: 'వికారం లేదా కళ్లు తిరగడం',
             ta: 'குமட்டல் அல்லது மயக்கம்',
-          },
+                pa: 'Nausea or feeling faint / dizzy',
+    },
         },
         {
           id: 'assoc_none',
@@ -195,7 +210,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'यापैकी काहीही नाही',
             te: 'ఇవేవీ లేవు',
             ta: 'இதில் எதுவும் இல்லை',
-          },
+                pa: 'None of these',
+    },
         },
       ],
     },
@@ -213,7 +229,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'ताप किती दिवसांपासून येत आहे?',
         te: 'జ్వరం ఎన్ని రోజులుగా వస్తోంది?',
         ta: 'எத்தனை நாட்களாக காய்ச்சல் அடிக்கிறது?',
-      },
+          pa: 'How many days have you had the fever?',
+  },
       options: [
         {
           id: 'fv_1_2_days',
@@ -224,7 +241,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '१ ते २ दिवस',
             te: '1-2 రోజులు',
             ta: '1-2 நாட்கள்',
-          },
+                pa: '1-2 days (Recent onset)',
+    },
         },
         {
           id: 'fv_3_7_days',
@@ -235,7 +253,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '३ ते ७ दिवस',
             te: '3 నుండి 7 రోజులు',
             ta: '3 முதல் 7 நாட்கள்',
-          },
+                pa: '3 to 7 days (High continuous fever)',
+    },
         },
         {
           id: 'fv_gt_week',
@@ -246,7 +265,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '७ दिवसांपेक्षा जास्त दिवस',
             te: 'వారం కంటే ఎక్కువ రోజులు',
             ta: '1 வாரத்திற்கு மேல்',
-          },
+                pa: 'More than 7 days (Prolonged fever)',
+    },
           isRedFlag: true,
         },
       ],
@@ -262,7 +282,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'तापाच्या वेळी तीव्र थंडी वाजून येते का किंवा सांधे भयंकर दुखतात का?',
         te: 'జ్వరంతో పాటు తీవ్రమైన వణుకు లేదా కీళ్ల నొప్పులు ఉన్నాయా?',
         ta: 'காய்ச்சலின் போது நடுக்கம் அல்லது எலும்பு முறிவு போன்ற வலி உள்ளதா?',
-      },
+          pa: 'Do you experience shaking chills or severe bone/joint breaking pain?',
+  },
       options: [
         {
           id: 'fv_shaking_chills',
@@ -273,7 +294,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'होय, तीव्र थंडी, हुडहुडी व डोळ्यांच्या मागे तीव्र वेदना',
             te: 'అవును, తీవ్రమైన వణుకు మరియు కళ్ల వెనుక నొప్పి',
             ta: 'ஆம், கடுமையான நடுக்கம் மற்றும் கண்களுக்குப் பின்னால் வலி',
-          },
+                pa: 'Yes, severe chills, rigors and pain behind eyes / joints',
+    },
           isRedFlag: true,
         },
         {
@@ -285,7 +307,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'अंगात बारीक ताप व थकवा जाणवतो',
             te: 'స్వల్ప జ్వరం మరియు నీరసం',
             ta: 'லேசான காய்ச்சல் மற்றும் சோர்வு',
-          },
+                pa: 'Mild warmth and body fatigue',
+    },
         },
       ],
     },
@@ -300,7 +323,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'खालीलपैकी कोणतीही गंभीर लक्षणे दिसत आहेत का?',
         te: 'ఈ క్రింది ప్రమాదకర లక్షణాలు ఏమైనా ఉన్నాయా?',
         ta: 'பின்வரும் தீவிர எச்சரிக்கை அறிகுறிகள் ஏதேனும் உள்ளதா?',
-      },
+          pa: 'Do you notice any of these critical warning signs?',
+  },
       options: [
         {
           id: 'fv_bleeding_rash',
@@ -311,7 +335,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'हिरड्या किंवा नाकातून रक्त येणे किंवा अंगावर लाल पुरळ',
             te: 'చిగుళ్ళు లేదా ముక్కు నుండి రక్తం కారడం లేదా చర్మంపై ఎర్రటి మచ్చలు',
             ta: 'ஈறுகள்/மூக்கிலிருந்து ரத்தம் வடிதல் அல்லது தோலில் சிவப்பு புள்ளிகள்',
-          },
+                pa: 'Bleeding from gums/nose or tiny red skin spots (Petechiae)',
+    },
           isRedFlag: true,
         },
         {
@@ -323,7 +348,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'अचेत होणे, भ्रम किंवा भलतेच बोलणे',
             te: 'స్పృహ తప్పడం లేదా అసంబద్ధంగా మాట్లాడటం',
             ta: 'சுயநினைவு மங்குதல் அல்லது குழப்பமான பேச்சு',
-          },
+                pa: 'Extreme lethargy, confusion, or unable to wake up properly',
+    },
           isRedFlag: true,
         },
         {
@@ -335,7 +361,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'यापैकी कोणतीही गंभीर लक्षणे नाहीत',
             te: 'ఈ లక్షణాలు ఏవీ లేవు',
             ta: 'எந்த தீவிர எச்சரிக்கை அறிகுறிகளும் இல்லை',
-          },
+                pa: 'None of these warning signs',
+    },
         },
       ],
     },
@@ -353,7 +380,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'श्वासाचा त्रास कधी वाढतो?',
         te: 'శ్వాస తీసుకోవడంలో ఇబ్బంది ఎప్పుడు తీవ్రమవుతుంది?',
         ta: 'மூச்சுத்திணறல் எப்போது அதிகமாகிறது?',
-      },
+          pa: 'When does the breathing difficulty worsen?',
+  },
       options: [
         {
           id: 'sob_at_rest',
@@ -364,7 +392,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'बसल्या जागी किंवा झोपल्यावरही धाप लागते',
             te: 'విశ్రాంతిలో ఉన్నప్పుడు కూడా శ్వాస ఆడదు',
             ta: 'ஓய்வாக இருக்கும் போதும் படுக்கும் போதும் மூச்சிரைக்கிறது',
-          },
+                pa: 'Even while resting or lying completely flat in bed',
+    },
           isRedFlag: true,
         },
         {
@@ -376,7 +405,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'फक्त चालताना किंवा जिना चढताना',
             te: 'నడిచినప్పుడు లేదా మెట్లు ఎక్కినప్పుడు మాత్రమే',
             ta: 'நடக்கும் போது அல்லது படிக்கட்டு ஏறும் போது மட்டும்',
-          },
+                pa: 'Only on brisk walking or climbing stairs',
+    },
         },
       ],
     },
@@ -391,7 +421,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'पायांवर सूज आहे का किंवा रात्री श्वास कोंडून जाग येते का?',
         te: 'కాళ్లలో వాపు ఉందా లేదా రాత్రిపూట ఊపిరాడక మెలకువ వస్తుందా?',
         ta: 'கால்களில் வீக்கம் உள்ளதா அல்லது இரவில் மூச்சுத்திணறி முழிப்பு வருகிறதா?',
-      },
+          pa: 'Do you have swelling in your legs or wake up gasping at night?',
+  },
       options: [
         {
           id: 'sob_pedal_edema',
@@ -402,7 +433,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'होय, दोन्ही पायांवर सूज आहे',
             te: 'అవును, రెండు కాళ్లలో వాపు ఉంది',
             ta: 'ஆம், இரண்டு கால்களிலும் வீக்கம் உள்ளது',
-          },
+                pa: 'Yes, both feet/ankles are swollen',
+    },
           isRedFlag: true,
         },
         {
@@ -414,7 +446,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'छातीतून शिट्टीसारखा आवाज येतो',
             te: 'ఛాతీలో పిల్లికూతలు లేదా ఈల వంటి శబ్దం',
             ta: 'நெஞ்சில் விசில் சத்தம் / வீசிங்',
-          },
+                pa: 'Whistling wheeze sound in chest / known asthma',
+    },
         },
       ],
     },
@@ -432,7 +465,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'पोटात प्रामुख्याने कोणत्या भागात दुखत आहे?',
         te: 'కడుపులో ఖచ్చితంగా ఎక్కడ నొప్పి ఉంది?',
         ta: 'வயிற்றில் வலி சரியாக எங்கு உள்ளது?',
-      },
+          pa: 'Where exactly is the abdominal pain located?',
+  },
       options: [
         {
           id: 'ab_right_lower',
@@ -443,7 +477,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'उजव्या बाजूला खाली तीव्र असह्य वेदना',
             te: 'కడుపు కింది భాగంలో కుడివైపున తీవ్రమైన నొప్పి',
             ta: 'அடிவயிற்றின் வலது பக்கத்தில் கடுமையான வலி',
-          },
+                pa: 'Severe sharp pain in the lower right side (Suspected Appendicitis)',
+    },
           isRedFlag: true,
         },
         {
@@ -455,7 +490,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'वरच्या पोटात जळजळ आणि दुखणे',
             te: 'పై కడుపులో మంట మరియు నొప్పి',
             ta: 'மேல் வயிற்றில் எரிச்சல் மற்றும் வலி',
-          },
+                pa: 'Upper center / below ribs burning pain (Gastritis / Gallbladder)',
+    },
         },
         {
           id: 'ab_diffuse',
@@ -466,7 +502,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'संपूर्ण पोटात गोळा येणे',
             te: 'మొత్తం కడుపులో తిమ్మిరి మరియు గ్యాస్',
             ta: 'முழு வயிற்றிலும் பிடிப்பு மற்றும் வாயு',
-          },
+                pa: 'Generalized cramps and gas across entire belly',
+    },
         },
       ],
     },
@@ -481,7 +518,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'उलटीत रक्त, पोट लाकडासारखे कडक होणे किंवा शौचात रक्त आले आहे का?',
         te: 'వాంతిలో రక్తం, కడుపు బండలా గట్టిపడటం లేదా మలంలో రక్తం పడిందా?',
         ta: 'வாந்தியில் ரத்தம், வயிறு மரக்கட்டை போல் இறுகுதல் அல்லது மலத்தில் ரத்தம் உள்ளதா?',
-      },
+          pa: 'Any blood in vomit, rigid board-like belly, or black tarry stools?',
+  },
       options: [
         {
           id: 'ab_bleed_rigid',
@@ -492,7 +530,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'होय, रक्ताची उलटी किंवा पोट अतिशय कडक झाले आहे',
             te: 'అవును, రక్తపు వాంతులు లేదా కడుపు బండలా గట్టిగా ఉంది',
             ta: 'ஆம், ரத்த வாந்தி அல்லது வயிறு மிகவும் கடினமாக உள்ளது',
-          },
+                pa: 'Yes, blood in vomit/stool or rigid rock-hard abdomen',
+    },
           isRedFlag: true,
         },
         {
@@ -504,7 +543,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'नाही, अशी कोणतीही गंभीर लक्षणे नाहीत',
             te: 'లేదు, అలాంటి లక్షణాలు లేవు',
             ta: 'இல்லை, அத்தகைய தீவிர அறிகுறிகள் இல்லை',
-          },
+                pa: 'No such critical symptoms',
+    },
         },
       ],
     },
@@ -522,7 +562,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'प्रामुख्याने कोणत्या सांध्यात जास्त त्रास आहे?',
         te: 'ప్రధానంగా ఏ కీళ్లలో నొప్పి లేదా వాపు ఉంది?',
         ta: 'முக்கியமாக எந்த மூட்டுகளில் வலி அல்லது வீக்கம் உள்ளது?',
-      },
+          pa: 'Which joints are primarily painful or swollen?',
+  },
       options: [
         {
           id: 'jp_knees',
@@ -533,7 +574,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'दोन्ही गुडघ्यांत (उठताना-बसताना त्रास)',
             te: 'రెండు మోకాళ్లలో (కూర్చుని లేచేటప్పుడు శబ్దం/నొప్పి)',
             ta: 'இரண்டு முழங்கால்களிலும் (எழுந்து உட்காரும் போது வலி)',
-          },
+                pa: 'Both knees (Crepitus, pain on standing / Osteoarthritis)',
+    },
         },
         {
           id: 'jp_hands_morning',
@@ -544,7 +586,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'हातांच्या बोटांमध्ये व सकाळी तीव्र कडकपणा',
             te: 'చేతి వేళ్ల కీళ్లలో ఉదయం పూట బిగుసుకుపోవడం',
             ta: 'கை விரல் மூட்டுகளில் காலை நேர விறைப்பு',
-          },
+                pa: 'Small joints of hands with >1 hr morning stiffness',
+    },
         },
         {
           id: 'jp_single_hot_swollen',
@@ -555,7 +598,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'एकच सांधा लाल, गरम व भयंकर सुजलेला',
             te: 'ఒక్క కీలు మాత్రమే ఎర్రబడి, వేడిగా మరియు తీవ్ర వాపుతో ఉంది',
             ta: 'ஒரே ஒரு மூட்டு மட்டும் சிவந்து, சூடாகி கடுமையான வீக்கத்துடன் உள்ளது',
-          },
+                pa: 'Single joint acutely red, hot, swollen and tender (Gout/Septic)',
+    },
           isRedFlag: true,
         },
       ],
@@ -574,7 +618,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'डोकेदुखी कशी सुरू झाली?',
         te: 'తలనొప్పి ఎలా ప్రారంభమైంది?',
         ta: 'தலைவலி எவ்வாறு தொடங்கியது?',
-      },
+          pa: 'How did the headache start and feel?',
+  },
       options: [
         {
           id: 'ha_thunderclap',
@@ -585,7 +630,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'जीवनातील सर्वात भयानक डोकेदुखी जी विजेसारखी अचानक सुरू झाली',
             te: 'జీవితంలో ఎన్నడూ లేనంత తీవ్రమైన తలనొప్పి అకస్మాత్తుగా రావడం',
             ta: 'வாழ்நாளில் இல்லாத மிகக் கடுமையான திடீர் தலைவலி',
-          },
+                pa: 'Worst headache of life, sudden explosion like a thunderclap',
+    },
           isRedFlag: true,
         },
         {
@@ -597,7 +643,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'एका बाजूला ठणकणारे दुखणे व प्रकाशाचा त्रास',
             te: 'తల ఒక వైపు కొట్టుకునే నొప్పి, వెలుతురు చూడలేకపోవడం',
             ta: 'தலையின் ஒரு பக்க துடிப்பு வலி மற்றும் வெளிச்சம் பார்க்க முடியாமை',
-          },
+                pa: 'One-sided throbbing pain with nausea, sensitivity to light/sound',
+    },
         },
         {
           id: 'ha_tension',
@@ -608,7 +655,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'डोक्याभोवती पट्टा बांधल्यासारखा जडपणा',
             te: 'తల చుట్టూ పట్టీ బిగించినట్లుగా బరువు',
             ta: 'தலையைச் சுற்றி பட்டை கட்டியது போன்ற பாரம்',
-          },
+                pa: 'Dull tight band around the head / neck heaviness',
+    },
         },
       ],
     },
@@ -623,7 +671,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'खालीलपैकी कोणतीही मेंदू/मज्जातंतू संबंधित लक्षणे आहेत का?',
         te: 'ఈ నరాల సంబంధిత ప్రమాదకర లక్షణాలు ఏమైనా ఉన్నాయా?',
         ta: 'நரம்பியல் தொடர்பான எச்சரிக்கை அறிகுறிகள் உள்ளதா?',
-      },
+          pa: 'Do you have any of these neurological red flags?',
+  },
       options: [
         {
           id: 'ha_weakness_speech',
@@ -634,7 +683,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'तोंड वाकडे होणे, बोलताना तोतरेपणा किंवा एका बाजूला अशक्तपणा',
             te: 'మూతి వంకరపోవడం, మాట ముద్ద రావడం లేదా ఒక చేయి/కాలు బలహీనపడటం',
             ta: 'வாய் ஒருபுறம் கோணுதல், பேச்சு குளறுதல் அல்லது ஒரு கை/கால் பலவீனம்',
-          },
+                pa: 'Facial droop, slurred speech, or weakness in one arm/leg (Stroke)',
+    },
           isRedFlag: true,
         },
         {
@@ -646,7 +696,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'मान ताठ होणे व हनुवटी छातीला लावता न येणे',
             te: 'మెడ బిగుసుకుపోవడం మరియు గడ్డం ఛాతీకి ఆనించలేకపోవడం',
             ta: 'கழுத்து விறைத்து தாடையை மார்பில் தொட முடியாமை',
-          },
+                pa: 'Stiff neck unable to touch chin to chest with fever',
+    },
           isRedFlag: true,
         },
         {
@@ -658,7 +709,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'काहीही नाही',
             te: 'ఇలాంటివి ఏవీ లేవు',
             ta: 'எந்த தீவிர நரம்பியல் அறிகுறிகளும் இல்லை',
-          },
+                pa: 'None of these',
+    },
         },
       ],
     },
@@ -676,7 +728,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'गेल्या २४ तासांत किती वेळा उलट्या किंवा जुलाब झाले?',
         te: 'గత 24 గంటల్లో ఎన్నిసార్లు వాంతులు లేదా విరేచనాలు అయ్యాయి?',
         ta: 'கடந்த 24 மணி நேரத்தில் எத்தனை முறை வாந்தி அல்லது வயிற்றுப்போக்கு ஏற்பட்டது?',
-      },
+          pa: 'How many episodes of vomiting or loose motions in last 24 hours?',
+  },
       options: [
         {
           id: 'vd_gt_8',
@@ -687,7 +740,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '८-१० पेक्षा जास्त वेळा, पाणीही पचत नाही',
             te: '8-10 సార్ల కంటే ఎక్కువ, మంచినీళ్లు కూడా తాగలేకపోతున్నారు',
             ta: '8-10 முறைக்கு மேல், தண்ணீர் கூட குடிக்க முடியவில்லை',
-          },
+                pa: 'More than 8-10 times, cannot keep even water down',
+    },
           isRedFlag: true,
         },
         {
@@ -699,7 +753,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '३ ते ५ वेळा, ओआरएस पाणी घेत आहेत',
             te: '3-5 సార్లు, ఓఆర్ఎస్ ద్రావణం తాగగలుగుతున్నారు',
             ta: '3-5 முறை, ஓஆர்எஸ் நீர் குடிக்க முடிகிறது',
-          },
+                pa: '3-5 times, able to drink ORS / fluids',
+    },
         },
       ],
     },
@@ -714,7 +769,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'गेल्या ८-१० तासांत लघवी पूर्ण बंद किंवा खूप कमी झाली आहे का?',
         te: 'గత 8-10 గంటలుగా మూత్రం పూర్తిగా ఆగిపోయిందా లేదా చాలా తగ్గిపోయిందా?',
         ta: 'கடந்த 8-10 மணி நேரமாக சிறுநீர் சுத்தமாக வரவில்லையா அல்லது மிகவும் குறைந்துவிட்டதா?',
-      },
+          pa: 'Has urine output severely decreased or stopped for >8 hours?',
+  },
       options: [
         {
           id: 'vd_anuria',
@@ -725,7 +781,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'होय, लघवी अजिबात झाली नाही व अतिशय गळून गेले आहेत',
             te: 'అవును, మూత్రం రాలేదు మరియు తీవ్ర నిస్సత్తువ',
             ta: 'ஆம், சிறுநீர் வரவில்லை மற்றும் கடுமையான சோர்வு',
-          },
+                pa: 'Yes, no urine passed for hours, extreme lethargy and dry mouth',
+    },
           isRedFlag: true,
         },
         {
@@ -737,7 +794,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'नाही, लघवी व्यवस्थित होत आहे',
             te: 'లేదు, మూత్రం సాధారణంగానే వస్తోంది',
             ta: 'இல்லை, சிறுநீர் சாதாரணமாக வருகிறது',
-          },
+                pa: 'No, passing urine regularly',
+    },
         },
       ],
     },
@@ -755,7 +813,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'मधुमेह किंवा उच्च रक्तदाब किती वर्षांपासून आहे?',
         te: 'మీకు డయాబెటిస్ లేదా హై బీపీ ఎంతకాలంగా ఉంది?',
         ta: 'எவ்வளவு காலமாக சர்க்கரை அல்லது ரத்த அழுத்தம் உள்ளது?',
-      },
+          pa: 'How long have you had Diabetes or High Blood Pressure?',
+  },
       options: [
         {
           id: 'dm_gt_10',
@@ -766,7 +825,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '१० पेक्षा जास्त वर्षांपासून',
             te: '10 సంవత్సరాలకు పైగా',
             ta: '10 ஆண்டுகளுக்கு மேலாக',
-          },
+                pa: 'More than 10 years',
+    },
         },
         {
           id: 'dm_1_5_yr',
@@ -777,7 +837,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: '१ ते ५ वर्षे',
             te: '1 నుండి 5 సంవత్సరాలు',
             ta: '1 முதல் 5 ஆண்டுகள்',
-          },
+                pa: '1 to 5 years',
+    },
         },
         {
           id: 'dm_new',
@@ -788,7 +849,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'नुकताच शोध लागला आहे',
             te: 'ఇటీవల కొత్తగా గుర్తించబడింది',
             ta: 'சமீபத்தில் புதிதாக கண்டறியப்பட்டது',
-          },
+                pa: 'Newly suspected / recently detected',
+    },
         },
       ],
     },
@@ -803,7 +865,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'पायांना मुंग्या येणे, डोळ्यांनी अंधुक दिसणे किंवा न भरणारी जखम आहे का?',
         te: 'కాళ్లలో తిమ్మిర్లు, కంటిచూపు మసకబారడం లేదా మానని పుండు ఉందా?',
         ta: 'கால்களில் மரத்துப்போதல், கண் பார்வை மங்குதல் அல்லது ஆறாத புண் உள்ளதா?',
-      },
+          pa: 'Any tingling numbness in feet, blurred vision, or non-healing foot wound?',
+  },
       options: [
         {
           id: 'dm_foot_ulcer',
@@ -814,7 +877,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'होय, पायात न भरणारी जखम आहे',
             te: 'అవును, కాలిపై మానని పుండు ఉంది',
             ta: 'ஆம், காலில் ஆறாத புண் உள்ளது',
-          },
+                pa: 'Yes, non-healing foot sore / blackened toe (Diabetic Foot)',
+    },
           isRedFlag: true,
         },
         {
@@ -826,7 +890,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'तळपायांची जळजळ किंवा मुंग्या येणे',
             te: 'అరికాళ్లలో మంటలు లేదా తిమ్మిరి',
             ta: 'உள்ளங்காலில் எரிச்சல் அல்லது மரத்துப்போதல்',
-          },
+                pa: 'Burning sensation and tingling in soles (Neuropathy)',
+    },
         },
         {
           id: 'dm_none',
@@ -837,7 +902,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'काही अडचण नाही, फक्त औषधे हवी आहेत',
             te: 'ఏ సమస్యలు లేవు, రెగ్యులర్ చెకప్ మాత్రమే',
             ta: 'எந்த சிக்கலும் இல்லை, வழக்கமான மாத்திரை மட்டும் போதும்',
-          },
+                pa: 'No complications, just routine refill and checkup',
+    },
         },
       ],
     },
@@ -855,7 +921,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'पुरळ किंवा त्वचेचा आजार कसा आहे?',
         te: 'దద్దుర్లు లేదా చర్మ సమస్య ఏ రకమైనది?',
         ta: 'தோல் தடிப்பு அல்லது பிரச்சினை எத்தகையது?',
-      },
+          pa: 'What kind of rash or lesion is it?',
+  },
       options: [
         {
           id: 'sk_spreading_fever',
@@ -866,7 +933,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'वेगाने पसरणारा लालसरपणा, तीव्र वेदना व ताप',
             te: 'వేగంగా వ్యాపించే ఎరుపు రంగు, తీవ్ర నొప్పి మరియు జ్వరం',
             ta: 'வேகமாகப் பரவும் சிவத்தல், கடுமையான வலி மற்றும் காய்ச்சல்',
-          },
+                pa: 'Rapidly spreading redness, severe pain, heat and fever (Cellulitis)',
+    },
           isRedFlag: true,
         },
         {
@@ -878,7 +946,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'जुनी खाज व कोरडी त्वचा',
             te: 'దీర్ఘకాలిక దురద మరియు పొడి చర్మం',
             ta: 'நீண்டகால அரிப்பு மற்றும் செதில் போன்ற தோல்',
-          },
+                pa: 'Chronic dry scaly patches, intense itching',
+    },
         },
       ],
     },
@@ -896,7 +965,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'अतिशय अशक्तपणा कधीपासून जाणवत आहे?',
         te: 'తీవ్రమైన నీరసం ఎంతకాలంగా ఉంది?',
         ta: 'கடுமையான சோர்வு எவ்வளவு காலமாக உள்ளது?',
-      },
+          pa: 'How long have you had severe weakness and fatigue?',
+  },
       options: [
         {
           id: 'gw_acute',
@@ -907,7 +977,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'आज अचानक भोवळ येऊन पडणे',
             te: 'ఈరోజే అకస్మాత్తుగా స్పృహ తప్పి పడిపోవడం',
             ta: 'இன்று திடீரென மயங்கி விழுதல்',
-          },
+                pa: 'Sudden collapse or fainting today (Syncope)',
+    },
           isRedFlag: true,
         },
         {
@@ -919,7 +990,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'काही महिन्यांपासून सतत थकवा',
             te: 'కొన్ని నెలలుగా నిరంతర నీరసం',
             ta: 'பல மாதங்களாக படிப்படியான சோர்வு',
-          },
+                pa: 'Gradual fatigue over months with paleness',
+    },
         },
       ],
     },
@@ -937,7 +1009,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
         mr: 'हा त्रास किती दिवसांपासून जाणवत आहे?',
         te: 'ఈ సమస్య ఎంతకాలంగా ఉంది?',
         ta: 'இந்த பிரச்சினை எவ்வளவு காலமாக உள்ளது?',
-      },
+          pa: 'How long have you been experiencing this issue?',
+  },
       options: [
         {
           id: 'oth_sudden',
@@ -948,7 +1021,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'आज अचानक सुरू झाला',
             te: 'ఈరోజే అకస్మాత్తుగా ప్రారంభమైంది',
             ta: 'இன்று திடீரென தொடங்கியது',
-          },
+                pa: 'Started suddenly today',
+    },
         },
         {
           id: 'oth_few_days',
@@ -959,7 +1033,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'काही दिवसांपासून',
             te: 'కొన్ని రోజులుగా',
             ta: 'சில நாட்களாக',
-          },
+                pa: 'A few days (3-7 days)',
+    },
         },
         {
           id: 'oth_months',
@@ -970,7 +1045,8 @@ export const COMPLAINT_QUESTIONS_MAP: Record<ChiefComplaintId, AdaptiveQuestion[
             mr: 'दीर्घकाळापासून',
             te: 'చాలా కాలంగా',
             ta: 'நீண்ட காலமாக',
-          },
+                pa: 'Longstanding (months or years)',
+    },
         },
       ],
     },
