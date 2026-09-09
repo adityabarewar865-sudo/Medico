@@ -47,6 +47,7 @@ import { hospitalDb } from '../../services/hospitalDatabase';
 import { speech } from '../../services/speech';
 import { AbhaCardModal } from './AbhaCardModal';
 import { AiChatbot } from '../common/AiChatbot';
+import { LiveDateTime } from '../common/LiveDateTime';
 
 interface PatientKioskProps {
   currentLanguage: LanguageCode;
@@ -201,13 +202,6 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
   // Completed Encounter Result
   const [completedEncounter, setCompletedEncounter] = useState<PatientCaseEncounter | null>(null);
 
-  // Live Clock
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Text-To-Speech helper for accessibility
   const handleSpeak = (text: string) => {
@@ -588,17 +582,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </button>
         </div>
 
-        <div className="text-right text-xs text-slate-500 font-semibold bg-white border border-slate-200/60 shadow-sm rounded-xl py-1.5 px-3">
-          <div className="text-sm font-black text-slate-800 tracking-tight">
-            {currentTime.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-          </div>
-          <div>
-            {currentTime.toLocaleDateString('en-US', { weekday: 'long' })}
-          </div>
-          <div>
-            {currentTime.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })}
-          </div>
-        </div>
+        <LiveDateTime />
       </div>
 
       {/* Step Progress Bar (1 to 7) */}
@@ -631,9 +615,43 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
       {/* Main Kiosk Card */}
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200/90 overflow-hidden">
-        {/* STEP 1: Language Selection */}
+        {/* STEP 1: Department Selection (OPD / IPD) & Language Selection */}
         {currentStep === 1 && (
           <div className="p-6 sm:p-10 space-y-6">
+            {/* Department Registration Selection: OPD vs IPD */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+              <div className="text-center mb-3">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                  Select Department Registration / पंजीकरण विभाग चुनें
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto">
+                <button
+                  type="button"
+                  onClick={() => setShowIpdModal(false)}
+                  className="p-4 rounded-2xl border-2 border-teal-600 bg-white dark:bg-slate-800 hover:bg-teal-50/50 text-left transition-all shadow-xs flex items-center justify-between group cursor-pointer"
+                >
+                  <div>
+                    <div className="text-xl font-black text-teal-800 dark:text-teal-300">OPD</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">Outpatient Consultation</div>
+                  </div>
+                  <span className="text-2xl">🩺</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowIpdModal(true)}
+                  className="p-4 rounded-2xl border-2 border-rose-600 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-left transition-all shadow-xs flex items-center justify-between group cursor-pointer"
+                >
+                  <div>
+                    <div className="text-xl font-black text-rose-700 dark:text-rose-400">IPD</div>
+                    <div className="text-xs text-rose-600 dark:text-rose-300 font-bold">Emergency Inpatient Admission</div>
+                  </div>
+                  <span className="text-2xl animate-pulse">🚨</span>
+                </button>
+              </div>
+            </div>
+
             <div className="text-center space-y-2">
               <div className="inline-flex p-3 rounded-2xl bg-teal-50 text-teal-700 mb-2 border border-teal-100">
                 <span className="text-3xl">🗣️</span>
@@ -1853,6 +1871,10 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                     <span>Understanding Dashavidha Pariksha (Classical Ayurvedic Framework)</span>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px] text-slate-600 font-medium">
+                    <div className="bg-emerald-50 p-2 rounded-lg border border-emerald-200 col-span-2 sm:col-span-5">
+                      <strong className="text-emerald-950 font-black">Dashavidha — Ten-fold assessment: </strong>
+                      <span className="text-emerald-800 font-semibold">Classical Ayurvedic comprehensive intake evaluation</span>
+                    </div>
                     <div className="bg-white p-2 rounded-lg border border-slate-200">
                       <strong className="text-slate-900 block">Prakriti</strong> Body constitution
                     </div>
@@ -2529,10 +2551,10 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md shadow-rose-600/30 flex items-center gap-2"
+                  className="px-8 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm shadow-md shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-transform active:scale-95"
                 >
                   <Bed className="w-4 h-4" />
-                  <span>Admit Patient Immediately</span>
+                  <span>Register</span>
                 </button>
               </div>
             </form>

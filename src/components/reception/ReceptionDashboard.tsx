@@ -18,6 +18,7 @@ import {
 import type { PatientRecord, Gender, AuthUser, PatientCaseEncounter } from '../../types/clinical';
 import { hospitalDb } from '../../services/hospitalDatabase';
 import { downloadHospitalExcel } from '../../services/excelService';
+import { LiveDateTime } from '../common/LiveDateTime';
 
 interface ReceptionDashboardProps {
   onSendToKiosk?: (patientId: string) => void;
@@ -223,6 +224,20 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 space-y-6">
+      {/* Reception Header with Live Date, Day and Time */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div>
+          <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-teal-600" />
+            <span>Hospital Reception &amp; Central Intake Desk</span>
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            {currentUser?.hospitalName || 'District Hospital'} &bull; {currentUser?.hospitalAddress || 'Hospital Complex, Main Road'}
+          </p>
+        </div>
+        <LiveDateTime />
+      </div>
+
       {/* Top Welcome & Reception Metrics Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center justify-between">

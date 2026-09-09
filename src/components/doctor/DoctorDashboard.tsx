@@ -44,6 +44,7 @@ import { generateVisitReceiptPdf } from '../../services/pdfReceiptService';
 import { FhirBundleModal } from './FhirBundleModal';
 import { OpdSlipPrint } from './OpdSlipPrint';
 import { VerificationSuccessModal } from './VerificationSuccessModal';
+import { LiveDateTime } from '../common/LiveDateTime';
 
 export const DoctorDashboard: React.FC = () => {
   const [patients, setPatients] = useState<PatientRecord[]>([]);
@@ -372,14 +373,17 @@ export const DoctorDashboard: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => downloadHospitalExcel(patients)}
-          className="px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs rounded-2xl border border-emerald-300 dark:border-emerald-800 flex items-center gap-2 shadow-2xs transition-all cursor-pointer"
-          title="Download complete hospital patient visits Excel (Hospital_Patient_Records.xlsx)"
-        >
-          <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-          <span>Export Excel (All Visits)</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <LiveDateTime />
+          <button
+            onClick={() => downloadHospitalExcel(patients)}
+            className="px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs rounded-2xl border border-emerald-300 dark:border-emerald-800 flex items-center gap-2 shadow-2xs transition-all cursor-pointer"
+            title="Download complete hospital patient visits Excel (Hospital_Patient_Records.xlsx)"
+          >
+            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+            <span>Export Excel (All Visits)</span>
+          </button>
+        </div>
       </div>
 
       {/* Top Clinical Triage Metrics Bar */}
@@ -899,7 +903,7 @@ export const DoctorDashboard: React.FC = () => {
               >
                 <span>🌿</span>
                 <span>
-                  AYUSH / Ayurvedic History
+                  AYUSH HISTORY
                   {(currentVisit.ayushHistory || currentVisit.systemOfMedicine === 'ayurveda') && (
                     <span className="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
                       Active
@@ -1057,6 +1061,55 @@ export const DoctorDashboard: React.FC = () => {
                   </div>
                 )}
 
+                {/* AI Summary Dedicated AYUSH HISTORY Section */}
+                {currentVisit.ayushHistory && (
+                  <div className="p-4 bg-emerald-50/70 dark:bg-emerald-950/30 rounded-2xl border border-emerald-300 dark:border-emerald-800 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
+                        <span>🌿 AYUSH HISTORY</span>
+                      </div>
+                      <span className="text-[10px] text-emerald-800 dark:text-emerald-300 font-semibold bg-white dark:bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-700">
+                        AI Clinical Intake Synthesis
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-700 dark:text-slate-300">
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Prakriti:</span>
+                        <span className="font-black text-emerald-950 dark:text-emerald-300">{currentVisit.ayushHistory.dashavidha.prakriti.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Vikriti:</span>
+                        <span className="font-black text-emerald-950 dark:text-emerald-300">{currentVisit.ayushHistory.dashavidha.vikriti.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Ahara Shakti (Agni):</span>
+                        <span className="font-black text-emerald-950 dark:text-emerald-300">{currentVisit.ayushHistory.dashavidha.aharaShakti.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Vyayama Shakti:</span>
+                        <span className="font-black text-emerald-950 dark:text-emerald-300">{currentVisit.ayushHistory.dashavidha.vyayamaShakti.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Diet (Ahara):</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{currentVisit.ayushHistory.ahara.usualDiet.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Meal Timing:</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{currentVisit.ayushHistory.ahara.mealTiming.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Sleep (Nidra):</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{currentVisit.ayushHistory.vihara.sleepPattern.split('(')[0]}</span>
+                      </div>
+                      <div className="bg-white/80 dark:bg-slate-900/60 p-2 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block">Daily Routine:</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{currentVisit.ayushHistory.vihara.dailyRoutine.split('(')[0]}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Patient Voice Transcript if recorded */}
                 {currentVisit.chiefComplaint.voiceInputTranscript && (
                   <div className="p-3 bg-blue-50/70 dark:bg-blue-950/40 rounded-xl border border-blue-100 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-300 flex items-start gap-2">
@@ -1179,15 +1232,15 @@ export const DoctorDashboard: React.FC = () => {
                           <td className="p-2">
                             {rx.category === 'ayurvedic' ? (
                               <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
-                                🌿 AYURVEDIC
+                                🌿 AYURVEDIC MEDICINES
                               </span>
                             ) : rx.category === 'homeopathic' ? (
-                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300">
-                                💧 HOMEOPATHIC
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 border border-purple-300">
+                                💧 HOMEOPATHIC MEDICINES
                               </span>
                             ) : (
                               <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300">
-                                💊 ALLOPATHIC
+                                💊 ALLOPATHIC MEDICINES
                               </span>
                             )}
                           </td>
@@ -1223,9 +1276,9 @@ export const DoctorDashboard: React.FC = () => {
                     onChange={(e) => setNewRx({ ...newRx, category: e.target.value as MedicineCategory })}
                     className="px-2.5 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200"
                   >
-                    <option value="allopathic">Allopathic</option>
-                    <option value="ayurvedic">Ayurvedic</option>
-                    <option value="homeopathic">Homeopathic</option>
+                    <option value="allopathic">ALLOPATHIC MEDICINES</option>
+                    <option value="ayurvedic">AYURVEDIC MEDICINES</option>
+                    <option value="homeopathic">HOMEOPATHIC MEDICINES</option>
                   </select>
                   <input
                     type="text"
@@ -1646,15 +1699,15 @@ export const DoctorDashboard: React.FC = () => {
                           <td className="p-3">
                             {med.category === 'ayurvedic' ? (
                               <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
-                                AYURVEDIC
+                                🌿 AYURVEDIC MEDICINES
                               </span>
                             ) : med.category === 'homeopathic' ? (
-                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300">
-                                HOMEOPATHIC
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 border border-purple-300">
+                                💧 HOMEOPATHIC MEDICINES
                               </span>
                             ) : (
                               <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300">
-                                ALLOPATHIC
+                                💊 ALLOPATHIC MEDICINES
                               </span>
                             )}
                           </td>

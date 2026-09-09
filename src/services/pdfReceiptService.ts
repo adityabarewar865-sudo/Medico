@@ -336,7 +336,11 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
 
       doc.setFont('helvetica', 'bold');
       doc.text(String(idx + 1), colX.num, y + 2.5);
-      const catSuffix = rx.category ? ` [${rx.category.toUpperCase()}]` : '';
+      const catSuffix = rx.category === 'ayurvedic'
+        ? ' [AYURVEDIC MEDICINES]'
+        : rx.category === 'homeopathic'
+        ? ' [HOMEOPATHIC MEDICINES]'
+        : ' [ALLOPATHIC MEDICINES]';
       doc.text(`${rx.name}${catSuffix}`, colX.name, y + 2.5);
 
       doc.setFont('helvetica', 'normal');

@@ -15,6 +15,7 @@ import { Eye,
 import type { LanguageCode, AuthUser } from '../../types/clinical';
 import { SUPPORTED_LANGUAGES, TRANSLATIONS } from '../../services/i18n';
 import { storage } from '../../services/storage';
+import { LiveDateTime } from './LiveDateTime';
 
 interface HeaderProps {
   currentMode: 'kiosk' | 'reception' | 'doctor';
@@ -208,6 +209,9 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
           </div>
+
+          {/* Live Date, Day and Time Display */}
+          <LiveDateTime className="hidden sm:inline-flex" />
 
           {/* Accessibility & Language Controls */}
           <div className="flex items-center gap-2">

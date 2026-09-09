@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../services/api';
 import type { PatientCaseEncounter, PatientRecord } from '../../types/clinical';
+import { LiveDateTime } from '../common/LiveDateTime';
 
 interface PatientReceiptPageProps {
   token: string;
@@ -138,6 +139,12 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
   return (
     <div className="min-h-screen bg-slate-100/80 py-6 px-3 sm:px-6">
       <div className="max-w-2xl mx-auto space-y-4">
+        {/* Live Date, Day and Time Header Bar */}
+        <div className="flex justify-between items-center bg-white/80 backdrop-blur px-4 py-2 rounded-2xl border border-slate-200/80 shadow-2xs">
+          <span className="text-xs font-black tracking-tight text-slate-700 uppercase">Hospital Digital Receipt Portal</span>
+          <LiveDateTime variant="compact" />
+        </div>
+
         {/* Hospital Header Ribbon */}
         <div className="bg-gradient-to-r from-teal-700 via-emerald-600 to-teal-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
           <div className="flex items-center gap-3">
@@ -355,15 +362,15 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
                       </span>
                       {med.category === 'ayurvedic' ? (
                         <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
-                          AYURVEDIC
+                          AYURVEDIC MEDICINES
                         </span>
                       ) : med.category === 'homeopathic' ? (
-                        <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
-                          HOMEOPATHIC
+                        <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-300">
+                          HOMEOPATHIC MEDICINES
                         </span>
                       ) : (
                         <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300">
-                          ALLOPATHIC
+                          ALLOPATHIC MEDICINES
                         </span>
                       )}
                     </div>

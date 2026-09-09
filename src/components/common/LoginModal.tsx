@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Lock, User, Key, Stethoscope, Users, Building, MapPin, AlertCircle } from 'lucide-react';
 import type { AuthUser } from '../../types/clinical';
+import { LiveDateTime } from './LiveDateTime';
 
 interface LoginPageProps {
   onLoginSuccess: (user: AuthUser) => void;
@@ -109,7 +110,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-950 animate-fade-in">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-950 animate-fade-in space-y-4">
+      <LiveDateTime />
       <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-md overflow-hidden relative">
 
         {/* Header */}
