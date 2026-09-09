@@ -380,6 +380,17 @@ class HospitalDatabaseService {
       savedToHis: visitData.savedToHis || false,
       abdmCareContextLinked: true,
       abdmCareContextRef: `CARE-CTX-${patient.patientId}-${visitId}`,
+      hospitalName: visitData.hospitalName || (typeof window !== 'undefined' ? localStorage.getItem('medico_hospital_name') : undefined) || 'District Hospital',
+      hospitalAddress: visitData.hospitalAddress || (typeof window !== 'undefined' ? localStorage.getItem('medico_hospital_address') : undefined) || 'Hospital Complex, Main Road, Civil Lines',
+      accompanyingPerson: visitData.accompanyingPerson,
+      knownAllergies: visitData.knownAllergies,
+      consultationType: visitData.consultationType || (visitData.isIpd ? 'ipd' : 'opd'),
+      systemOfMedicine: visitData.systemOfMedicine || 'allopathy',
+      ayushHistory: visitData.ayushHistory,
+      isIpd: visitData.isIpd || false,
+      ipdRegistrationId: visitData.ipdRegistrationId,
+      admissionDate: visitData.admissionDate,
+      bedWard: visitData.bedWard,
     };
 
     // 1. Optimistic local update
@@ -401,6 +412,63 @@ class HospitalDatabaseService {
     firebaseService.savePatientToCloud(patient).catch(() => {});
 
     return newVisit;
+  }
+
+  /**
+   * Fast-track Emergency IPD Registration (Name, Age, Phone only)
+   * Zero normal case-taking questions required before admission.
+   */
+  public registerIpdPatient(data: {
+    fullName: string;
+    age: number;
+    phone: string;
+    bedWard?: string;
+    admissionNotes?: string;
+  }): PatientCaseEncounter {
+    const cleanPhone = data.phone.replace(/\D/g, '');
+    let patient = this.findExistingPatient(cleanPhone);
+    if (!patient) {
+      patient = this.registerPatient({
+        fullName: data.fullName,
+        age: Number(data.age) || 30,
+        gender: 'male',
+        phone: data.phone,
+        address: 'Emergency Admission Ward',
+      });
+    }
+
+    const ipdNum = Math.floor(100 + Math.random() * 900);
+    const ipdToken = `IPD-2026-${ipdNum}`;
+    const bedWard = data.bedWard || 'Emergency Acute Bed 1';
+
+    const ipdVisit = this.createVisit(patient.patientId, {
+      isIpd: true,
+      ipdRegistrationId: ipdToken,
+      opdToken: ipdToken,
+      opdRoom: bedWard,
+      specialty: 'Emergency Medicine / Inpatient Department',
+      triagePriority: 'emergency',
+      triageRationale: 'Direct Emergency Inpatient (IPD) Fast-Track Registration',
+      consultationType: 'ipd',
+      chiefComplaint: {
+        id: 'other',
+        title: 'Emergency Inpatient Admission (Fast-Track IPD)',
+        description: data.admissionNotes || 'Critical/Emergency patient registered directly to IPD.',
+        onsetDuration: 'Acute Immediate',
+      },
+      clinicalSummary: {
+        chiefComplaintFormatted: `[IPD FAST-TRACK] ${data.fullName} (${data.age}Y) - Emergency Admission`,
+        historyOfPresentIllness: `Emergency Inpatient Admission registered directly without preliminary case-taking. Allocated to ${bedWard}. Case evaluation to be completed bedside by Medical Officer.`,
+        pastMedicalHistory: [],
+        activeMedications: [],
+        allergies: [],
+        investigationsSummary: 'Stat bedside evaluation and basic labs pending.',
+      },
+      admissionDate: new Date().toISOString(),
+      bedWard,
+    });
+
+    return ipdVisit;
   }
 
   /**

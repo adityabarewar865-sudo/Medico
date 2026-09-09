@@ -35,6 +35,7 @@ import type {
   TriagePriority,
   PrescribedRxItem,
   DoctorVerification,
+  MedicineCategory,
 } from '../../types/clinical';
 import { hospitalDb } from '../../services/hospitalDatabase';
 import { downloadHospitalExcel } from '../../services/excelService';
@@ -48,9 +49,9 @@ export const DoctorDashboard: React.FC = () => {
   const [patients, setPatients] = useState<PatientRecord[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [selectedVisitId, setSelectedVisitId] = useState<string>('');
-  const [triageFilter, setTriageFilter] = useState<'all' | TriagePriority>('all');
+  const [triageFilter, setTriageFilter] = useState<'all' | 'ipd' | TriagePriority>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'summary' | 'medicines' | 'timeline' | 'documents'>('summary');
+  const [activeTab, setActiveTab] = useState<'summary' | 'ayush' | 'medicines' | 'timeline' | 'documents'>('summary');
 
   // Modals
   const [showFhirModal, setShowFhirModal] = useState<boolean>(false);
@@ -80,7 +81,7 @@ export const DoctorDashboard: React.FC = () => {
     rr: '18',
   });
 
-  // Prescription builder state
+  // Prescription builder state with Medicine Category support
   const [prescriptions, setPrescriptions] = useState<PrescribedRxItem[]>([]);
   const [newRx, setNewRx] = useState<PrescribedRxItem>({
     name: '',
@@ -88,6 +89,7 @@ export const DoctorDashboard: React.FC = () => {
     frequency: '1-0-1 (BD)',
     duration: '5 days',
     instructions: 'After food',
+    category: 'allopathic',
   });
 
   // Load patients and subscribe to hospital database updates
@@ -179,7 +181,9 @@ export const DoctorDashboard: React.FC = () => {
     const latestVisit = patient.visits[0];
     const matchesTriage =
       triageFilter === 'all' ||
-      (latestVisit && latestVisit.triagePriority === triageFilter);
+      (triageFilter === 'ipd'
+        ? Boolean(latestVisit && latestVisit.isIpd)
+        : latestVisit && latestVisit.triagePriority === triageFilter);
 
     const q = searchQuery.toLowerCase().trim();
     if (!q) return matchesTriage;
@@ -200,6 +204,7 @@ export const DoctorDashboard: React.FC = () => {
   const emergencyCount = activeEncounters.filter((p) => p.triagePriority === 'emergency').length;
   const urgentCount = activeEncounters.filter((p) => p.triagePriority === 'urgent').length;
   const routineCount = activeEncounters.filter((p) => p.triagePriority === 'routine').length;
+  const ipdCount = activeEncounters.filter((p) => p.isIpd).length;
 
   // Medicine history across all visits for this patient
   const patientMedicineHistory = hospitalDb.getPatientMedicineHistory(
@@ -336,6 +341,7 @@ export const DoctorDashboard: React.FC = () => {
       frequency: '1-0-1 (BD)',
       duration: '5 days',
       instructions: 'After food',
+      category: 'allopathic',
     });
   };
 
@@ -453,11 +459,11 @@ export const DoctorDashboard: React.FC = () => {
               />
             </div>
 
-            {/* Triage Filter Tabs */}
-            <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold">
+            {/* Triage & Admission Filter Tabs */}
+            <div className="grid grid-cols-4 gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-[11px] font-bold">
               <button
                 onClick={() => setTriageFilter('all')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${
+                className={`py-1.5 rounded-lg transition-all text-center ${
                   triageFilter === 'all'
                     ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
                     : 'text-slate-600 dark:text-slate-400'
@@ -467,23 +473,33 @@ export const DoctorDashboard: React.FC = () => {
               </button>
               <button
                 onClick={() => setTriageFilter('emergency')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${
+                className={`py-1.5 rounded-lg transition-all text-center ${
                   triageFilter === 'emergency'
                     ? 'bg-rose-600 text-white shadow-2xs'
                     : 'text-rose-700 dark:text-rose-400'
                 }`}
               >
-                🚨 Red Flag ({emergencyCount})
+                🚨 Emergency ({emergencyCount})
               </button>
               <button
                 onClick={() => setTriageFilter('urgent')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${
+                className={`py-1.5 rounded-lg transition-all text-center ${
                   triageFilter === 'urgent'
                     ? 'bg-amber-500 text-white shadow-2xs'
                     : 'text-amber-700 dark:text-amber-400'
                 }`}
               >
                 Urgent ({urgentCount})
+              </button>
+              <button
+                onClick={() => setTriageFilter('ipd')}
+                className={`py-1.5 rounded-lg transition-all text-center ${
+                  triageFilter === 'ipd'
+                    ? 'bg-rose-700 text-white shadow-2xs'
+                    : 'text-rose-700 dark:text-rose-400'
+                }`}
+              >
+                🛏️ IPD ({ipdCount})
               </button>
             </div>
 
@@ -503,7 +519,7 @@ export const DoctorDashboard: React.FC = () => {
                     }}
                     className={`w-full text-left p-3.5 rounded-2xl border-2 transition-all ${
                       isSelected
-                        ? latestVisit.triagePriority === 'emergency'
+                        ? latestVisit.triagePriority === 'emergency' || latestVisit.isIpd
                           ? 'border-rose-600 bg-rose-50/80 dark:bg-rose-950/40 shadow-sm'
                           : 'border-teal-600 bg-teal-50/80 dark:bg-teal-950/40 shadow-sm'
                         : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
@@ -517,6 +533,15 @@ export const DoctorDashboard: React.FC = () => {
                         <span className="font-mono text-[11px] font-bold text-slate-600 dark:text-slate-400">
                           {latestVisit.opdToken}
                         </span>
+                        {latestVisit.isIpd ? (
+                          <span className="font-mono text-[9px] font-black px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300">
+                            IPD
+                          </span>
+                        ) : (
+                          <span className="font-mono text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                            OPD
+                          </span>
+                        )}
                       </div>
 
                       <span
@@ -789,8 +814,11 @@ export const DoctorDashboard: React.FC = () => {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-emerald-600" />
-                    <span className="font-black text-sm text-emerald-950 dark:text-emerald-200">
-                      ✓ Consultation Verified by {currentVisit.doctorReview.verifiedBy || 'Doctor'}
+                    <span className="font-black text-sm text-emerald-950 dark:text-emerald-200 uppercase tracking-wider bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-md border border-emerald-300">
+                      ✓ VERIFIED
+                    </span>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      Attending Doctor: {currentVisit.doctorReview.verifiedBy || 'Attending Physician'}
                     </span>
                     <span className="text-[11px] text-emerald-700 dark:text-emerald-300 font-medium">
                       ({currentVisit.doctorReview.verifiedAt ? new Date(currentVisit.doctorReview.verifiedAt).toLocaleDateString() : 'Verified'})
@@ -859,6 +887,25 @@ export const DoctorDashboard: React.FC = () => {
               >
                 <FileText className="w-4 h-4" />
                 <span>AI Case Summary &amp; Review</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('ayush')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+                  activeTab === 'ayush'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <span>🌿</span>
+                <span>
+                  AYUSH / Ayurvedic History
+                  {(currentVisit.ayushHistory || currentVisit.systemOfMedicine === 'ayurveda') && (
+                    <span className="text-[10px] ml-1 px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
+                      Active
+                    </span>
+                  )}
+                </span>
               </button>
 
               <button
@@ -1117,6 +1164,7 @@ export const DoctorDashboard: React.FC = () => {
                     <thead className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold">
                       <tr>
                         <th className="p-2">Drug Name</th>
+                        <th className="p-2">Category</th>
                         <th className="p-2">Dose</th>
                         <th className="p-2">Frequency</th>
                         <th className="p-2">Duration</th>
@@ -1128,6 +1176,21 @@ export const DoctorDashboard: React.FC = () => {
                       {prescriptions.map((rx, idx) => (
                         <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                           <td className="p-2 font-bold text-slate-900 dark:text-white">{rx.name}</td>
+                          <td className="p-2">
+                            {rx.category === 'ayurvedic' ? (
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
+                                🌿 AYURVEDIC
+                              </span>
+                            ) : rx.category === 'homeopathic' ? (
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300">
+                                💧 HOMEOPATHIC
+                              </span>
+                            ) : (
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300">
+                                💊 ALLOPATHIC
+                              </span>
+                            )}
+                          </td>
                           <td className="p-2">{rx.dosage}</td>
                           <td className="p-2 font-semibold text-teal-700 dark:text-teal-400">{rx.frequency}</td>
                           <td className="p-2">{rx.duration}</td>
@@ -1146,15 +1209,24 @@ export const DoctorDashboard: React.FC = () => {
                   </table>
                 </div>
 
-                {/* Add New Rx Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-6 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                {/* Add New Rx Row with Category selector */}
+                <div className="grid grid-cols-1 sm:grid-cols-7 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                   <input
                     type="text"
-                    placeholder="Medicine Name (e.g. Paracetamol)"
+                    placeholder="Medicine Name (e.g. Paracetamol / Ashwagandha)"
                     value={newRx.name}
                     onChange={(e) => setNewRx({ ...newRx, name: e.target.value })}
                     className="sm:col-span-2 px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold"
                   />
+                  <select
+                    value={newRx.category || 'allopathic'}
+                    onChange={(e) => setNewRx({ ...newRx, category: e.target.value as MedicineCategory })}
+                    className="px-2.5 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200"
+                  >
+                    <option value="allopathic">Allopathic</option>
+                    <option value="ayurvedic">Ayurvedic</option>
+                    <option value="homeopathic">Homeopathic</option>
+                  </select>
                   <input
                     type="text"
                     placeholder="Dose (e.g. 500 mg)"
@@ -1193,7 +1265,8 @@ export const DoctorDashboard: React.FC = () => {
                     {currentVisit.doctorReview.status === 'verified' ? (
                       <span className="text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5 bg-emerald-100/80 dark:bg-emerald-950/60 px-3 py-1 rounded-xl border border-emerald-300">
                         <CheckCircle className="w-4 h-4 text-emerald-600" />
-                        Digitally Verified by {currentVisit.doctorReview.verifiedBy || 'Doctor'}
+                        <span className="font-black uppercase tracking-wider">VERIFIED</span>
+                        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">• {currentVisit.doctorReview.verifiedBy || 'Doctor'}</span>
                       </span>
                     ) : currentVisit.doctorReview.status === 'rejected' ? (
                       <span className="text-rose-800 dark:text-rose-300 flex items-center gap-1.5 bg-rose-100 dark:bg-rose-950/60 px-3 py-1 rounded-xl border border-rose-300">
@@ -1253,6 +1326,277 @@ export const DoctorDashboard: React.FC = () => {
             </div>
           )}
 
+          {/* TAB: AYUSH / Ayurvedic Assessment & Dashavidha Pariksha */}
+          {activeTab === 'ayush' && (
+            <div className="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🌿</span>
+                    <h3 className="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                      AYUSH Clinical Evaluation: Dashavidha Pariksha &amp; Ahara-Vihara
+                    </h3>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Classical 10-fold Ayurvedic clinical examination framework &amp; dietary lifestyle profile for{' '}
+                    <strong>{currentPatientRecord.fullName}</strong> ({currentVisit.visitId})
+                  </p>
+                </div>
+
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                  {currentVisit.systemOfMedicine === 'ayurveda' || currentVisit.consultationType === 'wellness'
+                    ? '🌿 Ayurvedic / Wellness Consultation'
+                    : '🏥 Allopathic Consultation (AYUSH Profile)'}
+                </span>
+              </div>
+
+              {/* 1. DASHAVIDHA PARIKSHA 10 CLINICAL PARAMETERS */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black uppercase tracking-wider text-emerald-900 dark:text-emerald-400 flex items-center gap-2">
+                  <span>1. DASHAVIDHA PARIKSHA (10-FOLD CLASSICAL EXAMINATION)</span>
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {/* Parameter 1: Prakriti */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">1. Prakriti</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Body constitution</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.prakriti || 'Pitta-Kapha (Moderate build, warm skin, stable metabolism)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 2: Vikriti */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">2. Vikriti</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Current imbalance</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.vikriti || 'Vata-Pitta Vriddhi (Pain/dryness with burning or acid reflux)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 3: Sara */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">3. Sara</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Tissue quality</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.sara || 'Madhyama Sara (Average tissue tone and muscle firmness)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 4: Samhanana */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">4. Samhanana</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Body compactness</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.samhanana || 'Madhyama Samhanana (Compact, symmetrical bone-joint framework)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 5: Pramana */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">5. Pramana</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Body measurements</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.pramana || 'Madhyama Pramana (Normal height and weight distribution)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 6: Satmya */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">6. Satmya</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Suitability/adaptation</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.satmya || 'Madhyama Satmya (Tolerates moderate seasons, mixed regional foods)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 7: Sattva */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">7. Sattva</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Mental strength</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.sattva || 'Madhyama Sattva (Moderate mental resilience and calm focus)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 8: Ahara Shakti */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">8. Ahara Shakti</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Digestive capacity</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.aharaShakti || 'Samagni (Balanced digestive capacity, steady hunger)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 9: Vyayama Shakti */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">9. Vyayama Shakti</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Exercise capacity</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.vyayamaShakti || 'Madhyama Shakti (Moderate physical stamina, walking/yoga)'}
+                    </div>
+                  </div>
+
+                  {/* Parameter 10: Vaya */}
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-black text-emerald-950 dark:text-emerald-300">10. Vaya</span>
+                      <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Age assessment</span>
+                    </div>
+                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                      {currentVisit.ayushHistory?.dashavidha.vaya || 'Madhyama Vaya (Adult, productive age group 20-60 yrs)'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. AHARA & VIHARA ASSESSMENT */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                {/* Ahara */}
+                <div className="p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 space-y-3">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+                    <span>AHARA — DIET &amp; NUTRITION PATTERN</span>
+                  </h4>
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Usual Diet:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.ahara.usualDiet || 'Vegetarian (Balanced vegetarian meals)'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Meal Timing:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.ahara.mealTiming || 'Regular 2-3 times daily (Fixed timings)'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Food Preferences (Tastes):</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.ahara.foodPreferences || 'Sweet & Sour (Madhura-Amla, dairy & grains)'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Hydration / Fluids:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.ahara.waterIntake || '2 to 2.5 litres daily, normal/warm water'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Vihara */}
+                <div className="p-5 rounded-2xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 space-y-3">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-teal-950 dark:text-teal-300 flex items-center gap-1.5">
+                    <span>VIHARA — LIFESTYLE &amp; DAILY ROUTINE</span>
+                  </h4>
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Daily Routine (Dinacharya):</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.vihara.dailyRoutine || 'Early riser (Wakes before 6:30 AM)'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Sleep Pattern (Nidra):</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.vihara.sleepPattern || 'Sound 7 hours night sleep, restful awakenings'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Exercise / Physical Activity:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.vihara.exercise || 'Daily 20-30 min brisk walk or yogasanas'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium block">Work Pattern &amp; Stress:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {currentVisit.ayushHistory?.vihara.workLifestyle || 'Balanced work hours with adequate evening relaxation'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. AYURVEDIC WELLNESS SUMMARY */}
+              <div className="p-5 rounded-2xl bg-emerald-50/90 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-emerald-950 dark:text-emerald-200">
+                    AYURVEDIC WELLNESS SUMMARY
+                  </h4>
+                  <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-white dark:bg-slate-800 px-2.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-700">
+                    Recorded for Clinical Correlation
+                  </span>
+                </div>
+                <p className="text-xs text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
+                  Patient constitution assessed with predominant <strong>{currentVisit.ayushHistory?.dashavidha.prakriti.split('(')[0] || 'Pitta-Kapha'}</strong>, active imbalance tending toward <strong>{currentVisit.ayushHistory?.dashavidha.vikriti.split('(')[0] || 'Vata-Pitta'}</strong>. Digestive fire is functioning at <strong>{currentVisit.ayushHistory?.dashavidha.aharaShakti.split('(')[0] || 'Samagni'}</strong> level with <strong>{currentVisit.ayushHistory?.dashavidha.vyayamaShakti.split('(')[0] || 'Madhyama'}</strong> exercise tolerance. Diet: {currentVisit.ayushHistory?.ahara.usualDiet.split('(')[0] || 'Vegetarian'}, Sleep: {currentVisit.ayushHistory?.vihara.sleepPattern.split('(')[0] || 'Sound 7 hours'}.
+                </p>
+              </div>
+
+              {/* 4. EDUCATIONAL CARD: Understanding Dashavidha Pariksha */}
+              <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <span>ℹ️ Understanding Dashavidha Pariksha (Classical Ayurvedic Framework)</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px] text-slate-600 dark:text-slate-400 font-medium">
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Prakriti</strong> Body constitution
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Vikriti</strong> Current imbalance
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Sara</strong> Tissue quality
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Samhanana</strong> Body compactness
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Pramana</strong> Body measurements
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Satmya</strong> Suitability/adaptation
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Sattva</strong> Mental strength
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Ahara Shakti</strong> Digestive capacity
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Vyayama Shakti</strong> Exercise capacity
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    <strong className="text-slate-900 dark:text-white block">Vaya</strong> Age assessment
+                  </div>
+                </div>
+                <p className="text-[10px] text-slate-500 italic">
+                  * Informational only. Classical parameters provide individualized Ayurvedic context and are reviewed and confirmed by the attending doctor.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* TAB 2: Complete Medicine History Across All Visits */}
           {activeTab === 'medicines' && (
             <div className="p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-5">
@@ -1282,6 +1626,7 @@ export const DoctorDashboard: React.FC = () => {
                       <tr>
                         <th className="p-3">Visit ID</th>
                         <th className="p-3">Medicine Name</th>
+                        <th className="p-3">Category</th>
                         <th className="p-3">Dosage</th>
                         <th className="p-3">Frequency</th>
                         <th className="p-3">Date Prescribed</th>
@@ -1297,6 +1642,21 @@ export const DoctorDashboard: React.FC = () => {
                           </td>
                           <td className="p-3 font-black text-slate-900 dark:text-white">
                             {med.name}
+                          </td>
+                          <td className="p-3">
+                            {med.category === 'ayurvedic' ? (
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300">
+                                AYURVEDIC
+                              </span>
+                            ) : med.category === 'homeopathic' ? (
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300">
+                                HOMEOPATHIC
+                              </span>
+                            ) : (
+                              <span className="font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300">
+                                ALLOPATHIC
+                              </span>
+                            )}
                           </td>
                           <td className="p-3 font-semibold text-slate-700 dark:text-slate-300">
                             {med.dosage}

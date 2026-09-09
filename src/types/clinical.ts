@@ -155,12 +155,15 @@ export interface RedFlagAlert {
   clinicalActionNeeded: string;
 }
 
+export type MedicineCategory = 'allopathic' | 'ayurvedic' | 'homeopathic';
+
 export interface PrescribedRxItem {
   name: string;
   dosage: string;
   frequency: string;
   duration: string;
   instructions: string;
+  category?: MedicineCategory;
 }
 
 export interface DoctorVerification {
@@ -177,10 +180,54 @@ export interface DoctorVerification {
   rejectionReason?: string;
 }
 
+export interface DashavidhaPariksha {
+  prakriti: string; // Body constitution (e.g., Vata-Pitta, Pitta-Kapha, Kapha-Vata)
+  vikriti: string; // Current imbalance (e.g., Vata vriddhi, Pitta prakopa, Kapha avarana)
+  sara: string; // Tissue quality (e.g., Rasa, Rakta, Mamsa, Meda, Asthi, Majja, Shukra, Sattva)
+  samhanana: string; // Body compactness (e.g., Compact / Well-built, Moderate, Lean / Weak)
+  pramana: string; // Body measurements (e.g., Proportionate, Tall/Lean, Broad/Heavy)
+  satmya: string; // Suitability/adaptation (e.g., Mixed foods tolerated, Sensitive digestion, Climate adapted)
+  sattva: string; // Mental strength (e.g., Pravara / Strong, Madhyama / Moderate, Avara / Low)
+  aharaShakti: string; // Digestive capacity (e.g., Samagni - balanced, Mandagni - sluggish, Tikshnagni - high acidity, Vishamagni - variable)
+  vyayamaShakti: string; // Exercise capacity (e.g., High stamina, Moderate tolerance, Easily fatigued)
+  vaya: string; // Age assessment (e.g., Balya - childhood, Madhyama - middle age, Vriddha - geriatric)
+}
+
+export interface AharaAssessment {
+  usualDiet: string; // e.g. Vegetarian, Non-vegetarian, Satvik / Vegan
+  mealTiming: string; // e.g. Regular 2-3 meals, Irregular timings, Late night dining
+  foodPreferences: string; // e.g. Sweet & Sour, Spicy / Pungent, Salty, Bitter & Astringent
+  appetite: string; // e.g. Normal, Variable / Bloating, Hyperacidic / Burning, Poor appetite
+  digestiveConcerns: string; // e.g. Gas & Bloating, Acid reflux, Constipation, None
+  waterIntake: string; // e.g. 1-2 Litres, 2-3 Litres, Prefers warm fluids, Cold drinks
+  dietaryHabits: string; // e.g. Frequent snacking, Intermittent fasting, High tea/coffee
+}
+
+export interface ViharaAssessment {
+  dailyRoutine: string; // e.g. Early morning riser (Brahma muhurta), Normal routine, Irregular / Night owl
+  sleepPattern: string; // e.g. Sound 7-8 hrs, Disturbed / Fragmented, Day sleep (Divasvapna), Insomnia
+  physicalActivity: string; // e.g. Regular Yoga / Exercise, Moderate walking, Sedentary / Desk-bound
+  exercise: string; // e.g. Daily walking, Asanas & Pranayama, Gym / Strength training, None
+  workLifestyle: string; // e.g. High mental stress, Shift duties, Field work, Balanced
+  restRelaxation: string; // e.g. Adequate leisure, Meditation / Dhyana, Inadequate rest
+  otherHabits: string; // e.g. Prolonged screen exposure, Smoking / Alcohol, None
+}
+
+export interface AyushHistory {
+  isAyushMode: boolean;
+  modeType: 'clinical_opd' | 'wellness';
+  dashavidhaPariksha: DashavidhaPariksha;
+  dashavidha: DashavidhaPariksha;
+  ahara: AharaAssessment;
+  vihara: ViharaAssessment;
+  wellnessNotes?: string;
+  doctorAyushNotes?: string;
+}
+
 export interface PatientCaseEncounter {
   id: string;
-  opdToken: string; // e.g. OPD-MED-042
-  opdRoom: string; // e.g. Room 4 (Medicine)
+  opdToken: string; // e.g. OPD-MED-042 or IPD-2026-015
+  opdRoom: string; // e.g. Room 4 (Medicine) or Emergency Bed 2
   specialty: string;
   createdAt: string;
   demographics: PatientDemographics;
@@ -234,6 +281,15 @@ export interface PatientCaseEncounter {
     hasAllergy: 'yes' | 'no' | 'not_sure';
     details?: string;
   };
+  // AYUSH & Wellness integration
+  consultationType?: 'opd' | 'ipd' | 'wellness';
+  systemOfMedicine?: 'allopathy' | 'ayurveda';
+  ayushHistory?: AyushHistory;
+  // IPD fast-track details
+  isIpd?: boolean;
+  ipdRegistrationId?: string;
+  admissionDate?: string;
+  bedWard?: string;
 }
 
 export interface VisitMedicineItem {
@@ -247,6 +303,7 @@ export interface VisitMedicineItem {
   instructions?: string;
   datePrescribed: string;
   doctor: string;
+  category?: MedicineCategory;
 }
 
 export interface PatientRecord {

@@ -12,8 +12,10 @@ import {
   X,
   FileSpreadsheet,
   AlertCircle,
+  Bed,
+  Printer,
 } from 'lucide-react';
-import type { PatientRecord, Gender, AuthUser } from '../../types/clinical';
+import type { PatientRecord, Gender, AuthUser, PatientCaseEncounter } from '../../types/clinical';
 import { hospitalDb } from '../../services/hospitalDatabase';
 import { downloadHospitalExcel } from '../../services/excelService';
 
@@ -31,6 +33,16 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
   const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
   const [showNewVisitModal, setShowNewVisitModal] = useState<boolean>(false);
   const [showAddDoctorModal, setShowAddDoctorModal] = useState<boolean>(false);
+  const [showIpdModal, setShowIpdModal] = useState<boolean>(false);
+
+  // Emergency IPD Fast-Track State
+  const [ipdForm, setIpdForm] = useState({
+    fullName: '',
+    age: 40,
+    phone: '',
+    bedWard: 'Emergency Bed 1 (Acute Resus)',
+  });
+  const [ipdSuccessEncounter, setIpdSuccessEncounter] = useState<PatientCaseEncounter | null>(null);
 
   // New Patient Form State
   const [newPatientForm, setNewPatientForm] = useState({
@@ -155,6 +167,29 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
     );
   };
 
+  // Fast-Track Emergency IPD Admission Handler
+  const handleEmergencyIpdSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ipdForm.fullName.trim() || !ipdForm.phone.trim()) {
+      alert('Please provide patient name and contact phone number for IPD admission.');
+      return;
+    }
+
+    const created = hospitalDb.registerIpdPatient({
+      fullName: ipdForm.fullName.trim(),
+      age: Number(ipdForm.age) || 40,
+      phone: ipdForm.phone.trim(),
+      bedWard: ipdForm.bedWard,
+    });
+
+    const refreshed = created.patientId ? hospitalDb.getPatientById(created.patientId) : undefined;
+    if (refreshed) {
+      setSelectedPatient(refreshed);
+    }
+    setIpdSuccessEncounter(created);
+    setShowIpdModal(false);
+  };
+
   const handleAddDoctor = (e: React.FormEvent) => {
     e.preventDefault();
     if (!addDoctorForm.name.trim() || !addDoctorForm.username.trim() || !addDoctorForm.password.trim() || !addDoctorForm.hospitalName.trim()) {
@@ -241,6 +276,13 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
               <span>Register Patient</span>
             </button>
             <button
+              onClick={() => setShowIpdModal(true)}
+              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5"
+            >
+              <Bed className="w-4 h-4" />
+              <span>🚨 Emergency IPD</span>
+            </button>
+            <button
               onClick={() => setShowAddDoctorModal(true)}
               className="px-4 py-2 bg-sky-100 hover:bg-sky-50 text-sky-900 font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5"
             >
@@ -317,9 +359,20 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <span className="font-mono text-xs font-black px-2 py-0.5 rounded-lg bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
-                          {patient.patientId}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-mono text-xs font-black px-2 py-0.5 rounded-lg bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                            {patient.patientId}
+                          </span>
+                          {latestVisit?.isIpd ? (
+                            <span className="font-mono text-[9px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-300">
+                              IPD
+                            </span>
+                          ) : (
+                            <span className="font-mono text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
+                              OPD
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                           {patient.visits.length} {patient.visits.length === 1 ? 'Visit' : 'Visits'}
                         </span>
@@ -928,6 +981,187 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* EMERGENCY IPD FAST-TRACK MODAL (3 minimal fields: Name, Age, Phone) */}
+      {showIpdModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-rose-500 animate-scale-in">
+            <div className="flex items-start justify-between gap-3 border-b border-rose-100 dark:border-rose-900 pb-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                  RECEPTION FAST-TRACK ADMISSION
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-rose-950 dark:text-rose-200 flex items-center gap-2 mt-1">
+                  <span>🚨 Emergency IPD Registration</span>
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">
+                  Direct admission protocol: No initial case questions required. Minimal intake.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowIpdModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleEmergencyIpdSubmit} className="space-y-4 pt-4">
+              <div className="space-y-1">
+                <label className="text-xs font-black text-slate-800 dark:text-slate-200">
+                  Patient Full Name <span className="text-rose-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={ipdForm.fullName}
+                  onChange={(e) => setIpdForm({ ...ipdForm, fullName: e.target.value })}
+                  placeholder="e.g., Harish Chandra"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-black text-slate-800 dark:text-slate-200">
+                    Age (Years) <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={120}
+                    required
+                    value={ipdForm.age}
+                    onChange={(e) => setIpdForm({ ...ipdForm, age: Number(e.target.value) })}
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-black text-slate-800 dark:text-slate-200">
+                    Mobile Number <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    maxLength={10}
+                    value={ipdForm.phone}
+                    onChange={(e) => setIpdForm({ ...ipdForm, phone: e.target.value })}
+                    placeholder="10-digit mobile"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-black text-slate-800 dark:text-slate-200">
+                  Allocated Emergency Bed / Ward:
+                </label>
+                <select
+                  value={ipdForm.bedWard}
+                  onChange={(e) => setIpdForm({ ...ipdForm, bedWard: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                >
+                  <option value="Emergency Bed 1 (Acute Resus)">Emergency Bed 1 (Acute Resus)</option>
+                  <option value="Emergency Bed 2 (Triage / Monitor)">Emergency Bed 2 (Triage / Monitor)</option>
+                  <option value="ICU Bed 4 (Critical Care)">ICU Bed 4 (Critical Care)</option>
+                  <option value="Male IPD Ward - Bed 12">Male IPD Ward - Bed 12</option>
+                  <option value="Female IPD Ward - Bed 08">Female IPD Ward - Bed 08</option>
+                  <option value="Pediatric Ward - Bed 03">Pediatric Ward - Bed 03</option>
+                </select>
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowIpdModal(false)}
+                  className="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md shadow-rose-600/30 flex items-center gap-2"
+                >
+                  <Bed className="w-4 h-4" />
+                  <span>Admit Patient Immediately</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* IPD REGISTRATION CONFIRMATION SLIP */}
+      {ipdSuccessEncounter && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-rose-600 text-slate-900 space-y-4 animate-scale-in">
+            <div className="text-center space-y-1">
+              <span className="text-xs font-black uppercase tracking-widest text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-300 inline-block">
+                EMERGENCY IPD ADMISSION CONFIRMED
+              </span>
+              <h3 className="text-2xl font-black text-slate-900 pt-1">
+                {ipdSuccessEncounter.hospitalName}
+              </h3>
+              <p className="text-xs text-slate-500 font-medium">
+                {ipdSuccessEncounter.hospitalAddress}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-center space-y-1">
+              <div className="text-[11px] font-bold text-rose-800 uppercase tracking-wider">
+                IPD Admission Number
+              </div>
+              <div className="text-3xl font-mono font-black text-rose-700">
+                {ipdSuccessEncounter.ipdRegistrationId}
+              </div>
+              <div className="text-xs font-bold text-rose-900">
+                Bed / Ward: {ipdSuccessEncounter.bedWard}
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Patient Name:</span>
+                <span className="font-bold text-slate-900">{ipdSuccessEncounter.demographics.fullName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Age / Gender:</span>
+                <span className="font-bold text-slate-900">{ipdSuccessEncounter.demographics.age} Yrs / {ipdSuccessEncounter.demographics.gender.toUpperCase()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Contact Number:</span>
+                <span className="font-bold text-slate-900">{ipdSuccessEncounter.demographics.phone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Admission Date &amp; Time:</span>
+                <span className="font-mono font-bold text-slate-800">
+                  {new Date(ipdSuccessEncounter.admissionDate || Date.now()).toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 border border-slate-300"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print IPD Slip</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIpdSuccessEncounter(null)}
+                className="flex-1 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md shadow-rose-600/30 flex items-center justify-center"
+              >
+                <span>Done</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

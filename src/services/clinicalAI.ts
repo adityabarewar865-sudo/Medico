@@ -6,6 +6,7 @@ import type {
   TriagePriority,
   RedFlagAlert,
   ExtractedMedication,
+  AyushHistory,
 } from '../types/clinical';
 
 export interface GeneratedClinicalAssessment {
@@ -28,7 +29,8 @@ export class ClinicalAIService {
     complaintText: string,
     answers: AdaptiveAnswer[],
     documents: UploadedMedicalDocument[],
-    allergyInfo?: { hasAllergy: 'yes' | 'no' | 'not_sure'; details?: string }
+    allergyInfo?: { hasAllergy: 'yes' | 'no' | 'not_sure'; details?: string },
+    ayushHistory?: AyushHistory
   ): GeneratedClinicalAssessment {
     const redFlags: RedFlagAlert[] = [];
     let isEmergency = false;
@@ -172,7 +174,24 @@ export class ClinicalAIService {
         }.`
       : '';
 
-    const hpi = `${demographics.age}-year-old ${demographics.gender} presented to the Outpatient Department with primary complaint of ${complaintText || getComplaintDisplayName(complaintId)}. Clinical evaluation details elicited via adaptive voice/touch intake: ${hpiAnswersSummary || 'No specific exacerbating notes provided'}.${allergyNote}${attendantNote} Review of prior medical documentation identified: ${allDiagnoses.length > 0 ? allDiagnoses.join(', ') : 'No documented prior chronic morbidities'}.`;
+    const ayushSection = ayushHistory?.isAyushMode
+      ? `\n\n[AYUSH HISTORY - AYURVEDIC ASSESSMENT]\n` +
+        `• Dashavidha Pariksha:\n` +
+        `  - Prakriti (Body Constitution): ${ayushHistory.dashavidhaPariksha.prakriti || 'Under evaluation'}\n` +
+        `  - Vikriti (Current Imbalance): ${ayushHistory.dashavidhaPariksha.vikriti || 'Under evaluation'}\n` +
+        `  - Sara (Tissue Quality): ${ayushHistory.dashavidhaPariksha.sara || 'Under evaluation'}\n` +
+        `  - Samhanana (Body Compactness): ${ayushHistory.dashavidhaPariksha.samhanana || 'Under evaluation'}\n` +
+        `  - Pramana (Body Measurements): ${ayushHistory.dashavidhaPariksha.pramana || 'Under evaluation'}\n` +
+        `  - Satmya (Suitability/Adaptation): ${ayushHistory.dashavidhaPariksha.satmya || 'Under evaluation'}\n` +
+        `  - Sattva (Mental Strength): ${ayushHistory.dashavidhaPariksha.sattva || 'Under evaluation'}\n` +
+        `  - Ahara Shakti (Digestive Capacity): ${ayushHistory.dashavidhaPariksha.aharaShakti || 'Under evaluation'}\n` +
+        `  - Vyayama Shakti (Exercise Capacity): ${ayushHistory.dashavidhaPariksha.vyayamaShakti || 'Under evaluation'}\n` +
+        `  - Vaya (Age Assessment): ${ayushHistory.dashavidhaPariksha.vaya || 'Under evaluation'}\n` +
+        `• Ahara Assessment (Diet): Usual Diet: ${ayushHistory.ahara.usualDiet || 'Standard'}; Timings: ${ayushHistory.ahara.mealTiming || 'Regular'}; Appetite: ${ayushHistory.ahara.appetite || 'Normal'}; Water: ${ayushHistory.ahara.waterIntake || '1.5-2L'}; Tastes: ${ayushHistory.ahara.foodPreferences || 'Balanced'}; Digestive Concerns: ${ayushHistory.ahara.digestiveConcerns || 'None'}.\n` +
+        `• Vihara Assessment (Lifestyle): Routine: ${ayushHistory.vihara.dailyRoutine || 'Standard'}; Sleep: ${ayushHistory.vihara.sleepPattern || 'Sound'}; Exercise: ${ayushHistory.vihara.exercise || 'Regular'}; Work/Lifestyle: ${ayushHistory.vihara.workLifestyle || 'Moderate'}; Relaxation: ${ayushHistory.vihara.restRelaxation || 'Adequate'}.${ayushHistory.wellnessNotes ? `\n• Ayurvedic Wellness Notes: ${ayushHistory.wellnessNotes}` : ''}`
+      : '';
+
+    const hpi = `${demographics.age}-year-old ${demographics.gender} presented to the ${ayushHistory?.modeType === 'wellness' ? 'Ayurvedic Wellness OPD' : 'Outpatient Department'} with primary complaint/focus of ${complaintText || getComplaintDisplayName(complaintId)}. Clinical evaluation details elicited via adaptive voice/touch intake: ${hpiAnswersSummary || 'No specific exacerbating notes provided'}.${allergyNote}${attendantNote}${ayushSection} Review of prior medical documentation identified: ${allDiagnoses.length > 0 ? allDiagnoses.join(', ') : 'No documented prior chronic morbidities'}.`;
 
     // Past history deduplicated
     const pastMedicalHistory = allDiagnoses.length > 0 ? allDiagnoses : ['None explicitly documented in uploaded records'];

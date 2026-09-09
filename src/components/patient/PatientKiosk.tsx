@@ -19,7 +19,10 @@ import {
   Sparkles,
   Printer,
   Users,
-  HelpCircle,
+  Leaf,
+  Bed,
+  Utensils,
+  Info,
 } from 'lucide-react';
 import type {
   LanguageCode,
@@ -30,6 +33,10 @@ import type {
   PatientCaseEncounter,
   AccompanyingPerson,
   AttendantRelation,
+  DashavidhaPariksha,
+  AharaAssessment,
+  ViharaAssessment,
+  AyushHistory,
 } from '../../types/clinical';
 import { TRANSLATIONS, CHIEF_COMPLAINTS_DATA, SUPPORTED_LANGUAGES } from '../../services/i18n';
 import { COMPLAINT_QUESTIONS_MAP } from '../../services/adaptiveQuestions';
@@ -124,6 +131,56 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
   // Consent state
   const [consentGranted, setConsentGranted] = useState<boolean>(false);
   const [isReadingConsent, setIsReadingConsent] = useState<boolean>(false);
+
+  // Consultation Type & System of Medicine
+  const [consultationType, setConsultationType] = useState<'opd' | 'wellness'>('opd');
+  const [systemOfMedicine, setSystemOfMedicine] = useState<'allopathy' | 'ayurveda'>('allopathy');
+
+  // AYUSH: Dashavidha Pariksha (10 Parameters)
+  const [dashavidha, setDashavidha] = useState<DashavidhaPariksha>({
+    prakriti: 'Vata-Pitta (Active, lean, variable appetite, prefers warmth)',
+    vikriti: 'Pitta-Vata (Current digestive acidity, restlessness, sleep delay)',
+    sara: 'Madhyama Sara (Moderate tissue quality, steady vitality)',
+    samhanana: 'Susamhita (Well-compacted, symmetrical bone and muscle build)',
+    pramana: 'Pramana-yukta (Proportionate body dimensions and height)',
+    satmya: 'Oka-Satmya (Well-adapted to home-cooked wholesome foods)',
+    sattva: 'Madhyama Sattva (Moderate mental resilience and calm focus)',
+    aharaShakti: 'Samagni (Balanced digestive capacity, steady hunger)',
+    vyayamaShakti: 'Madhyama Shakti (Moderate physical stamina, walking/yoga)',
+    vaya: 'Madhyama Vaya (Adult, productive age group 20-60 yrs)',
+  });
+
+  // AYUSH: Ahara Assessment (Diet & Food)
+  const [ahara, setAhara] = useState<AharaAssessment>({
+    usualDiet: 'Vegetarian (Wholesome balanced vegetarian meals)',
+    mealTiming: 'Regular 2-3 times daily (Breakfast, Lunch, Light Dinner)',
+    foodPreferences: 'Sweet & Sour (Madhura-Amla), moderately spiced',
+    appetite: 'Normal, consistent appetite',
+    digestiveConcerns: 'None / Occasional mild gas after heavy meals',
+    waterIntake: '2 to 2.5 litres daily, normal/warm water',
+    dietaryHabits: 'Occasional tea/coffee, home-cooked food preferred',
+  });
+
+  // AYUSH: Vihara Assessment (Lifestyle & Habits)
+  const [vihara, setVihara] = useState<ViharaAssessment>({
+    dailyRoutine: 'Early riser (6:00 AM), structured daily routine',
+    sleepPattern: 'Sound 7 hours night sleep, restful awakenings',
+    physicalActivity: 'Moderate daily walking and active housework',
+    exercise: 'Daily 20-30 min brisk walk or yogasanas',
+    workLifestyle: 'Desk work with moderate screen exposure',
+    restRelaxation: 'Adequate relaxation, leisure reading / prayer',
+    otherHabits: 'No smoking, no alcohol, limited caffeine',
+  });
+
+  // Emergency IPD Fast-Track State
+  const [showIpdModal, setShowIpdModal] = useState<boolean>(false);
+  const [ipdForm, setIpdForm] = useState({
+    fullName: '',
+    age: 42,
+    phone: '',
+    bedWard: 'Emergency Bed 1 (Acute Resus)',
+  });
+  const [ipdSuccessEncounter, setIpdSuccessEncounter] = useState<PatientCaseEncounter | null>(null);
 
   // Chief Complaint state
   const [selectedComplaintId, setSelectedComplaintId] = useState<ChiefComplaintId>('chest_pain');
@@ -323,17 +380,38 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
 
     const timeline = buildChronologicalTimeline(uploadedDocs);
 
+    // AYUSH & Wellness Data
+    const isAyushModeActive = systemOfMedicine === 'ayurveda' || consultationType === 'wellness';
+    const ayushHistoryData: AyushHistory | undefined = isAyushModeActive
+      ? {
+          isAyushMode: true,
+          modeType: consultationType === 'wellness' ? 'wellness' : 'clinical_opd',
+          dashavidhaPariksha: dashavidha,
+          dashavidha,
+          ahara,
+          vihara,
+          wellnessNotes: consultationType === 'wellness' ? (complaintCustomText || 'Preventive wellness and holistic lifestyle rejuvenation assessment.') : undefined,
+        }
+      : undefined;
+
     const assessment = clinicalAI.generateAssessment(
       demographics,
       selectedComplaintId,
       complaintCustomText,
       formattedAnswers,
       uploadedDocs,
-      { hasAllergy: allergyResponse, details: allergyDetails }
+      { hasAllergy: allergyResponse, details: allergyDetails },
+      ayushHistoryData
     );
 
-    const tokenNumber = `OPD-MED-${Math.floor(100 + Math.random() * 900)}`;
-    const roomNumber = assessment.triagePriority === 'emergency' ? 'Room 1 (Emergency Resus / Med)' : 'Room 4 (General Medicine)';
+    const tokenNumber = isAyushModeActive
+      ? `AYUSH-OPD-${Math.floor(100 + Math.random() * 900)}`
+      : `OPD-MED-${Math.floor(100 + Math.random() * 900)}`;
+    const roomNumber = isAyushModeActive
+      ? 'Room 7 (Ayurvedic OPD & Panchakarma)'
+      : assessment.triagePriority === 'emergency'
+      ? 'Room 1 (Emergency Resus / Med)'
+      : 'Room 4 (General Medicine)';
 
     const existingPatient = detectedPatientRecord || hospitalDb.findExistingPatient(demographics.phone);
     const assignedPatientId = existingPatient?.patientId || hospitalDb.generateNextPatientId();
@@ -351,7 +429,7 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
       visitDate: new Date().toISOString().split('T')[0],
       opdToken: tokenNumber,
       opdRoom: roomNumber,
-      specialty: 'Internal Medicine',
+      specialty: isAyushModeActive ? 'Ayurvedic Medicine / Kayachikitsa' : 'Internal Medicine',
       hospitalName: finalHospitalName,
       hospitalAddress: finalHospitalAddress,
       accompanyingPerson: finalAccompanying,
@@ -359,6 +437,9 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
         hasAllergy: allergyResponse,
         details: allergyDetails,
       },
+      consultationType,
+      systemOfMedicine,
+      ayushHistory: ayushHistoryData,
       createdAt: new Date().toISOString(),
       demographics: {
         ...demographics,
@@ -425,8 +506,29 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     }
   };
 
+  const handleEmergencyIpdSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ipdForm.fullName.trim() || !ipdForm.phone.trim()) {
+      alert('Please provide patient name and mobile number for emergency IPD registration.');
+      return;
+    }
+
+    const created = hospitalDb.registerIpdPatient({
+      fullName: ipdForm.fullName.trim(),
+      age: Number(ipdForm.age) || 40,
+      phone: ipdForm.phone.trim(),
+      bedWard: ipdForm.bedWard,
+    });
+
+    setIpdSuccessEncounter(created);
+    setShowIpdModal(false);
+    confetti({ particleCount: 60, spread: 60 });
+  };
+
   const handleResetForNewPatient = () => {
     setCurrentStep(1);
+    setConsultationType('opd');
+    setSystemOfMedicine('allopathy');
     setDemographics({
       id: `pat_${Date.now()}`,
       fullName: '',
@@ -445,35 +547,46 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
     
     setUploadedDocs([]);
     setCompletedEncounter(null);
+    setIpdSuccessEncounter(null);
   };
-
-  
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      {/* Live Date, Day and Time + Voice Guide Audio Toggle */}
+      {/* Live Date, Day and Time + Voice Guide Audio Toggle + Fast-Track IPD Registration */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4 no-print">
-        <button
-          type="button"
-          onClick={() => {
-            const nextVal = !voiceGuideEnabled;
-            setVoiceGuideEnabled(nextVal);
-            if (nextVal) {
-              handleSpeak('आवाज सहायता चालू है / Voice guide is enabled');
-            } else {
-              speech.stopSpeaking();
-            }
-          }}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border shadow-sm transition-all cursor-pointer ${
-            voiceGuideEnabled
-              ? 'bg-teal-600 text-white border-teal-700'
-              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-          }`}
-          title="Toggle Read Aloud Audio"
-        >
-          <Volume2 className={`w-4 h-4 ${voiceGuideEnabled ? 'animate-pulse' : ''}`} />
-          <span>{voiceGuideEnabled ? t.audioOn : t.audioOff}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              const nextVal = !voiceGuideEnabled;
+              setVoiceGuideEnabled(nextVal);
+              if (nextVal) {
+                handleSpeak('आवाज सहायता चालू है / Voice guide is enabled');
+              } else {
+                speech.stopSpeaking();
+              }
+            }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border shadow-sm transition-all cursor-pointer ${
+              voiceGuideEnabled
+                ? 'bg-teal-600 text-white border-teal-700'
+                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+            }`}
+            title="Toggle Read Aloud Audio"
+          >
+            <Volume2 className={`w-4 h-4 ${voiceGuideEnabled ? 'animate-pulse' : ''}`} />
+            <span>{voiceGuideEnabled ? t.audioOn : t.audioOff}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowIpdModal(true)}
+            className="px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 shadow-sm transition-all cursor-pointer"
+            title="Emergency IPD Fast-Track (Only Name, Age, Mobile Number required)"
+          >
+            <Bed className="w-4 h-4" />
+            <span>🚨 {t.ipdFastTrack || 'Emergency IPD Registration'}</span>
+          </button>
+        </div>
 
         <div className="text-right text-xs text-slate-500 font-semibold bg-white border border-slate-200/60 shadow-sm rounded-xl py-1.5 px-3">
           <div className="text-sm font-black text-slate-800 tracking-tight">
@@ -1011,18 +1124,110 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
 
-        {/* STEP 4: Chief Complaint & Anatomical Selection */}
+        {/* STEP 4: Chief Complaint / Wellness & System Selection */}
         {currentStep === 4 && (
           <div className="p-6 sm:p-10 space-y-6">
             <div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
                 <HeartPulse className="w-8 h-8 text-rose-600" />
-                {t.stepComplaintTitle}
+                {consultationType === 'wellness' ? 'Preventive Health & Wellness Intake' : t.stepComplaintTitle}
               </h2>
               <p className="text-sm text-slate-600 font-medium mt-1">
-                {t.stepComplaintSubtitle}
+                {consultationType === 'wellness'
+                  ? 'Select your Ayurvedic wellness focus or preventive health goals'
+                  : t.stepComplaintSubtitle}
               </p>
             </div>
+
+            {/* Consultation Type & System of Medicine Selection Controls */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              {/* 1. Consultation Focus */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-black uppercase tracking-wider text-slate-600">
+                  {t.consultationType || 'Consultation Focus'}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setConsultationType('opd')}
+                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      consultationType === 'opd'
+                        ? 'border-rose-600 bg-rose-50 text-rose-950 font-black shadow-2xs ring-2 ring-rose-400/20'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>🩺 {t.clinicalProblemOpd || 'Problem (OPD)'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConsultationType('wellness');
+                      setSystemOfMedicine('ayurveda');
+                    }}
+                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      consultationType === 'wellness'
+                        ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-black shadow-2xs ring-2 ring-emerald-400/20'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>🌱 {t.wellnessCheckup || 'Wellness'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. System of Medicine */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-black uppercase tracking-wider text-slate-600">
+                  {t.systemOfMedicine || 'System of Medicine'}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSystemOfMedicine('allopathy')}
+                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      systemOfMedicine === 'allopathy' && consultationType !== 'wellness'
+                        ? 'border-teal-600 bg-teal-50 text-teal-950 font-black shadow-2xs ring-2 ring-teal-400/20'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>🏥 {t.allopathyOpd || 'Allopathy OPD'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSystemOfMedicine('ayurveda')}
+                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      systemOfMedicine === 'ayurveda'
+                        ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-black shadow-2xs ring-2 ring-emerald-400/20'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>🍃 {t.ayurvedicOpd || 'Ayurveda OPD'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* AYUSH History Mode Active Notice Banner */}
+            {(systemOfMedicine === 'ayurveda' || consultationType === 'wellness') && (
+              <div className="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 flex items-start gap-3 shadow-2xs animate-fade-in">
+                <div className="p-2 rounded-xl bg-emerald-600 text-white shrink-0 mt-0.5">
+                  <Leaf className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-black text-emerald-950">
+                      🍃 AYUSH HISTORY MODE ACTIVATED — Ayurvedic OPD &amp; Wellness
+                    </h4>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900">
+                      SIH Specification
+                    </span>
+                  </div>
+                  <p className="text-xs text-emerald-800 leading-relaxed font-medium">
+                    In Step 5, you will undergo an extended clinical intake capturing <strong>Dashavidha Pariksha</strong> (Prakriti, Vikriti, Sara, Samhanana, Pramana, Satmya, Sattva, Ahara Shakti, Vyayama Shakti, Vaya) and <strong>Ahara-Vihara assessment</strong> (Diet &amp; Lifestyle).
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Symptom Cards Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
@@ -1151,92 +1356,614 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
 
-        {/* STEP 5: Adaptive Follow-up Questions & Known Allergies */}
+        {/* STEP 5: Adaptive Follow-up Questions OR AYUSH History Mode */}
         {currentStep === 5 && (
           <div className="p-6 sm:p-10 space-y-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
-                <HelpCircle className="w-8 h-8 text-teal-600" />
-                {t.stepQuestionsTitle || 'Adaptive Clinical Questions'}
-              </h2>
-              <p className="text-sm text-slate-600 font-medium mt-1">
-                {t.stepQuestionsSubtitle || 'AI-tailored follow-up questions based on your complaint'}
-              </p>
-            </div>
-
-            {/* Questions List for Chief Complaint */}
-            <div className="space-y-5">
-              {(COMPLAINT_QUESTIONS_MAP[selectedComplaintId] || []).map((q, qIndex) => {
-                const qText = q.text[currentLanguage] || q.text.en;
-                const currentAnswer = adaptiveAnswers[q.id];
-
-                return (
-                  <div
-                    key={q.id}
-                    className="p-5 rounded-2xl bg-slate-50/80 border-2 border-slate-200/90 space-y-3.5 transition-all shadow-2xs"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="space-y-1">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-100 text-teal-800 border border-teal-200">
-                          Q{qIndex + 1} • {q.category.toUpperCase()}
-                        </span>
-                        <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                          {qText}
-                        </h4>
+            {(systemOfMedicine === 'ayurveda' || consultationType === 'wellness') ? (
+              /* AYUSH HISTORY MODE: Extended Ayurvedic Patient History */
+              <div className="space-y-8 animate-fade-in">
+                {/* Mode Header */}
+                <div className="p-5 rounded-3xl bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 text-white shadow-md">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl backdrop-blur">
+                        🍃
                       </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleSpeak(qText)}
-                        className="p-2 rounded-xl bg-white hover:bg-teal-50 text-teal-700 border border-slate-200 shadow-2xs shrink-0 transition-colors"
-                        title="Listen to question"
-                      >
-                        <Volume2 className="w-4 h-4" />
-                      </button>
+                      <div>
+                        <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/40 text-emerald-100 border border-emerald-300/30">
+                          SIH AYUSH OPD Mandate
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1">
+                          AYUSH HISTORY MODE — Extended Ayurvedic Case-Taking
+                        </h2>
+                        <p className="text-xs text-emerald-100 font-medium">
+                          Comprehensive assessment of Dashavidha Pariksha and Ahara-Vihara lifestyle patterns
+                        </p>
+                      </div>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleSpeak(
+                          'आयुष इतिहास मोड: दशविध परीक्षा और आहार-विहार मूल्यांकन / AYUSH history mode extended interview'
+                        )
+                      }
+                      className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white backdrop-blur border border-white/20 transition-all cursor-pointer"
+                      title="Read section aloud"
+                    >
+                      <Volume2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
 
-                    {/* Options list */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {q.options?.map((opt) => {
-                        const optLabel = opt.label[currentLanguage] || opt.label.en;
-                        const isSelected = currentAnswer === opt.id;
-
-                        return (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            onClick={() => {
-                              setAdaptiveAnswers((prev) => ({
-                                ...prev,
-                                [q.id]: opt.id,
-                              }));
-                            }}
-                            className={`p-3.5 rounded-xl border-2 text-left font-bold text-xs sm:text-sm transition-all flex items-center justify-between ${
-                              isSelected
-                                ? opt.isRedFlag
-                                  ? 'border-rose-600 bg-rose-50 text-rose-950 shadow-2xs'
-                                  : 'border-teal-600 bg-teal-50 text-teal-950 shadow-2xs'
-                                : 'border-slate-200 bg-white hover:bg-slate-100/80 text-slate-700'
-                            }`}
-                          >
-                            <span>{optLabel}</span>
-                            {isSelected && (
-                              <CheckCircle
-                                className={`w-4 h-4 shrink-0 ${
-                                  opt.isRedFlag ? 'text-rose-600' : 'text-teal-600'
-                                }`}
-                              />
-                            )}
-                          </button>
-                        );
-                      })}
+                {/* 1. DASHAVIDHA PARIKSHA (10 Classical Ayurvedic Parameters) */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <div>
+                      <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                        <span>DASHAVIDHA PARIKSHA</span>
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">
+                          दशविध परीक्षा
+                        </span>
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium">
+                        10 Classical diagnostic parameters with patient-friendly clinical choices
+                      </p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* MANDATORY ALLERGY QUESTION SECTION */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* 1. Prakriti */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>1. Prakriti</span>
+                          <span className="text-slate-500 font-bold">— Body constitution</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Prakriti — Body constitution')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.prakriti}
+                        onChange={(e) => setDashavidha({ ...dashavidha, prakriti: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Vata-Pitta (Lean build, active mind, variable digestion, sensitive to cold)">Vata-Pitta (Lean build, active, sensitive to cold)</option>
+                        <option value="Pitta-Kapha (Moderate build, sharp intellect, strong appetite, warm body)">Pitta-Kapha (Moderate build, sharp intellect, strong appetite)</option>
+                        <option value="Kapha-Vata (Solid endurance, calm, slow metabolism, light frame)">Kapha-Vata (Solid endurance, calm, slow metabolism)</option>
+                        <option value="Vataja (Light frame, dry skin, quick movement, irregular sleep)">Vataja (Light frame, dry skin, irregular sleep)</option>
+                        <option value="Pittaja (Warm skin, high metabolism, intolerant to heat, acid prone)">Pittaja (Warm skin, high metabolism, intolerant to heat)</option>
+                        <option value="Kaphaja (Heavy build, smooth skin, stable mind, slow digestion)">Kaphaja (Heavy build, smooth skin, stable mind)</option>
+                        <option value="Sama Prakriti (Tridoshic equilibrium, optimal balance)">Sama Prakriti (Tridoshic equilibrium, optimal balance)</option>
+                      </select>
+                    </div>
+
+                    {/* 2. Vikriti */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>2. Vikriti</span>
+                          <span className="text-slate-500 font-bold">— Current imbalance</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Vikriti — Current imbalance')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.vikriti}
+                        onChange={(e) => setDashavidha({ ...dashavidha, vikriti: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Vata Imbalance (Joint aches, dryness, constipation, anxiety/sleep disturbance)">Vata Imbalance (Joint aches, dryness, constipation, sleep disturbance)</option>
+                        <option value="Pitta Imbalance (Hyperacidity, burning sensations, anger/irritation, skin flare-up)">Pitta Imbalance (Hyperacidity, burning sensations, skin flare-up)</option>
+                        <option value="Kapha Imbalance (Sluggishness, chest congestion, weight gain, excessive sleep)">Kapha Imbalance (Sluggishness, congestion, weight gain, lethargy)</option>
+                        <option value="Pitta-Vata Vriddhi (Acidity with restless sleep and fatigue)">Pitta-Vata Vriddhi (Acidity with restless sleep and fatigue)</option>
+                        <option value="Vata-Kapha Vriddhi (Stiff joints with heavy body sensation)">Vata-Kapha Vriddhi (Stiff joints with heavy body sensation)</option>
+                        <option value="Tridosha Imbalance (Generalized systemic imbalance)">Tridosha Imbalance (Generalized systemic imbalance)</option>
+                      </select>
+                    </div>
+
+                    {/* 3. Sara */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>3. Sara</span>
+                          <span className="text-slate-500 font-bold">— Tissue quality</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Sara — Tissue quality')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.sara}
+                        onChange={(e) => setDashavidha({ ...dashavidha, sara: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Pravara Sara (Superior tissue vigor, excellent immunity, strong bones/muscles)">Pravara Sara (Superior tissue vigor, strong immunity &amp; bones)</option>
+                        <option value="Madhyama Sara (Moderate resilience, standard endurance, healthy tissues)">Madhyama Sara (Moderate resilience, standard endurance)</option>
+                        <option value="Avara Sara (Delicate tissues, easily fatigued, low immune reserve)">Avara Sara (Delicate tissues, easily fatigued, low immunity)</option>
+                        <option value="Rasa-Rakta Sara (Radiant complexion, good blood circulation)">Rasa-Rakta Sara (Radiant complexion, good blood circulation)</option>
+                        <option value="Asthi-Majja Sara (Dense bones, strong joints and dental health)">Asthi-Majja Sara (Dense bones, strong joints &amp; teeth)</option>
+                      </select>
+                    </div>
+
+                    {/* 4. Samhanana */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>4. Samhanana</span>
+                          <span className="text-slate-500 font-bold">— Body compactness</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Samhanana — Body compactness')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.samhanana}
+                        onChange={(e) => setDashavidha({ ...dashavidha, samhanana: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Susamhita (Well-compacted, firm musculature, stable joints)">Susamhita (Well-compacted, firm musculature, stable joints)</option>
+                        <option value="Madhyama (Medium body compactness and frame density)">Madhyama (Medium body compactness and frame density)</option>
+                        <option value="Heena / Asamhita (Loose joints, delicate bone frame, flaccid tone)">Heena / Asamhita (Loose joints, delicate bone frame)</option>
+                      </select>
+                    </div>
+
+                    {/* 5. Pramana */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>5. Pramana</span>
+                          <span className="text-slate-500 font-bold">— Body measurements</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Pramana — Body measurements')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.pramana}
+                        onChange={(e) => setDashavidha({ ...dashavidha, pramana: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Pramana-yukta (Proportionate height-to-weight and limb ratio)">Pramana-yukta (Proportionate height, weight &amp; limbs)</option>
+                        <option value="Heena Pramana (Significantly underweight, lean, below standard height)">Heena Pramana (Underweight / lean frame)</option>
+                        <option value="Ati Pramana (Heavy frame, overweight / elevated BMI)">Ati Pramana (Heavy frame / overweight / elevated BMI)</option>
+                      </select>
+                    </div>
+
+                    {/* 6. Satmya */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>6. Satmya</span>
+                          <span className="text-slate-500 font-bold">— Suitability/adaptation</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Satmya — Suitability/adaptation')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.satmya}
+                        onChange={(e) => setDashavidha({ ...dashavidha, satmya: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Sarva-Rasa Satmya (Tolerates all 6 tastes and varying diets comfortably)">Sarva-Rasa Satmya (Tolerates all 6 tastes comfortably)</option>
+                        <option value="Madhyama Satmya (Tolerates common regional foods, minor sensitivities)">Madhyama Satmya (Tolerates common foods with minor sensitivity)</option>
+                        <option value="Eka-Rasa / Asatmya (Sensitive system, easily upset by diet or climate change)">Eka-Rasa / Asatmya (Sensitive, easily upset by diet changes)</option>
+                      </select>
+                    </div>
+
+                    {/* 7. Sattva */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>7. Sattva</span>
+                          <span className="text-slate-500 font-bold">— Mental strength</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Sattva — Mental strength')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.sattva}
+                        onChange={(e) => setDashavidha({ ...dashavidha, sattva: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Pravara Sattva (High emotional resilience, calm demeanor, high patience)">Pravara Sattva (High emotional resilience &amp; patience)</option>
+                        <option value="Madhyama Sattva (Moderate tolerance, recovers quickly with supportive care)">Madhyama Sattva (Moderate tolerance, recovers with support)</option>
+                        <option value="Avara Sattva (Low stress tolerance, prone to anxiety, apprehension)">Avara Sattva (Low stress tolerance, prone to anxiety)</option>
+                      </select>
+                    </div>
+
+                    {/* 8. Ahara Shakti */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>8. Ahara Shakti</span>
+                          <span className="text-slate-500 font-bold">— Digestive capacity</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Ahara Shakti — Digestive capacity')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.aharaShakti}
+                        onChange={(e) => setDashavidha({ ...dashavidha, aharaShakti: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Samagni (Balanced digestive capacity, steady hunger, smooth digestion)">Samagni (Balanced digestion, comfortable hunger at intervals)</option>
+                        <option value="Tikshnagni (Intense hunger, quick gastric emptying, burns food, acid prone)">Tikshnagni (Intense hunger, burns food fast, prone to acidity)</option>
+                        <option value="Mandagni (Slow, sluggish digestion, feeling of heaviness after small meals)">Mandagni (Sluggish digestion, heaviness after small meals)</option>
+                        <option value="Vishamagni (Irregular appetite, unpredictable digestion with gas/bloating)">Vishamagni (Irregular appetite, variable bloating &amp; gas)</option>
+                      </select>
+                    </div>
+
+                    {/* 9. Vyayama Shakti */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>9. Vyayama Shakti</span>
+                          <span className="text-slate-500 font-bold">— Exercise capacity</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Vyayama Shakti — Exercise capacity')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.vyayamaShakti}
+                        onChange={(e) => setDashavidha({ ...dashavidha, vyayamaShakti: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Pravara Shakti (High exercise capacity, performs heavy physical work easily)">Pravara Shakti (High stamina, performs physical activity easily)</option>
+                        <option value="Madhyama Shakti (Moderate capacity, comfortable with 30-45 min brisk walk/yoga)">Madhyama Shakti (Moderate capacity, 30-45 min walk/yoga)</option>
+                        <option value="Avara Shakti (Low stamina, experiences breathlessness or quick fatigue)">Avara Shakti (Low stamina, easily breathless or fatigued)</option>
+                      </select>
+                    </div>
+
+                    {/* 10. Vaya */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                          <span>10. Vaya</span>
+                          <span className="text-slate-500 font-bold">— Age assessment</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak('Vaya — Age assessment')}
+                          className="text-slate-400 hover:text-emerald-700"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <select
+                        value={dashavidha.vaya}
+                        onChange={(e) => setDashavidha({ ...dashavidha, vaya: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="Balya Vaya (Growth phase, Kapha predominant, childhood to adolescence)">Balya Vaya (Growth phase, childhood / adolescence)</option>
+                        <option value="Madhyama Vaya (Active adult phase 16-60 years, Pitta predominant)">Madhyama Vaya (Active adult phase 16-60 years)</option>
+                        <option value="Vriddha Vaya (Geriatric phase >60 years, Vata predominant, degenerative tendencies)">Vriddha Vaya (Geriatric phase &gt;60 years)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. AHARA–VIHARA ASSESSMENT (Diet & Lifestyle) */}
+                <div className="space-y-4 pt-4 border-t border-slate-200">
+                  <div className="border-b border-slate-200 pb-2">
+                    <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                      <span>AHARA–VIHARA ASSESSMENT</span>
+                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 font-bold">
+                        Diet &amp; Lifestyle
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-500 font-medium">
+                      Capturing nutritional habits and daily living patterns for holistic clinical guidance
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* AHARA SECTION */}
+                    <div className="p-5 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-3">
+                      <h4 className="text-xs font-black uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                        <Utensils className="w-4 h-4 text-amber-600" />
+                        <span>AHARA — DIET / FOOD</span>
+                      </h4>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Usual Diet Pattern:</label>
+                        <select
+                          value={ahara.usualDiet}
+                          onChange={(e) => setAhara({ ...ahara, usualDiet: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Vegetarian (Wholesome balanced vegetarian meals)">Vegetarian (Wholesome balanced vegetarian meals)</option>
+                          <option value="Non-vegetarian (Includes poultry, fish, or red meat regularly)">Non-vegetarian (Includes poultry, fish, meat)</option>
+                          <option value="Satvik / Vegan (Pure plant-based, no onion/garlic, fresh food)">Satvik / Vegan (Pure plant-based, freshly cooked)</option>
+                          <option value="Mixed (Mostly home-cooked with occasional outside dining)">Mixed (Home-cooked with occasional outside food)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Meal Timing &amp; Rhythm:</label>
+                        <select
+                          value={ahara.mealTiming}
+                          onChange={(e) => setAhara({ ...ahara, mealTiming: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Regular 2-3 times daily (Breakfast, Lunch, Light Dinner)">Regular 2-3 times daily (Fixed timings)</option>
+                          <option value="Irregular timings (Skips breakfast, late afternoon lunch)">Irregular timings (Skips meals, busy schedule)</option>
+                          <option value="Late night dinner (Dinner taken within 1 hour of sleep)">Late night dinner (Eats shortly before sleep)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Food Preferences (Tastes):</label>
+                        <select
+                          value={ahara.foodPreferences}
+                          onChange={(e) => setAhara({ ...ahara, foodPreferences: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Sweet & Sour (Madhura-Amla, prefers comforting grains/dairy)">Sweet &amp; Sour (Madhura-Amla, dairy &amp; grains)</option>
+                          <option value="Spicy & Pungent (Katu-Tikshna, high chilies and hot spices)">Spicy &amp; Pungent (Katu, high chilies and spices)</option>
+                          <option value="Salty & Fried (Lavana, pickles, snacks, fried items)">Salty &amp; Fried (Lavana, savory snacks, fried)</option>
+                          <option value="Bitter & Astringent (Tikta-Kashaya, green vegetables, tea)">Bitter &amp; Astringent (Tikta-Kashaya, greens, tea)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Water &amp; Fluid Intake:</label>
+                        <select
+                          value={ahara.waterIntake}
+                          onChange={(e) => setAhara({ ...ahara, waterIntake: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="2 to 2.5 litres daily, normal/warm water">2 to 2.5 Litres daily (Normal/warm water)</option>
+                          <option value="Less than 1.5 litres daily (Low hydration / dry throat)">Less than 1.5 Litres daily (Low fluid intake)</option>
+                          <option value="More than 3 litres daily (High hydration)">More than 3 Litres daily (High hydration)</option>
+                          <option value="Prefers refrigerated / cold beverages with meals">Prefers chilled / cold drinks with meals</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* VIHARA SECTION */}
+                    <div className="p-5 rounded-2xl bg-teal-50/50 border border-teal-200 space-y-3">
+                      <h4 className="text-xs font-black uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
+                        <Activity className="w-4 h-4 text-teal-600" />
+                        <span>VIHARA — LIFESTYLE</span>
+                      </h4>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Daily Routine (Dinacharya):</label>
+                        <select
+                          value={vihara.dailyRoutine}
+                          onChange={(e) => setVihara({ ...vihara, dailyRoutine: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Early riser (wakes before 6:30 AM), active routine">Early riser (Wakes before 6:30 AM)</option>
+                          <option value="Standard routine (Wakes around 7:00 - 8:00 AM)">Standard routine (Wakes 7:00 - 8:00 AM)</option>
+                          <option value="Irregular / Night owl (Sleeps past midnight, variable wake-up)">Night owl (Late nights, irregular routine)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Sleep Pattern (Nidra):</label>
+                        <select
+                          value={vihara.sleepPattern}
+                          onChange={(e) => setVihara({ ...vihara, sleepPattern: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Sound 7 hours night sleep, restful awakenings">Sound 7-8 hours sleep, restful awakenings</option>
+                          <option value="Disturbed / Interrupted sleep, difficulty falling asleep">Disturbed / Fragmented sleep, takes long to sleep</option>
+                          <option value="Daytime sleeping habit (Divasvapna, 1-2 hours afternoon nap)">Habitual afternoon sleep (Divasvapna)</option>
+                          <option value="Chronic insomnia / Sleep deprivation (<5 hours)">Chronic sleep deficit (&lt;5 hours nightly)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Physical Activity &amp; Exercise:</label>
+                        <select
+                          value={vihara.exercise}
+                          onChange={(e) => setVihara({ ...vihara, exercise: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Daily 20-30 min brisk walk or yogasanas">Daily 20-30 min brisk walk or yogasanas</option>
+                          <option value="Moderate walking and active domestic routine">Moderate daily walking and housework</option>
+                          <option value="Sedentary (Desk work, minimal exercise)">Sedentary (Desk-bound, minimal exercise)</option>
+                          <option value="Intense gym / sports training (4-5 days/week)">Intense gym / sports (4-5 days/week)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-700">Work Pattern &amp; Rest:</label>
+                        <select
+                          value={vihara.workLifestyle}
+                          onChange={(e) => setVihara({ ...vihara, workLifestyle: e.target.value })}
+                          className="w-full p-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-900"
+                        >
+                          <option value="Balanced work hours with adequate evening relaxation">Balanced work with adequate relaxation</option>
+                          <option value="High mental stress / long continuous screen hours">High mental stress / continuous screen work</option>
+                          <option value="Shift duties / Rotating night work">Rotating shift duties / night work</option>
+                          <option value="Physical field labor with sun exposure">Physical field labor with sun exposure</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. AYURVEDIC WELLNESS HISTORY (Summary Card) */}
+                <div className="p-5 rounded-2xl bg-emerald-50/80 border border-emerald-300 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-black uppercase tracking-wider text-emerald-950 flex items-center gap-2">
+                      <span>AYURVEDIC WELLNESS HISTORY</span>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200">
+                        Profile Summary
+                      </span>
+                    </h4>
+                    <span className="text-[11px] text-emerald-800 font-semibold">
+                      Recorded for Doctor Evaluation
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                    Constitutional Prakriti evaluated as <strong>{dashavidha.prakriti.split('(')[0]}</strong> with <strong>{dashavidha.vikriti.split('(')[0]}</strong> tendencies. Digestive fire functioning as <strong>{dashavidha.aharaShakti.split('(')[0]}</strong>, with <strong>{dashavidha.vyayamaShakti.split('(')[0]}</strong> exercise stamina. Habitual diet: {ahara.usualDiet.split('(')[0]}, sleep pattern: {vihara.sleepPattern.split('(')[0]}.
+                  </p>
+                </div>
+
+                {/* 4. INFORMATIONAL EDUCATIONAL AREA: Understanding Dashavidha Pariksha */}
+                <div className="p-4 rounded-2xl bg-slate-100/90 border border-slate-200 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-black text-slate-800">
+                    <Info className="w-4 h-4 text-emerald-600" />
+                    <span>Understanding Dashavidha Pariksha (Classical Ayurvedic Framework)</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px] text-slate-600 font-medium">
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Prakriti</strong> Body constitution
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Vikriti</strong> Current imbalance
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Sara</strong> Tissue quality
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Samhanana</strong> Body compactness
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Pramana</strong> Body measurements
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Satmya</strong> Suitability/adaptation
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Sattva</strong> Mental strength
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Ahara Shakti</strong> Digestive capacity
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Vyayama Shakti</strong> Exercise capacity
+                    </div>
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <strong className="text-slate-900 block">Vaya</strong> Age assessment
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-slate-500 italic pt-1">
+                    * Informational only. Classical parameters provide individualized Ayurvedic context and are reviewed and confirmed by the attending doctor.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              /* STANDARD ALLOPATHY OPD ADAPTIVE QUESTIONS */
+              <div className="space-y-5 animate-fade-in">
+                {(COMPLAINT_QUESTIONS_MAP[selectedComplaintId] || []).map((q, qIndex) => {
+                  const qText = q.text[currentLanguage] || q.text.en;
+                  const currentAnswer = adaptiveAnswers[q.id];
+
+                  return (
+                    <div
+                      key={q.id}
+                      className="p-5 rounded-2xl bg-slate-50/80 border-2 border-slate-200/90 space-y-3.5 transition-all shadow-2xs"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-100 text-teal-800 border border-teal-200">
+                            Q{qIndex + 1} • {q.category.toUpperCase()}
+                          </span>
+                          <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                            {qText}
+                          </h4>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleSpeak(qText)}
+                          className="p-2 rounded-xl bg-white hover:bg-teal-50 text-teal-700 border border-slate-200 shadow-2xs shrink-0 transition-colors"
+                          title="Listen to question"
+                        >
+                          <Volume2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Options list */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {q.options?.map((opt) => {
+                          const optLabel = opt.label[currentLanguage] || opt.label.en;
+                          const isSelected = currentAnswer === opt.id;
+
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => {
+                                setAdaptiveAnswers((prev) => ({
+                                  ...prev,
+                                  [q.id]: opt.id,
+                                }));
+                              }}
+                              className={`p-3.5 rounded-xl border-2 text-left font-bold text-xs sm:text-sm transition-all flex items-center justify-between ${
+                                isSelected
+                                  ? opt.isRedFlag
+                                    ? 'border-rose-600 bg-rose-50 text-rose-950 shadow-2xs'
+                                    : 'border-teal-600 bg-teal-50 text-teal-950 shadow-2xs'
+                                  : 'border-slate-200 bg-white hover:bg-slate-100/80 text-slate-700'
+                              }`}
+                            >
+                              <span>{optLabel}</span>
+                              {isSelected && (
+                                <CheckCircle
+                                  className={`w-4 h-4 shrink-0 ${
+                                    opt.isRedFlag ? 'text-rose-600' : 'text-teal-600'
+                                  }`}
+                                />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* MANDATORY ALLERGY QUESTION SECTION (Common across OPD and AYUSH) */}
             <div className="p-5 sm:p-6 rounded-2xl bg-amber-50/70 border-2 border-amber-300 space-y-4 shadow-2xs">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2.5">
@@ -1644,9 +2371,27 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
                   </div>
                 )}
                 <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Consultation:</span>
+                  <span className="font-bold text-teal-800 uppercase">
+                    {completedEncounter.systemOfMedicine === 'ayurveda' || completedEncounter.consultationType === 'wellness'
+                      ? '🌿 AYUSH / AYURVEDIC WELLNESS'
+                      : '🏥 ALLOPATHIC OPD'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-slate-500 font-medium">Complaint:</span>
                   <span className="font-bold text-slate-900 truncate max-w-[200px]">{completedEncounter.chiefComplaint.title}</span>
                 </div>
+
+                {completedEncounter.ayushHistory && (
+                  <div className="mt-2 pt-2 border-t border-slate-200 text-[11px] text-emerald-900 bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200">
+                    <div className="font-black text-emerald-950 uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <span>🌿 Dashavidha Pariksha Summary</span>
+                    </div>
+                    <div>Prakriti: <strong>{completedEncounter.ayushHistory.dashavidha.prakriti.split('(')[0]}</strong> | Vikriti: <strong>{completedEncounter.ayushHistory.dashavidha.vikriti.split('(')[0]}</strong></div>
+                    <div>Agni: <strong>{completedEncounter.ayushHistory.dashavidha.aharaShakti.split('(')[0]}</strong> | Vyayama: <strong>{completedEncounter.ayushHistory.dashavidha.vyayamaShakti.split('(')[0]}</strong></div>
+                  </div>
+                )}
               </div>
 
               {/* QR Code Barcode */}
@@ -1683,6 +2428,187 @@ export const PatientKiosk: React.FC<PatientKioskProps> = ({
           </div>
         )}
       </div>
+
+      {/* EMERGENCY IPD FAST-TRACK MODAL (3 mandatory fields: Name, Age, Mobile) */}
+      {showIpdModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-rose-500 animate-scale-in">
+            <div className="flex items-start justify-between gap-3 border-b border-rose-100 pb-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                  FAST-TRACK ADMISSION
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-rose-950 flex items-center gap-2 mt-1">
+                  <span>🚨 Emergency IPD Registration</span>
+                </h3>
+                <p className="text-xs text-slate-600 mt-1 font-medium">
+                  Direct admission protocol: No initial case questions required. Minimal intake.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowIpdModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleEmergencyIpdSubmit} className="space-y-4 pt-4">
+              <div className="space-y-1">
+                <label className="text-xs font-black text-slate-800">
+                  Patient Full Name <span className="text-rose-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={ipdForm.fullName}
+                  onChange={(e) => setIpdForm({ ...ipdForm, fullName: e.target.value })}
+                  placeholder="e.g., Harish Chandra"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-black text-slate-800">
+                    Age (Years) <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={120}
+                    required
+                    value={ipdForm.age}
+                    onChange={(e) => setIpdForm({ ...ipdForm, age: Number(e.target.value) })}
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-black text-slate-800">
+                    Mobile Number <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    maxLength={10}
+                    value={ipdForm.phone}
+                    onChange={(e) => setIpdForm({ ...ipdForm, phone: e.target.value })}
+                    placeholder="10-digit mobile"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-black text-slate-800">
+                  Allocated Emergency Bed / Ward:
+                </label>
+                <select
+                  value={ipdForm.bedWard}
+                  onChange={(e) => setIpdForm({ ...ipdForm, bedWard: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 font-bold focus:border-rose-600 focus:bg-white focus:outline-none"
+                >
+                  <option value="Emergency Bed 1 (Acute Resus)">Emergency Bed 1 (Acute Resus)</option>
+                  <option value="Emergency Bed 2 (Triage / Monitor)">Emergency Bed 2 (Triage / Monitor)</option>
+                  <option value="ICU Bed 4 (Critical Care)">ICU Bed 4 (Critical Care)</option>
+                  <option value="Male IPD Ward - Bed 12">Male IPD Ward - Bed 12</option>
+                  <option value="Female IPD Ward - Bed 08">Female IPD Ward - Bed 08</option>
+                  <option value="Pediatric Ward - Bed 03">Pediatric Ward - Bed 03</option>
+                </select>
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowIpdModal(false)}
+                  className="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md shadow-rose-600/30 flex items-center gap-2"
+                >
+                  <Bed className="w-4 h-4" />
+                  <span>Admit Patient Immediately</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* IPD REGISTRATION CONFIRMATION SLIP */}
+      {ipdSuccessEncounter && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-rose-600 text-slate-900 space-y-4 animate-scale-in">
+            <div className="text-center space-y-1">
+              <span className="text-xs font-black uppercase tracking-widest text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-300 inline-block">
+                EMERGENCY IPD ADMISSION CONFIRMED
+              </span>
+              <h3 className="text-2xl font-black text-slate-900 pt-1">
+                {ipdSuccessEncounter.hospitalName}
+              </h3>
+              <p className="text-xs text-slate-500 font-medium">
+                {ipdSuccessEncounter.hospitalAddress}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-center space-y-1">
+              <div className="text-[11px] font-bold text-rose-800 uppercase tracking-wider">
+                IPD Admission Number
+              </div>
+              <div className="text-3xl font-mono font-black text-rose-700">
+                {ipdSuccessEncounter.ipdRegistrationId}
+              </div>
+              <div className="text-xs font-bold text-rose-900">
+                Bed / Ward: {ipdSuccessEncounter.bedWard}
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Patient Name:</span>
+                <span className="font-bold text-slate-900">{ipdSuccessEncounter.demographics.fullName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Age / Gender:</span>
+                <span className="font-bold text-slate-900">{ipdSuccessEncounter.demographics.age} Yrs / {ipdSuccessEncounter.demographics.gender.toUpperCase()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Contact Number:</span>
+                <span className="font-bold text-slate-900">{ipdSuccessEncounter.demographics.phone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Admission Date &amp; Time:</span>
+                <span className="font-mono font-bold text-slate-800">
+                  {new Date(ipdSuccessEncounter.admissionDate || Date.now()).toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 border border-slate-300"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print IPD Slip</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIpdSuccessEncounter(null)}
+                className="flex-1 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md shadow-rose-600/30 flex items-center justify-center"
+              >
+                <span>Done</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ABHA Card Modal */}
       <AbhaCardModal

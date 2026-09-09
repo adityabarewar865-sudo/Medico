@@ -217,6 +217,28 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
             )}
           </div>
 
+          {/* AYUSH Assessment Summary (If recorded) */}
+          {encounter.ayushHistory && (
+            <div className="p-3 bg-emerald-50/70 border border-emerald-300 rounded-xl space-y-1.5 text-xs">
+              <div className="flex items-center justify-between text-emerald-950 font-black uppercase tracking-wider text-[11px]">
+                <span>🌿 AYUSH DASHVIDHA PARIKSHA &amp; LIFESTYLE ASSESSMENT</span>
+                <span className="text-[10px] text-emerald-700 font-semibold bg-white px-2 py-0.5 rounded border border-emerald-200">
+                  Ayurvedic Profile
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-800">
+                <div>Prakriti: <strong>{encounter.ayushHistory.dashavidha.prakriti.split('(')[0]}</strong></div>
+                <div>Vikriti: <strong>{encounter.ayushHistory.dashavidha.vikriti.split('(')[0]}</strong></div>
+                <div>Sara: <strong>{encounter.ayushHistory.dashavidha.sara.split('(')[0]}</strong></div>
+                <div>Samhanana: <strong>{encounter.ayushHistory.dashavidha.samhanana.split('(')[0]}</strong></div>
+                <div>Agni: <strong>{encounter.ayushHistory.dashavidha.aharaShakti.split('(')[0]}</strong></div>
+                <div>Vyayama: <strong>{encounter.ayushHistory.dashavidha.vyayamaShakti.split('(')[0]}</strong></div>
+                <div>Diet: <strong>{encounter.ayushHistory.ahara.usualDiet.split('(')[0]}</strong></div>
+                <div>Sleep: <strong>{encounter.ayushHistory.vihara.sleepPattern.split('(')[0]}</strong></div>
+              </div>
+            </div>
+          )}
+
           {/* Prescription ℞ */}
           <div className="space-y-2 pt-1">
             <div className="flex items-center gap-2 text-base font-black text-teal-800">
@@ -230,6 +252,7 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
               <thead className="bg-slate-100 font-bold text-slate-700">
                 <tr>
                   <th className="p-2 border-b border-slate-200">Medicine Name</th>
+                  <th className="p-2 border-b border-slate-200">Category</th>
                   <th className="p-2 border-b border-slate-200">Dosage</th>
                   <th className="p-2 border-b border-slate-200">Frequency</th>
                   <th className="p-2 border-b border-slate-200">Duration</th>
@@ -241,6 +264,21 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
                   encounter.doctorReview.prescribedMedications!.map((rx, idx) => (
                     <tr key={idx}>
                       <td className="p-2 font-bold text-slate-900">{rx.name}</td>
+                      <td className="p-2">
+                        {rx.category === 'ayurvedic' ? (
+                          <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            AYURVEDIC
+                          </span>
+                        ) : rx.category === 'homeopathic' ? (
+                          <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
+                            HOMEOPATHIC
+                          </span>
+                        ) : (
+                          <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300">
+                            ALLOPATHIC
+                          </span>
+                        )}
+                      </td>
                       <td className="p-2">{rx.dosage}</td>
                       <td className="p-2 font-semibold text-slate-700">{rx.frequency}</td>
                       <td className="p-2">{rx.duration}</td>
@@ -249,7 +287,7 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="p-3 text-center text-slate-400">
+                    <td colSpan={6} className="p-3 text-center text-slate-400">
                       Standard symptomatic advice or refer to attending physician.
                     </td>
                   </tr>
@@ -287,9 +325,9 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
               <div className="text-[10px] text-slate-500">
                 Medical Officer / Consultant Physician
               </div>
-              <div className="text-[9px] text-emerald-700 font-bold flex items-center justify-end gap-1">
-                <CheckCircle className="w-3 h-3 text-emerald-600" />
-                <span>Digitally Verified &amp; Signed</span>
+              <div className="text-[10px] text-emerald-800 font-black flex items-center justify-end gap-1">
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">✓ VERIFIED</span>
               </div>
             </div>
           </div>

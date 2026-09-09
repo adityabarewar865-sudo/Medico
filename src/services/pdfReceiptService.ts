@@ -245,6 +245,26 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
     y += 4;
   }
 
+  // AYUSH Dashavidha Pariksha & Lifestyle Summary
+  if (visit.ayushHistory) {
+    y += 2;
+    doc.setFillColor(240, 253, 244);
+    doc.setDrawColor(187, 247, 208);
+    doc.roundedRect(margin, y, contentWidth, 14, 1.5, 1.5, 'FD');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(22, 101, 52);
+    doc.text('AYUSH CLINICAL PROFILE: DASHAVIDHA PARIKSHA & AHARA-VIHARA', margin + 3, y + 4.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(21, 128, 61);
+    const ayushLine1 = `Prakriti: ${visit.ayushHistory.dashavidha.prakriti.split('(')[0]}  •  Vikriti: ${visit.ayushHistory.dashavidha.vikriti.split('(')[0]}  •  Sara: ${visit.ayushHistory.dashavidha.sara.split('(')[0]}  •  Agni: ${visit.ayushHistory.dashavidha.aharaShakti.split('(')[0]}`;
+    const ayushLine2 = `Vyayama: ${visit.ayushHistory.dashavidha.vyayamaShakti.split('(')[0]}  •  Diet: ${visit.ayushHistory.ahara.usualDiet.split('(')[0]}  •  Sleep: ${visit.ayushHistory.vihara.sleepPattern.split('(')[0]}`;
+    doc.text(ayushLine1, margin + 3, y + 8.5);
+    doc.text(ayushLine2, margin + 3, y + 12);
+    y += 16;
+  }
+
   y += 3;
 
   // -------------------------------------------------------------
@@ -275,7 +295,7 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
   doc.setFontSize(7.5);
   doc.setTextColor(30, 41, 59);
   doc.text('#', colX.num, y + 4.2);
-  doc.text('Medicine Name', colX.name, y + 4.2);
+  doc.text('Medicine Name (Category)', colX.name, y + 4.2);
   doc.text('Dosage', colX.dosage, y + 4.2);
   doc.text('Frequency & Instructions', colX.freq, y + 4.2);
   doc.text('Duration', colX.duration, y + 4.2);
@@ -292,6 +312,7 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
           frequency: m.frequency,
           duration: m.duration || '5 days',
           instructions: m.instructions || 'After meals',
+          category: m.category || 'allopathic',
         }))
       : [];
 
@@ -315,7 +336,8 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
 
       doc.setFont('helvetica', 'bold');
       doc.text(String(idx + 1), colX.num, y + 2.5);
-      doc.text(rx.name, colX.name, y + 2.5);
+      const catSuffix = rx.category ? ` [${rx.category.toUpperCase()}]` : '';
+      doc.text(`${rx.name}${catSuffix}`, colX.name, y + 2.5);
 
       doc.setFont('helvetica', 'normal');
       doc.text(rx.dosage || 'Standard', colX.dosage, y + 2.5);

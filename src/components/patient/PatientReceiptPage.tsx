@@ -302,6 +302,30 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
               </div>
             </div>
           )}
+
+          {/* AYUSH Assessment Summary (If recorded) */}
+          {visit?.ayushHistory && (
+            <div className="border-t border-slate-100 pt-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-black uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+                  <span>🌿 AYUSH DASHVIDHA PARIKSHA &amp; LIFESTYLE ASSESSMENT</span>
+                </span>
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  Ayurvedic Profile
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-emerald-50/50 p-3 rounded-2xl border border-emerald-200 text-xs text-slate-800">
+                <div>Prakriti: <strong>{visit.ayushHistory.dashavidha.prakriti.split('(')[0]}</strong></div>
+                <div>Vikriti: <strong>{visit.ayushHistory.dashavidha.vikriti.split('(')[0]}</strong></div>
+                <div>Sara: <strong>{visit.ayushHistory.dashavidha.sara.split('(')[0]}</strong></div>
+                <div>Agni: <strong>{visit.ayushHistory.dashavidha.aharaShakti.split('(')[0]}</strong></div>
+                <div>Vyayama: <strong>{visit.ayushHistory.dashavidha.vyayamaShakti.split('(')[0]}</strong></div>
+                <div>Sattva: <strong>{visit.ayushHistory.dashavidha.sattva.split('(')[0]}</strong></div>
+                <div>Diet: <strong>{visit.ayushHistory.ahara.usualDiet.split('(')[0]}</strong></div>
+                <div>Sleep: <strong>{visit.ayushHistory.vihara.sleepPattern.split('(')[0]}</strong></div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Prescriptions & Medicines Card */}
@@ -325,9 +349,24 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
                   className="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                 >
                   <div>
-                    <span className="font-bold text-slate-900 text-sm block">
-                      {idx + 1}. {med.name}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-slate-900 text-sm block">
+                        {idx + 1}. {med.name}
+                      </span>
+                      {med.category === 'ayurvedic' ? (
+                        <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                          AYURVEDIC
+                        </span>
+                      ) : med.category === 'homeopathic' ? (
+                        <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
+                          HOMEOPATHIC
+                        </span>
+                      ) : (
+                        <span className="font-mono text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300">
+                          ALLOPATHIC
+                        </span>
+                      )}
+                    </div>
                     <span className="text-xs text-slate-500">
                       Dosage: <strong className="text-slate-700">{med.dosage}</strong> • Frequency: <strong className="text-slate-700">{med.frequency}</strong>
                     </span>
