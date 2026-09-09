@@ -37,7 +37,20 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('popstate', handleLocation);
   }, []);
 
-  const [currentMode, setCurrentMode] = useState<'kiosk' | 'reception' | 'doctor'>('kiosk');
+  const [currentMode, setCurrentMode] = useState<'kiosk' | 'reception' | 'doctor'>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem('medico_auth_user');
+        if (saved) {
+          const user = JSON.parse(saved);
+          return user.role === 'doctor' ? 'doctor' : 'reception';
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return 'reception';
+  });
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('hi');
   
   const [highContrast, setHighContrast] = useState<boolean>(false);
@@ -63,7 +76,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setCurrentMode('kiosk');
+      setCurrentMode(currentUser.role === 'doctor' ? 'doctor' : 'reception');
     }
   }, []);
 
@@ -114,8 +127,9 @@ export const App: React.FC = () => {
     } catch {
       // ignore
     }
-    // PAGE 2: After successful login, show the existing "Choose OPD or IPD"
-    setCurrentMode('kiosk');
+    // Reception logs in -> Redirect directly to Reception Dashboard
+    // Doctor logs in -> Redirect directly to Doctor Dashboard
+    setCurrentMode(user.role === 'doctor' ? 'doctor' : 'reception');
   };
 
   const handleLogout = () => {
@@ -125,7 +139,7 @@ export const App: React.FC = () => {
     } catch {
       // ignore
     }
-    setCurrentMode('kiosk');
+    setCurrentMode('reception');
   };
 
   // Dedicated Mobile Patient Receipt View (Direct Link - No Login Required)

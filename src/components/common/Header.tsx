@@ -194,7 +194,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Active Staff User Badge & Logout */}
-            {currentUser && currentMode !== 'kiosk' && (
+            {currentUser && (
               <div className="hidden sm:flex items-center gap-2 pl-1">
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700 truncate max-w-[140px]">
                   {currentUser.role === 'doctor' ? '🩺' : '👤'} {currentUser.name.split(' ')[0]}

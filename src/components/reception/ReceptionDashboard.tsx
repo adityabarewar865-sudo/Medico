@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Search,
   UserPlus,
+  UserCheck,
   Calendar,
   CheckCircle2,
   ArrowRight,
@@ -21,7 +22,7 @@ import { downloadHospitalExcel } from '../../services/excelService';
 import { LiveDateTime } from '../common/LiveDateTime';
 
 interface ReceptionDashboardProps {
-  onSendToKiosk?: (patientId: string) => void;
+  onSendToKiosk?: (patientId?: string) => void;
   currentUser?: AuthUser | null;
 }
 
@@ -235,7 +236,19 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
             {currentUser?.hospitalName || 'District Hospital'} &bull; {currentUser?.hospitalAddress || 'Hospital Complex, Main Road'}
           </p>
         </div>
-        <LiveDateTime />
+        <div className="flex items-center gap-3">
+          {onSendToKiosk && (
+            <button
+              onClick={() => onSendToKiosk()}
+              className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+              title="Open Patient Kiosk for OPD / IPD intake"
+            >
+              <UserCheck className="w-4 h-4" />
+              <span>Patient Kiosk</span>
+            </button>
+          )}
+          <LiveDateTime />
+        </div>
       </div>
 
       {/* Top Welcome & Reception Metrics Bar */}
@@ -283,9 +296,19 @@ export const ReceptionDashboard: React.FC<ReceptionDashboardProps> = ({ onSendTo
             <p className="text-xs text-teal-100/90 mt-1">Patient intake & staff</p>
           </div>
           <div className="flex flex-col gap-2">
+            {onSendToKiosk && (
+              <button
+                onClick={() => onSendToKiosk()}
+                className="px-4 py-2 bg-white hover:bg-slate-50 text-teal-900 font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Launch Patient Kiosk"
+              >
+                <UserCheck className="w-4 h-4 text-teal-600" />
+                <span>Patient Kiosk</span>
+              </button>
+            )}
             <button
               onClick={() => setShowRegisterModal(true)}
-              className="px-4 py-2 bg-white hover:bg-slate-50 text-teal-800 font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5"
+              className="px-4 py-2 bg-teal-500/30 hover:bg-teal-500/40 text-white font-black text-xs rounded-2xl shadow-sm transition-all flex items-center gap-1.5 border border-white/20"
             >
               <UserPlus className="w-4 h-4" />
               <span>Register Patient</span>
