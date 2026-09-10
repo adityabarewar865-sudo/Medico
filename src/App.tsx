@@ -3,6 +3,7 @@ import { Header } from './components/common/Header';
 import { PatientKiosk } from './components/patient/PatientKiosk';
 import { DoctorDashboard } from './components/doctor/DoctorDashboard';
 import { ReceptionDashboard } from './components/reception/ReceptionDashboard';
+import { AdminDashboard } from './components/admin/AdminDashboard';
 import { PatientReceiptPage } from './components/patient/PatientReceiptPage';
 import { LoginPage } from './components/common/LoginModal';
 import type { LanguageCode, AuthUser } from './types/clinical';
@@ -37,13 +38,13 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('popstate', handleLocation);
   }, []);
 
-  const [currentMode, setCurrentMode] = useState<'kiosk' | 'reception' | 'doctor'>(() => {
+  const [currentMode, setCurrentMode] = useState<'kiosk' | 'reception' | 'doctor' | 'admin'>(() => {
     if (typeof window !== 'undefined') {
       try {
         const saved = sessionStorage.getItem('medico_auth_user');
         if (saved) {
           const user = JSON.parse(saved);
-          return user.role === 'doctor' ? 'doctor' : 'reception';
+          return user.role === 'admin' ? 'admin' : user.role === 'doctor' ? 'doctor' : 'reception';
         }
       } catch {
         // ignore
@@ -76,7 +77,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setCurrentMode(currentUser.role === 'doctor' ? 'doctor' : 'reception');
+      setCurrentMode(currentUser.role === 'admin' ? 'admin' : currentUser.role === 'doctor' ? 'doctor' : 'reception');
     }
   }, []);
 
@@ -129,7 +130,8 @@ export const App: React.FC = () => {
     }
     // Reception logs in -> Redirect directly to Reception Dashboard
     // Doctor logs in -> Redirect directly to Doctor Dashboard
-    setCurrentMode(user.role === 'doctor' ? 'doctor' : 'reception');
+    // Admin logs in -> Redirect directly to Admin Dashboard
+    setCurrentMode(user.role === 'admin' ? 'admin' : user.role === 'doctor' ? 'doctor' : 'reception');
   };
 
   const handleLogout = () => {
@@ -164,24 +166,12 @@ export const App: React.FC = () => {
     >
       {/* Top Navigation & Controls */}
       <Header
-        currentMode={
-          currentMode === 'kiosk'
-            ? 'kiosk'
-            : currentUser?.role === 'doctor'
-            ? 'doctor'
-            : 'reception'
-        }
+        currentMode={currentMode}
         onModeChange={(mode) => {
-          if (mode === 'kiosk') {
-            setCurrentMode('kiosk');
-          } else if (currentUser) {
-            setCurrentMode(currentUser.role === 'doctor' ? 'doctor' : 'reception');
-          } else {
-            setCurrentMode('login' as any);
-          }
+          setCurrentMode(mode);
         }}
         currentUser={currentUser}
-        onRequestLogin={() => setCurrentMode('login' as any)}
+        onRequestLogin={() => setCurrentUser(null)}
         onLogout={handleLogout}
         currentLanguage={currentLanguage}
         onLanguageChange={setCurrentLanguage}
@@ -214,7 +204,7 @@ export const App: React.FC = () => {
         )}
 
         {currentMode === 'doctor' && (
-          currentUser?.role === 'doctor' ? (
+          currentUser?.role === 'doctor' || currentUser?.role === 'admin' ? (
             <DoctorDashboard />
           ) : (
             <div className="max-w-md mx-auto my-12 p-8 bg-white dark:bg-slate-900 rounded-3xl border border-rose-200 text-center space-y-4 shadow-xl">
@@ -233,6 +223,15 @@ export const App: React.FC = () => {
               </button>
             </div>
           )
+        )}
+
+        {currentMode === 'admin' && (
+          <AdminDashboard
+            currentUser={currentUser}
+            onSendToKiosk={() => setCurrentMode('kiosk')}
+            onOpenReception={() => setCurrentMode('reception')}
+            onOpenDoctor={() => setCurrentMode('doctor')}
+          />
         )}
       </main>
 

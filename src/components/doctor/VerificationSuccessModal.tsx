@@ -13,7 +13,7 @@ import {
   Check,
 } from 'lucide-react';
 import type { PatientCaseEncounter, PatientRecord } from '../../types/clinical';
-import { generateVisitReceiptPdf, downloadVisitReceiptPdf } from '../../services/pdfReceiptService';
+import { generateVisitReceiptPdf, downloadVisitReceiptPdf, resolveAssignedDoctorName } from '../../services/pdfReceiptService';
 
 interface VerificationSuccessModalProps {
   patient: PatientRecord;
@@ -69,7 +69,7 @@ export const VerificationSuccessModal: React.FC<VerificationSuccessModalProps> =
   };
 
   const visitDateStr = visit.visitDate || visit.createdAt.split('T')[0];
-  const attendingDoctor = visit.doctorReview?.verifiedBy || visit.attendingDoctor ;
+  const assignedDoctor = resolveAssignedDoctorName(visit);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4 animate-in fade-in duration-200 overflow-y-auto">
@@ -127,10 +127,10 @@ export const VerificationSuccessModal: React.FC<VerificationSuccessModalProps> =
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <span className="text-slate-500 dark:text-slate-400">Attending Physician:</span>
+                <span className="text-slate-500 dark:text-slate-400">Assigned Doctor:</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5 flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  {attendingDoctor}
+                  {assignedDoctor}
                 </p>
               </div>
 

@@ -32,5 +32,17 @@
     "receiptUrl": "http://localhost:5173/receipt/cfb422976dc3b38ed0234ce2239e29236ee66eea7fb8c81a",
     "pdfPath": "D:\\Hackathon 2026\\prototype 2\\server\\data\\receipts\\Receipt_P10031_V001_cfb42297.pdf",
     "pdfBase64Preview": "data:application/pdf;filename=generated.pdf;base64,JVBERi0xLjMKJbrfrOAKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL1Jlc291cmNlcyAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUuMjc5OTk5OTk5OTk5OTcyNyA4NDEuODg5O..."
+  },
+  {
+    "receiptToken": "eb14e62b169c580f0aeefa1fec8a6ccc8362d31e914f8780",
+    "patientId": "P10025",
+    "visitId": "V002",
+    "patientName": "Rahul Sharma",
+    "phone": "9876500001",
+    "doctorName": "Dr. S. K. Verma, MD",
+    "verifiedAt": "2026-09-10T05:14:47.005Z",
+    "receiptUrl": "http://localhost:5173/receipt/eb14e62b169c580f0aeefa1fec8a6ccc8362d31e914f8780",
+    "pdfPath": "D:\\Hackathon 2026\\prototype 2\\server\\data\\receipts\\Receipt_P10025_V002_eb14e62b.pdf",
+    "pdfBase64Preview": "data:application/pdf;filename=generated.pdf;base64,JVBERi0xLjMKJbrfrOAKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL1Jlc291cmNlcyAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUuMjc5OTk5OTk5OTk5OTcyNyA4NDEuODg5O..."
   }
 ]

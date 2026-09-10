@@ -489,6 +489,9 @@ class HospitalDatabaseService {
     if (!visit) return undefined;
 
     visit.doctorReview = { ...visit.doctorReview, ...review };
+    if (review.verifiedBy && review.verifiedBy !== 'Attending Doctor' && review.verifiedBy !== 'Not Assigned') {
+      visit.attendingDoctor = review.verifiedBy;
+    }
 
     // Sync prescribed medicines into visit.medicines if provided
     if (review.prescribedMedications && review.prescribedMedications.length > 0) {
@@ -503,7 +506,7 @@ class HospitalDatabaseService {
         duration: rx.duration,
         instructions: rx.instructions,
         datePrescribed: visit.visitDate || new Date().toISOString().split('T')[0],
-        doctor: review.verifiedBy || visit.attendingDoctor || 'Attending Physician',
+        doctor: review.verifiedBy || visit.attendingDoctor || 'Dr. S. K. Verma, MD',
       }));
       visit.medicines = formattedMeds;
     }

@@ -11,6 +11,7 @@ import { Eye,
   Building2,
   LogOut,
   Lock,
+  LayoutDashboard,
 } from 'lucide-react';
 import type { LanguageCode, AuthUser } from '../../types/clinical';
 import { SUPPORTED_LANGUAGES, TRANSLATIONS } from '../../services/i18n';
@@ -18,10 +19,10 @@ import { storage } from '../../services/storage';
 import { LiveDateTime } from './LiveDateTime';
 
 interface HeaderProps {
-  currentMode: 'kiosk' | 'reception' | 'doctor';
-  onModeChange: (mode: 'kiosk' | 'reception' | 'doctor') => void;
+  currentMode: 'kiosk' | 'reception' | 'doctor' | 'admin';
+  onModeChange: (mode: 'kiosk' | 'reception' | 'doctor' | 'admin') => void;
   currentUser: AuthUser | null;
-  onRequestLogin: (role: 'reception' | 'doctor') => void;
+  onRequestLogin: (role: 'reception' | 'doctor' | 'admin') => void;
   onLogout: () => void;
   currentLanguage: LanguageCode;
   onLanguageChange: (lang: LanguageCode) => void;
@@ -69,14 +70,14 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleRoleSelect = (role: 'kiosk' | 'reception' | 'doctor') => {
+  const handleRoleSelect = (role: 'kiosk' | 'reception' | 'doctor' | 'admin') => {
     if (role === 'kiosk') {
       onModeChange('kiosk');
       return;
     }
 
     if (role === 'reception') {
-      if (currentUser?.role === 'reception') {
+      if (currentUser?.role === 'reception' || currentUser?.role === 'admin') {
         onModeChange('reception');
       } else {
         onRequestLogin('reception');
@@ -85,12 +86,17 @@ export const Header: React.FC<HeaderProps> = ({
     }
 
     if (role === 'doctor') {
-      if (currentUser?.role === 'doctor') {
+      if (currentUser?.role === 'doctor' || currentUser?.role === 'admin') {
         onModeChange('doctor');
       } else {
         alert('Access Restricted: Reception staff cannot access the Doctor Dashboard. Doctor login required.');
         onRequestLogin('doctor');
       }
+      return;
+    }
+
+    if (role === 'admin') {
+      onModeChange('admin');
       return;
     }
   };
@@ -191,13 +197,26 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                 )}
               </button>
+
+              {/* 4. Hospital Admin Panel */}
+              <button
+                onClick={() => handleRoleSelect('admin')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all ${
+                  currentMode === 'admin'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Admin</span>
+              </button>
             </div>
 
             {/* Active Staff User Badge & Logout */}
             {currentUser && (
               <div className="hidden sm:flex items-center gap-2 pl-1">
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700 truncate max-w-[140px]">
-                  {currentUser.role === 'doctor' ? '🩺' : '👤'} {currentUser.name.split(' ')[0]}
+                  {currentUser.role === 'admin' ? '🛡️' : currentUser.role === 'doctor' ? '🩺' : '👤'} {currentUser.name.split(' ')[0]}
                 </span>
                 <button
                   onClick={onLogout}

@@ -698,6 +698,9 @@ class ClinicalDatabaseService {
     if (!visit) return undefined;
 
     visit.doctorReview = { ...visit.doctorReview, ...review };
+    if (review.verifiedBy && review.verifiedBy !== 'Attending Doctor' && review.verifiedBy !== 'Not Assigned') {
+      visit.attendingDoctor = review.verifiedBy;
+    }
     visit.excelStoredAt = new Date().toISOString();
 
     if (saveToHis) {

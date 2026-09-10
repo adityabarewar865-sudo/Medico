@@ -215,14 +215,14 @@ export const DoctorDashboard: React.FC = () => {
   // Doctor Action: Verify & Generate Receipt with PDF & Firebase
   const handleVerifyAndGenerateReceipt = async (saveToHis: boolean = true) => {
     setIsVerifying(true);
-    currentVisit.clinicalSummary.historyOfPresentIllness = editedHpi;
-    currentVisit.chiefComplaint.title = editedChiefComplaint;
-    currentVisit.clinicalSummary.vitals = vitals;
+
+    const userStr = typeof window !== 'undefined' ? localStorage.getItem('medico_current_user') : null;
+    const doctorName = userStr ? JSON.parse(userStr).name : (currentVisit.attendingDoctor || 'Dr. S. K. Verma, MD');
 
     const updatedReview: DoctorVerification = {
       ...currentVisit.doctorReview,
       verified: true,
-      verifiedBy: (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).name : 'Attending Doctor'),
+      verifiedBy: doctorName,
       verifiedAt: new Date().toISOString(),
       status: 'verified' as const,
       finalImpression: doctorImpression,
@@ -230,6 +230,13 @@ export const DoctorDashboard: React.FC = () => {
       doctorAdvice,
       prescribedMedications: prescriptions,
     };
+
+    // Update in-memory visit state immediately so PDF and UI have latest details
+    currentVisit.clinicalSummary.historyOfPresentIllness = editedHpi;
+    currentVisit.chiefComplaint.title = editedChiefComplaint;
+    currentVisit.clinicalSummary.vitals = vitals;
+    currentVisit.attendingDoctor = doctorName;
+    currentVisit.doctorReview = updatedReview;
 
     // 1. Optimistic local database update
     hospitalDb.updateDoctorReview(
@@ -822,7 +829,7 @@ export const DoctorDashboard: React.FC = () => {
                       ✓ VERIFIED
                     </span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                      Attending Doctor: {currentVisit.doctorReview.verifiedBy || 'Attending Physician'}
+                      Assigned Doctor: {currentVisit.doctorReview.verifiedBy || currentVisit.attendingDoctor || 'Dr. S. K. Verma, MD'}
                     </span>
                     <span className="text-[11px] text-emerald-700 dark:text-emerald-300 font-medium">
                       ({currentVisit.doctorReview.verifiedAt ? new Date(currentVisit.doctorReview.verifiedAt).toLocaleDateString() : 'Verified'})

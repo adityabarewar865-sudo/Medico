@@ -6,6 +6,7 @@
  * - Hospital/Project header
  * - Patient ID & Visit ID
  * - Patient Name, Age, Gender, Mobile Number
+ * - Assigned Doctor (Doctor who checked and verified the patient)
  * - Date of visit & Time
  * - Problem / Complaint & Bedside Vitals
  * - Relevant medical history & allergies
@@ -13,7 +14,7 @@
  * - Prescriptions table (Medicine, Dosage, Frequency/Instructions, Duration)
  * - Doctor's Advice & Lifestyle Tips
  * - Additional Doctor Notes
- * - Verification date & Doctor digital signature block
+ * - Verification date & Doctor digital signature block with Assigned Doctor
  */
 
 import { jsPDF } from 'jspdf';
@@ -26,10 +27,65 @@ export interface GenerateReceiptOptions {
   department?: string;
 }
 
+/**
+ * Resolves the doctor who checked/verified the patient
+ */
+export function resolveAssignedDoctorName(visit?: PatientCaseEncounter | null): string {
+  if (!visit) return 'Dr. S. K. Verma, MD';
+
+  // 1. Check verifiedBy on doctorReview
+  const verifiedBy = visit.doctorReview?.verifiedBy?.trim();
+  if (
+    verifiedBy &&
+    verifiedBy !== 'Attending Doctor' &&
+    verifiedBy !== 'Attending Physician' &&
+    verifiedBy !== 'Not Assigned'
+  ) {
+    return verifiedBy;
+  }
+
+  // 2. Check attendingDoctor on visit
+  const attending = visit.attendingDoctor?.trim();
+  if (
+    attending &&
+    attending !== 'Attending Doctor' &&
+    attending !== 'Attending Physician' &&
+    attending !== 'Not Assigned'
+  ) {
+    return attending;
+  }
+
+  // 3. Check logged-in doctor in localStorage
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const userStr = localStorage.getItem('medico_current_user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        if (
+          user?.name &&
+          user.name !== 'Not Assigned' &&
+          user.name !== 'Attending Doctor' &&
+          user.name !== 'Attending Physician'
+        ) {
+          return user.name;
+        }
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  // 4. Fallback to Senior Medical Officer
+  return 'Dr. S. K. Verma, MD';
+}
+
 export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF {
   const { patient, visit } = options;
-  const fallbackHospital = localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).hospitalName : 'HOSPITAL NAME NOT SET';
-  const hospitalName = options.hospitalName || fallbackHospital || 'HOSPITAL NAME NOT SET';
+  const fallbackHospital =
+    typeof window !== 'undefined' && localStorage.getItem('medico_current_user')
+      ? JSON.parse(localStorage.getItem('medico_current_user')!).hospitalName
+      : 'District Hospital';
+  const hospitalName = options.hospitalName || fallbackHospital || 'District Hospital';
   const department = options.department || 'Outpatient Department (OPD) — General Medicine';
 
   const doc = new jsPDF({
@@ -40,141 +96,201 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
 
   const pageWidth = 210;
   const pageHeight = 297;
-  const margin = 14;
-  const contentWidth = pageWidth - margin * 2;
+  const margin = 12; // 12mm page margins
+  const contentWidth = pageWidth - margin * 2; // 186mm content width
   let y = margin;
 
-  // Helper for text wrapping
+  // Helper for text wrapping with safe boundary check
   const printWrapped = (
     text: string,
     x: number,
     startY: number,
     maxWidth: number,
-    lineHeight = 5
+    lineHeight = 3.8
   ): number => {
     const lines = doc.splitTextToSize(text || '', maxWidth);
     doc.text(lines, x, startY);
     return startY + lines.length * lineHeight;
   };
 
+  // Helper to strictly clip text within a maximum width in mm
+  const clipText = (text: string, maxWidth: number): string => {
+    if (!text) return '';
+    const str = String(text);
+    if (doc.getTextWidth(str) <= maxWidth) return str;
+    let low = 0;
+    let high = str.length;
+    let best = '';
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      const sub = str.slice(0, mid) + '...';
+      if (doc.getTextWidth(sub) <= maxWidth) {
+        best = sub;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    return best || str.slice(0, 8) + '...';
+  };
+
+  const assignedDoctorName = resolveAssignedDoctorName(visit);
+
   // -------------------------------------------------------------
-  // 1. HOSPITAL HEADER BANNER
+  // 1. HOSPITAL HEADER BANNER (Strictly bounded)
   // -------------------------------------------------------------
+  const headerHeight = 20;
   doc.setFillColor(15, 118, 110); // Emerald/Teal brand header #0f766e
-  doc.roundedRect(margin, y, contentWidth, 22, 2, 2, 'F');
+  doc.roundedRect(margin, y, contentWidth, headerHeight, 2, 2, 'F');
 
   // Medical Cross Icon
   doc.setFillColor(255, 255, 255);
-  doc.rect(margin + 5, y + 5, 12, 12, 'F');
+  doc.rect(margin + 4, y + 4, 12, 12, 'F');
   doc.setFillColor(15, 118, 110);
-  doc.rect(margin + 9, y + 7, 4, 8, 'F');
-  doc.rect(margin + 7, y + 9, 8, 4, 'F');
-
-  // Header Titles
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
-  doc.text(hospitalName, margin + 21, y + 9);
-
-  const hospitalAddress = visit.hospitalAddress || patient.hospitalAddress || localStorage.getItem('medico_hospital_address') || 'Hospital Complex, Main Road, Civil Lines';
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(230, 245, 243);
-  doc.text(`${hospitalAddress}  •  ${department}`, margin + 21, y + 15);
+  doc.rect(margin + 8, y + 6, 4, 8, 'F');
+  doc.rect(margin + 6, y + 8, 8, 4, 'F');
 
   // Verification Badge Pill on top right
+  const badgeWidth = 46;
+  const badgeX = pageWidth - margin - badgeWidth - 4;
   doc.setFillColor(240, 253, 244);
-  doc.roundedRect(pageWidth - margin - 52, y + 5, 48, 12, 1.5, 1.5, 'F');
+  doc.roundedRect(badgeX, y + 4, badgeWidth, 12, 1.5, 1.5, 'F');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   doc.setTextColor(22, 101, 52);
-  doc.text('✓ VERIFIED', pageWidth - margin - 50, y + 10);
+  doc.text('✓ VERIFIED OPD RECEIPT', badgeX + 3, y + 8.5);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(6.5);
+  doc.setFontSize(6.2);
   doc.setTextColor(21, 128, 61);
-  doc.text('National Health Registry Validated', pageWidth - margin - 50, y + 14);
+  doc.text('ABDM Validated • Health Mission', badgeX + 3, y + 12.5);
 
-  y += 26;
+  // Header Titles (strictly clipped so they never collide with the badge)
+  const maxHeaderWidth = badgeX - (margin + 18) - 4;
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  const titleText = clipText(hospitalName.toUpperCase(), maxHeaderWidth);
+  doc.text(titleText, margin + 18, y + 8.5);
+
+  const hospitalAddress =
+    visit.hospitalAddress ||
+    patient.hospitalAddress ||
+    (typeof window !== 'undefined' ? localStorage.getItem('medico_hospital_address') : null) ||
+    'Hospital Complex, Main Road, Civil Lines';
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.2);
+  doc.setTextColor(230, 245, 243);
+  const subTitle = clipText(`${hospitalAddress}  •  ${department}`, maxHeaderWidth);
+  doc.text(subTitle, margin + 18, y + 14.5);
+
+  y += headerHeight + 3;
 
   // -------------------------------------------------------------
   // 2. PATIENT IDENTIFICATION CARD & VISIT INFO
   // -------------------------------------------------------------
   const attendant = visit.accompanyingPerson || patient.accompanyingPerson;
-  const cardHeight = attendant?.name || visit.knownAllergies ? 36 : 28;
+  const abha = patient.abha?.abhaNumber || visit.demographics?.abha?.abhaNumber || '91-XXXX-XXXX-XXXX';
+  const allergyText = visit.knownAllergies
+    ? visit.knownAllergies.hasAllergy === 'yes'
+      ? `YES: ${visit.knownAllergies.details || 'Specified by patient'}`
+      : visit.knownAllergies.hasAllergy === 'not_sure'
+      ? 'NOT SURE (Verify before medication)'
+      : 'NO (No known drug/food allergies)'
+    : null;
 
-  doc.setFillColor(248, 250, 252); // #f8fafc
-  doc.setDrawColor(226, 232, 240); // #e2e8f0
+  // Calculate dynamic card height based on actual rows
+  let leftLineCount = 3;
+  if (attendant?.name) leftLineCount += 1;
+  if (allergyText) leftLineCount += 1;
+  const rightLineCount = 5;
+  const maxCardRows = Math.max(leftLineCount, rightLineCount);
+  const cardHeight = Math.max(maxCardRows * 5.2 + 3, 29);
+
+  doc.setFillColor(248, 250, 252);
+  doc.setDrawColor(226, 232, 240);
   doc.roundedRect(margin, y, contentWidth, cardHeight, 2, 2, 'FD');
 
-  doc.setTextColor(15, 23, 42); // slate-900
+  const leftX = margin + 4;
+  const maxLeftW = 106;
+  const rightX = pageWidth - margin - 72;
+  const maxRightW = 68;
+
+  // Left Column: Demographics
+  doc.setTextColor(15, 23, 42);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.text(patient.fullName, margin + 4, y + 6);
+  doc.setFontSize(10.5);
+  doc.text(clipText(patient.fullName, maxLeftW), leftX, y + 5.5);
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
-  doc.setTextColor(71, 85, 105); // slate-600
+  doc.setFontSize(7.5);
+  doc.setTextColor(71, 85, 105);
   doc.text(
-    `Age / Gender: ${patient.age} Y / ${patient.gender.toUpperCase()}    •    Mobile: ${patient.phone}`,
-    margin + 4,
-    y + 11.5
+    clipText(`Age / Gender: ${patient.age} Y / ${patient.gender.toUpperCase()}   •   Mobile: +91 ${patient.phone}`, maxLeftW),
+    leftX,
+    y + 10.5
   );
 
-  const abha = patient.abha?.abhaNumber || visit.demographics.abha?.abhaNumber || '91-XXXX-XXXX-XXXX';
-  doc.text(`ABHA Number: ${abha}    •    Address: ${patient.address || 'District Catchment Area'}`, margin + 4, y + 17);
+  doc.text(
+    clipText(`ABHA: ${abha}   •   Address: ${patient.address || 'District Catchment Area'}`, maxLeftW),
+    leftX,
+    y + 15.5
+  );
 
-  let extraY = y + 22.5;
+  let currentLeftY = y + 20.5;
   if (attendant?.name) {
-    doc.text(`Attendant: ${attendant.name} (${attendant.relation})    •    Mobile: ${attendant.phone || 'N/A'}`, margin + 4, extraY);
-    extraY += 5;
+    doc.text(
+      clipText(`Attendant: ${attendant.name} (${attendant.relation})  •  Phone: ${attendant.phone || 'N/A'}`, maxLeftW),
+      leftX,
+      currentLeftY
+    );
+    currentLeftY += 5;
   }
 
-  if (visit.knownAllergies) {
-    const allergyText = visit.knownAllergies.hasAllergy === 'yes'
-      ? `YES — ${visit.knownAllergies.details || 'Specified'}`
-      : visit.knownAllergies.hasAllergy === 'not_sure'
-      ? 'NOT SURE (Caution: Verify before prescribing)'
-      : 'NO (No known drug or food allergies)';
-    doc.text(`Allergies: ${allergyText}`, margin + 4, extraY);
+  if (allergyText) {
+    doc.setFont('helvetica', 'bold');
+    if (visit.knownAllergies?.hasAllergy === 'yes') {
+      doc.setTextColor(190, 18, 60);
+    } else if (visit.knownAllergies?.hasAllergy === 'not_sure') {
+      doc.setTextColor(180, 83, 9);
+    } else {
+      doc.setTextColor(21, 128, 61);
+    }
+    doc.text(clipText(`Allergies: ${allergyText}`, maxLeftW), leftX, currentLeftY);
   }
 
-  // Visit metadata (Right column)
+  // Right Column: Visit Metadata & Assigned Doctor
   const visitDateStr = visit.visitDate || visit.createdAt.split('T')[0];
-  const visitTimeStr = visit.createdAt ? new Date(visit.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '10:00 AM';
+  const visitTimeStr = visit.createdAt
+    ? new Date(visit.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+    : '10:00 AM';
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 118, 110);
-  doc.text(`Patient ID: ${patient.patientId}`, pageWidth - margin - 60, y + 6);
-  doc.text(`Visit ID: ${visit.visitId || 'V001'}`, pageWidth - margin - 60, y + 11);
+  doc.setFontSize(8);
+  doc.text(`Patient ID: ${patient.patientId}`, rightX, y + 5.5);
+  doc.text(`Visit ID: ${visit.visitId || 'V001'}`, rightX, y + 10.5);
 
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(71, 85, 105);
-  doc.setFontSize(8);
-  doc.text(`Date: ${visitDateStr} (${visitTimeStr})`, pageWidth - margin - 60, y + 16);
-  doc.text(`Token: ${visit.opdToken}  |  ${visit.opdRoom}`, pageWidth - margin - 60, y + 21);
+  doc.setFontSize(7.5);
+  doc.text(`Date: ${visitDateStr} (${visitTimeStr})`, rightX, y + 15.5);
+  doc.text(clipText(`Token: ${visit.opdToken}  |  ${visit.opdRoom}`, maxRightW), rightX, y + 20.5);
 
-  y += cardHeight + 4;
+  // Assigned Doctor prominently displayed in patient card
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.8);
+  doc.setTextColor(15, 23, 42);
+  doc.text(clipText(`Assigned Doctor: ${assignedDoctorName}`, maxRightW), rightX, y + 25.5);
+
+  y += cardHeight + 3;
 
   // -------------------------------------------------------------
   // 3. CLINICAL PROBLEM & BEDSIDE VITALS
   // -------------------------------------------------------------
-  doc.setFillColor(254, 242, 242); // soft rose for problem highlight
-  doc.setDrawColor(254, 202, 202);
-  doc.roundedRect(margin, y, contentWidth, 14, 1.5, 1.5, 'FD');
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(185, 28, 28);
-  doc.text('PROBLEM / CHIEF COMPLAINT:', margin + 3, y + 5.5);
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
-  doc.setTextColor(15, 23, 42);
   const complaintTitle = visit.chiefComplaint?.title || 'General Outpatient Evaluation';
   const complaintDetail = visit.chiefComplaint?.onsetDuration ? ` (${visit.chiefComplaint.onsetDuration})` : '';
-  doc.text(`${complaintTitle}${complaintDetail}`, margin + 62, y + 5.5);
+  const fullComplaint = `${complaintTitle}${complaintDetail}`;
 
-  // Vitals Row
   const vitals = visit.clinicalSummary.vitals || {
     bp: '120/80',
     pulse: '74',
@@ -182,126 +298,144 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
     temp: '98.4',
     rr: '16',
   };
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
-  doc.setTextColor(71, 85, 105);
-  doc.text(
-    `Vitals:  BP: ${vitals.bp} mmHg  |  Pulse: ${vitals.pulse} bpm  |  SpO2: ${vitals.spo2}%  |  Temp: ${vitals.temp}°F  |  Resp Rate: ${vitals.rr}/min`,
-    margin + 3,
-    y + 10.5
-  );
 
-  y += 18;
+  const probCardHeight = 13.5;
+  doc.setFillColor(254, 242, 242);
+  doc.setDrawColor(254, 202, 202);
+  doc.roundedRect(margin, y, contentWidth, probCardHeight, 1.5, 1.5, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(185, 28, 28);
+  doc.text('PROBLEM / CHIEF COMPLAINT:', margin + 3, y + 5);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(15, 23, 42);
+  const maxComplaintW = contentWidth - 56;
+  doc.text(clipText(fullComplaint, maxComplaintW), margin + 50, y + 5);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.2);
+  doc.setTextColor(71, 85, 105);
+  const vitalsText = `Vitals:  BP: ${vitals.bp} mmHg  |  Pulse: ${vitals.pulse} bpm  |  SpO2: ${vitals.spo2}%  |  Temp: ${vitals.temp}°F  |  Resp Rate: ${vitals.rr}/min`;
+  doc.text(clipText(vitalsText, contentWidth - 6), margin + 3, y + 9.8);
+
+  y += probCardHeight + 3;
 
   // -------------------------------------------------------------
   // 4. DOCTOR-VERIFIED CLINICAL SUMMARY
   // -------------------------------------------------------------
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
+  doc.setFontSize(8.5);
   doc.setTextColor(15, 23, 42);
-  doc.text('DOCTOR-VERIFIED CLINICAL SUMMARY', margin, y);
+  doc.text('DOCTOR-VERIFIED CLINICAL SUMMARY', margin, y + 2.5);
   doc.setDrawColor(15, 118, 110);
-  doc.setLineWidth(0.4);
-  doc.line(margin, y + 1.5, margin + 70, y + 1.5);
-  y += 5.5;
+  doc.setLineWidth(0.3);
+  doc.line(margin, y + 4, margin + 65, y + 4);
+  y += 7;
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setFontSize(7.5);
   doc.setTextColor(51, 65, 85);
   doc.text('History of Present Illness (HPI):', margin, y);
-  y += 4;
+  y += 3.5;
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
+  doc.setFontSize(7.2);
   doc.setTextColor(51, 65, 85);
   const hpiText =
     visit.clinicalSummary.historyOfPresentIllness ||
     visit.chiefComplaint?.description ||
     'Patient presented with acute clinical symptoms requiring evaluation.';
-  y = printWrapped(hpiText, margin, y, contentWidth, 4.2);
+  y = printWrapped(hpiText, margin, y, contentWidth, 3.4);
 
   // Past Medical History & Allergies
   const pmhList = visit.clinicalSummary.pastMedicalHistory;
   const allergiesList = visit.clinicalSummary.allergies;
 
   if (pmhList && pmhList.length > 0) {
-    y += 2;
+    y += 1.5;
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
+    doc.setFontSize(7.2);
+    doc.setTextColor(30, 41, 59);
     doc.text('Past Medical History: ', margin, y);
     doc.setFont('helvetica', 'normal');
-    doc.text(pmhList.join(' • '), margin + 35, y);
-    y += 4;
+    doc.setTextColor(71, 85, 105);
+    const pmhStr = pmhList.join(' • ');
+    y = printWrapped(pmhStr, margin + 30, y, contentWidth - 30, 3.4);
   }
 
   if (allergiesList && allergiesList.length > 0) {
     y += 1.5;
     doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.2);
     doc.setTextColor(190, 18, 60);
     doc.text('Known Allergies: ', margin, y);
     doc.setFont('helvetica', 'normal');
     const allergiesStr = allergiesList.map((a) => `${a.allergen} (${a.reaction})`).join(', ');
-    doc.text(allergiesStr, margin + 28, y);
-    y += 4;
+    y = printWrapped(allergiesStr, margin + 25, y, contentWidth - 25, 3.4);
   }
 
-  // AYUSH Dashavidha Pariksha & Lifestyle Summary
+  // AYUSH Dashavidha Pariksha & Lifestyle Summary (if present)
   if (visit.ayushHistory) {
     y += 2;
-    doc.setFillColor(240, 253, 244);
-    doc.setDrawColor(187, 247, 208);
-    doc.roundedRect(margin, y, contentWidth, 14, 1.5, 1.5, 'FD');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(7.5);
-    doc.setTextColor(22, 101, 52);
-    doc.text('AYUSH CLINICAL PROFILE: DASHAVIDHA PARIKSHA & AHARA-VIHARA', margin + 3, y + 4.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
-    doc.setTextColor(21, 128, 61);
     const ayushLine1 = `Prakriti: ${visit.ayushHistory.dashavidha.prakriti.split('(')[0]}  •  Vikriti: ${visit.ayushHistory.dashavidha.vikriti.split('(')[0]}  •  Sara: ${visit.ayushHistory.dashavidha.sara.split('(')[0]}  •  Agni: ${visit.ayushHistory.dashavidha.aharaShakti.split('(')[0]}`;
     const ayushLine2 = `Vyayama: ${visit.ayushHistory.dashavidha.vyayamaShakti.split('(')[0]}  •  Diet: ${visit.ayushHistory.ahara.usualDiet.split('(')[0]}  •  Sleep: ${visit.ayushHistory.vihara.sleepPattern.split('(')[0]}`;
-    doc.text(ayushLine1, margin + 3, y + 8.5);
-    doc.text(ayushLine2, margin + 3, y + 12);
-    y += 16;
+
+    doc.setFillColor(240, 253, 244);
+    doc.setDrawColor(187, 247, 208);
+    doc.roundedRect(margin, y, contentWidth, 12, 1.5, 1.5, 'FD');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(6.8);
+    doc.setTextColor(22, 101, 52);
+    doc.text('AYUSH CLINICAL PROFILE: DASHAVIDHA PARIKSHA & AHARA-VIHARA', margin + 3, y + 3.8);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(21, 128, 61);
+    doc.text(clipText(ayushLine1, contentWidth - 6), margin + 3, y + 7.2);
+    doc.text(clipText(ayushLine2, contentWidth - 6), margin + 3, y + 10.3);
+    y += 13.5;
   }
 
-  y += 3;
+  y += 2.5;
 
   // -------------------------------------------------------------
-  // 5. PRESCRIBED MEDICATIONS TABLE
+  // 5. PRESCRIBED MEDICATIONS TABLE (Rx)
+  // Columns budgeted strictly inside contentWidth (186mm):
+  // # (6mm), Medicine (64mm), Dosage (30mm), Freq (56mm), Dur (30mm)
   // -------------------------------------------------------------
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
+  doc.setFontSize(8.5);
   doc.setTextColor(15, 23, 42);
-  doc.text('PRESCRIBED MEDICINES (Rx)', margin, y);
+  doc.text('PRESCRIBED MEDICINES (Rx)', margin, y + 2.5);
   doc.setDrawColor(15, 118, 110);
-  doc.line(margin, y + 1.5, margin + 55, y + 1.5);
-  y += 5.5;
+  doc.line(margin, y + 4, margin + 52, y + 4);
+  y += 6.5;
 
   // Table Header
   const colX = {
     num: margin + 2,
-    name: margin + 10,
-    dosage: margin + 70,
+    name: margin + 8,
+    dosage: margin + 72,
     freq: margin + 102,
-    duration: margin + 155,
+    duration: margin + 158,
   };
 
   doc.setFillColor(241, 245, 249);
   doc.setDrawColor(203, 213, 225);
-  doc.roundedRect(margin, y, contentWidth, 6, 1, 1, 'FD');
+  doc.roundedRect(margin, y, contentWidth, 5.5, 1, 1, 'FD');
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7.5);
+  doc.setFontSize(7.2);
   doc.setTextColor(30, 41, 59);
-  doc.text('#', colX.num, y + 4.2);
-  doc.text('Medicine Name (Category)', colX.name, y + 4.2);
-  doc.text('Dosage', colX.dosage, y + 4.2);
-  doc.text('Frequency & Instructions', colX.freq, y + 4.2);
-  doc.text('Duration', colX.duration, y + 4.2);
-  y += 7.5;
+  doc.text('#', colX.num, y + 3.8);
+  doc.text('Medicine Name (Category)', colX.name, y + 3.8);
+  doc.text('Dosage', colX.dosage, y + 3.8);
+  doc.text('Frequency & Instructions', colX.freq, y + 3.8);
+  doc.text('Duration', colX.duration, y + 3.8);
+  y += 6.5;
 
-  // Prescriptions rows
   const rxList =
     visit.doctorReview?.prescribedMedications && visit.doctorReview.prescribedMedications.length > 0
       ? visit.doctorReview.prescribedMedications
@@ -318,88 +452,101 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
 
   if (rxList.length === 0) {
     doc.setFont('helvetica', 'italic');
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(100, 116, 139);
     doc.text('No oral pharmaceuticals prescribed. Supportive care and observation advised.', margin + 4, y + 3.5);
-    y += 7;
+    y += 6.5;
   } else {
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(15, 23, 42);
-
     rxList.forEach((rx, idx) => {
-      // Alternating row background
       if (idx % 2 === 0) {
         doc.setFillColor(248, 250, 252);
-        doc.rect(margin, y - 2, contentWidth, 6.5, 'F');
+        doc.rect(margin, y - 1.5, contentWidth, 5.8, 'F');
       }
 
       doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.2);
+      doc.setTextColor(30, 41, 59);
       doc.text(String(idx + 1), colX.num, y + 2.5);
-      const catSuffix = rx.category === 'ayurvedic'
-        ? ' [AYURVEDIC MEDICINES]'
-        : rx.category === 'homeopathic'
-        ? ' [HOMEOPATHIC MEDICINES]'
-        : ' [ALLOPATHIC MEDICINES]';
-      doc.text(`${rx.name}${catSuffix}`, colX.name, y + 2.5);
+
+      const catSuffix =
+        rx.category === 'ayurvedic'
+          ? ' [AYUR]'
+          : rx.category === 'homeopathic'
+          ? ' [HOME]'
+          : ' [ALLO]';
+      const medNameFull = `${rx.name}${catSuffix}`;
+      doc.text(clipText(medNameFull, 62), colX.name, y + 2.5);
 
       doc.setFont('helvetica', 'normal');
-      doc.text(rx.dosage || 'Standard', colX.dosage, y + 2.5);
-      const freqText = rx.instructions ? `${rx.frequency} (${rx.instructions})` : rx.frequency;
-      doc.text(freqText, colX.freq, y + 2.5);
-      doc.text(rx.duration || '5 days', colX.duration, y + 2.5);
+      doc.setFontSize(7.2);
+      doc.text(clipText(rx.dosage || 'Standard', 28), colX.dosage, y + 2.5);
 
-      y += 6.5;
+      const freqText = rx.instructions ? `${rx.frequency} (${rx.instructions})` : rx.frequency;
+      doc.text(clipText(freqText, 54), colX.freq, y + 2.5);
+
+      doc.text(clipText(rx.duration || '5 days', 26), colX.duration, y + 2.5);
+
+      y += 5.8;
     });
   }
 
-  y += 4;
+  y += 2.5;
 
   // -------------------------------------------------------------
-  // 6. DOCTOR'S ADVICE & LIFESTYLE TIPS
+  // 6. DOCTOR'S ADVICE & LIFESTYLE TIPS (Dynamic height - no border overflow)
   // -------------------------------------------------------------
   const doctorAdviceText =
     visit.doctorReview?.doctorAdvice?.trim() ||
     '• Maintain adequate hydration (minimum 2.5 liters of warm water daily).\n• Take prescribed medications strictly after food with full glass of water.\n• Complete bed rest for the next 48-72 hours.\n• Avoid cold food, dust exposure, and oily/spicy diet.\n• Immediate Emergency Return Warning: In case of chest pain, shortness of breath, high persistent fever (>102°F), or severe dizziness, report immediately to Room 1 Emergency Resus.';
 
-  doc.setFillColor(240, 253, 244); // soft emerald/green card
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.8);
+  const adviceLines = doc.splitTextToSize(doctorAdviceText, contentWidth - 8);
+  const adviceCardHeight = Math.max(adviceLines.length * 3.2 + 8, 16);
+
+  doc.setFillColor(240, 253, 244);
   doc.setDrawColor(187, 247, 208);
-  doc.roundedRect(margin, y, contentWidth, 24, 2, 2, 'FD');
+  doc.roundedRect(margin, y, contentWidth, adviceCardHeight, 1.5, 1.5, 'FD');
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
+  doc.setFontSize(7.5);
   doc.setTextColor(22, 101, 52);
-  doc.text("DOCTOR'S ADVICE & LIFESTYLE TIPS", margin + 4, y + 5);
+  doc.text("DOCTOR'S ADVICE & LIFESTYLE TIPS", margin + 4, y + 4.5);
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7.5);
+  doc.setFontSize(6.8);
   doc.setTextColor(21, 128, 61);
-  printWrapped(doctorAdviceText, margin + 4, y + 9.5, contentWidth - 8, 3.8);
+  doc.text(adviceLines, margin + 4, y + 8.5);
 
-  y += 28;
+  y += adviceCardHeight + 2.5;
 
   // -------------------------------------------------------------
-  // 7. ADDITIONAL DOCTOR NOTES & INVESTIGATIONS
+  // 7. ADDITIONAL DOCTOR NOTES & INVESTIGATIONS (Dynamic height)
   // -------------------------------------------------------------
   const doctorNotes = visit.doctorReview?.doctorNotes || 'Review OPD in 5 days or sooner if symptoms worsen.';
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.8);
+  const notesLines = doc.splitTextToSize(doctorNotes, contentWidth - 36);
+  const notesCardHeight = Math.max(notesLines.length * 3.2 + 4, 9.5);
+
   doc.setFillColor(248, 250, 252);
   doc.setDrawColor(226, 232, 240);
-  doc.roundedRect(margin, y, contentWidth, 14, 1.5, 1.5, 'FD');
+  doc.roundedRect(margin, y, contentWidth, notesCardHeight, 1.5, 1.5, 'FD');
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setFontSize(7.2);
   doc.setTextColor(15, 23, 42);
-  doc.text('Doctor Notes / Plan:', margin + 3, y + 5);
+  doc.text('Doctor Notes / Plan:', margin + 3, y + 4.2);
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7.5);
+  doc.setFontSize(6.8);
   doc.setTextColor(71, 85, 105);
-  printWrapped(doctorNotes, margin + 35, y + 5, contentWidth - 40, 3.8);
+  doc.text(notesLines, margin + 32, y + 4.2);
 
-  y += 18;
+  y += notesCardHeight + 3;
 
   // -------------------------------------------------------------
-  // 8. DOCTOR VERIFICATION STAMP & SIGNATURE (FOOTER)
+  // 8. DOCTOR VERIFICATION STAMP & SIGNATURE (FOOTER - strictly inside page)
   // -------------------------------------------------------------
   const verifiedDateStr = visit.doctorReview?.verifiedAt
     ? new Date(visit.doctorReview.verifiedAt).toLocaleString('en-US', {
@@ -408,38 +555,57 @@ export function generateVisitReceiptPdf(options: GenerateReceiptOptions): jsPDF 
       })
     : new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 
-  const attendingDoc = visit.doctorReview?.verifiedBy || visit.attendingDoctor || 'Attending Physician';
+  const sigBoxHeight = 18;
+  const maxFooterY = pageHeight - margin - sigBoxHeight - 6;
+  const finalSigY = Math.min(Math.max(y, 238), maxFooterY);
+
+  const sigBoxW = 76;
+  const sigBoxX = pageWidth - margin - sigBoxW;
+
+  // Left Info Summary (Parallel to signature box)
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(6.8);
+  doc.setTextColor(15, 118, 110);
+  doc.text('OFFICIAL HOSPITAL DIGITAL CONSULTATION RECEIPT', margin, finalSigY + 4);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.2);
+  doc.setTextColor(100, 116, 139);
+  doc.text(`ABDM Care Context: ${visit.abdmCareContextRef || 'CARE-CTX-OPD'}  •  HIP ID: IN0510000128`, margin, finalSigY + 8);
+  doc.text('Generated via Medikiosk AI OPD Gateway • Valid for dispensary, diagnostics, and follow-up.', margin, finalSigY + 12);
+  doc.text('Digitally signed by verified medical officer under ABDM Health Data Management Policy.', margin, finalSigY + 15.5);
 
   // Digital verification box
   doc.setDrawColor(15, 118, 110);
   doc.setLineWidth(0.3);
-  doc.roundedRect(pageWidth - margin - 75, y, 75, 22, 1.5, 1.5, 'S');
+  doc.setFillColor(250, 253, 252);
+  doc.roundedRect(sigBoxX, finalSigY, sigBoxW, sigBoxHeight, 1.5, 1.5, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.2);
+  doc.setTextColor(15, 118, 110);
+  doc.text('DIGITALLY VERIFIED & SIGNED', sigBoxX + 4, finalSigY + 4.5);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
-  doc.setTextColor(15, 118, 110);
-  doc.text('DIGITALLY VERIFIED & SIGNED', pageWidth - margin - 70, y + 5.5);
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
   doc.setTextColor(15, 23, 42);
-  const actualDocName = (attendingDoc === 'Attending Doctor' || attendingDoc === 'Attending Physician') 
-    ? (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).name : 'Not Assigned')
-    : attendingDoc;
-  doc.text(`Attending Doctor: ${actualDocName}`, pageWidth - margin - 70, y + 10.5);
+  doc.text(clipText(`Assigned Doctor: ${assignedDoctorName}`, sigBoxW - 8), sigBoxX + 4, finalSigY + 8.8);
 
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.setTextColor(100, 116, 139);
-  doc.text(`Reg No: NMR-IND-89421 • Internal Medicine`, pageWidth - margin - 70, y + 15);
-  doc.text(`Verified: ${verifiedDateStr}`, pageWidth - margin - 70, y + 19);
-
-  // Disclaimer on bottom left
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6.5);
+  doc.setTextColor(100, 116, 139);
+  doc.text('Medical Officer • Reg No: NMR-IND-89421', sigBoxX + 4, finalSigY + 12.5);
+  doc.text(`Signed: ${verifiedDateStr}`, sigBoxX + 4, finalSigY + 15.8);
+
+  // Bottom border line & disclaimer
+  doc.setDrawColor(226, 232, 240);
+  doc.setLineWidth(0.2);
+  doc.line(margin, pageHeight - margin - 4.5, pageWidth - margin, pageHeight - margin - 4.5);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6);
   doc.setTextColor(148, 163, 184);
-  doc.text('This is an official hospital clinical summary generated via Medikiosk AI OPD System.', margin, pageHeight - margin - 4);
-  doc.text('Valid for clinical records, pharmacy dispensing, and hospital follow-up under ABDM.', margin, pageHeight - margin - 1);
+  doc.text('Hospital Digital OPD Receipt  •  Ayushman Bharat Digital Mission (ABDM) Compatible  •  Strictly Confidential', margin, pageHeight - margin - 2);
+  doc.text(`Page 1 of 1`, pageWidth - margin - 15, pageHeight - margin - 2);
 
   return doc;
 }

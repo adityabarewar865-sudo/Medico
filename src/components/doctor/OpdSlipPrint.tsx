@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Printer, QrCode, CheckCircle, ShieldCheck } from 'lucide-react';
 import type { PatientCaseEncounter } from '../../types/clinical';
+import { resolveAssignedDoctorName } from '../../services/pdfReceiptService';
 
 interface OpdSlipPrintProps {
   isOpen: boolean;
@@ -320,7 +321,7 @@ export const OpdSlipPrint: React.FC<OpdSlipPrintProps> = ({
 
             <div className="text-right space-y-1">
               <div className="font-bold text-xs text-slate-900">
-                Attending Doctor: {encounter.doctorReview.verifiedBy === 'Attending Doctor' || encounter.doctorReview.verifiedBy === 'Attending Physician' ? (localStorage.getItem('medico_current_user') ? JSON.parse(localStorage.getItem('medico_current_user')!).name : 'Not Assigned') : encounter.doctorReview.verifiedBy}
+                Assigned Doctor: {resolveAssignedDoctorName(encounter)}
               </div>
               <div className="text-[10px] text-slate-500">
                 Medical Officer / Consultant Physician

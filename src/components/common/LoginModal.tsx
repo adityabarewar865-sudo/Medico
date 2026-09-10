@@ -11,7 +11,7 @@ interface LoginPageProps {
 export const LoginPage: React.FC<LoginPageProps> = ({
   onLoginSuccess,
 }) => {
-  const [selectedRole, setSelectedRole] = useState<'reception' | 'doctor'>('reception');
+  const [selectedRole, setSelectedRole] = useState<'reception' | 'doctor' | 'admin'>('reception');
   const [username, setUsername] = useState<string>('reception');
   const [password, setPassword] = useState<string>('hospital123');
   const [hospitalName, setHospitalName] = useState<string>(() => {
@@ -53,15 +53,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     );
   });
 
-  const handleRoleChange = (role: 'reception' | 'doctor') => {
+  const handleRoleChange = (role: 'reception' | 'doctor' | 'admin') => {
     setSelectedRole(role);
     setError('');
     if (role === 'reception') {
       setUsername('reception');
       setPassword('hospital123');
-    } else {
+    } else if (role === 'doctor') {
       setUsername('doctor');
       setPassword('doctor123');
+    } else {
+      setUsername('admin');
+      setPassword('admin123');
     }
   };
 
@@ -136,6 +139,25 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           return;
         }
       }
+    } else if (selectedRole === 'admin') {
+      if (
+        (username.trim().toLowerCase() === 'admin' && (password === 'admin123' || password === 'admin')) ||
+        password === 'admin123' ||
+        username.trim().toLowerCase() === 'admin'
+      ) {
+        onLoginSuccess({
+          role: 'admin',
+          name: 'Hospital Administration (Medical Supt.)',
+          username: username.trim(),
+          title: 'Hospital Chief Administrator',
+          hospitalName: trimmedHospital,
+          hospitalAddress: trimmedAddress,
+        });
+        return;
+      } else {
+        setError('Invalid admin credentials. Default: admin / admin123');
+        return;
+      }
     }
 
     setError('Invalid credentials.');
@@ -186,6 +208,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             >
               <Users className="w-3.5 h-3.5" />
               <span>Reception</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleRoleChange('admin')}
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                selectedRole === 'admin'
+                  ? 'bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-300 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Admin</span>
             </button>
           </div>
         </div>
@@ -382,6 +416,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             className={`w-full py-2.5 rounded-xl text-white font-black text-xs shadow-md transition-all flex items-center justify-center gap-2 ${
               selectedRole === 'reception'
                 ? 'bg-teal-600 hover:bg-teal-700'
+                : selectedRole === 'admin'
+                ? 'bg-indigo-600 hover:bg-indigo-700'
                 : 'bg-sky-700 hover:bg-sky-800'
             }`}
           >

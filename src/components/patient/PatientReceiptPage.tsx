@@ -132,7 +132,12 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
 
   const { receipt, patient, visit } = receiptData;
   const visitDateFormatted = visit?.visitDate || (receipt.verifiedAt ? receipt.verifiedAt.split('T')[0] : '2026-09-07');
-  const attendingDoctor = receipt.doctorName || visit?.doctorReview?.verifiedBy ;
+  const attendingDoctor =
+    receipt.doctorName && receipt.doctorName !== 'Attending Doctor' && receipt.doctorName !== 'Not Assigned'
+      ? receipt.doctorName
+      : visit?.doctorReview?.verifiedBy && visit?.doctorReview?.verifiedBy !== 'Attending Doctor'
+      ? visit.doctorReview.verifiedBy
+      : visit?.attendingDoctor || 'Dr. S. K. Verma, MD';
   const medicines = visit?.doctorReview?.prescribedMedications || visit?.medicines || [];
   const doctorAdvice = visit?.doctorReview?.doctorAdvice || 'Drink plenty of water, get adequate rest, and take prescribed medicines as directed.';
 
@@ -151,14 +156,14 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
             <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0">
               <Hospital className="w-7 h-7" />
             </div>
-            <div>
-              <span className="text-xs uppercase tracking-wider font-bold text-teal-200 block">
+            <div className="min-w-0 flex-1">
+              <span className="text-xs uppercase tracking-wider font-bold text-teal-200 block truncate">
                 {visit?.hospitalName?.toUpperCase() || 'DISTRICT HOSPITAL'}
               </span>
-              <p className="text-xs text-teal-100 font-medium">
+              <p className="text-xs text-teal-100 font-medium truncate">
                 {visit?.hospitalAddress || 'Hospital Complex, Main Road, Civil Lines'}
               </p>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight leading-tight mt-1">
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight leading-tight mt-1 break-words">
                 Verified Medical Consultation Receipt
               </h1>
             </div>
@@ -192,22 +197,22 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
 
         {/* Patient & Visit Details Card */}
         <div className="bg-white rounded-3xl p-6 shadow-md border border-slate-200 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3 gap-2">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-10 h-10 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center font-bold shrink-0">
                 <User className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-bold text-slate-900 text-base">{receipt.patientName}</h3>
-                <p className="text-xs text-slate-500 flex items-center gap-1">
+              <div className="min-w-0">
+                <h3 className="font-bold text-slate-900 text-base truncate">{receipt.patientName}</h3>
+                <p className="text-xs text-slate-500 flex items-center gap-1 flex-wrap">
                   {patient && <span>{patient.age}Y • {patient.gender.toUpperCase()} • </span>}
-                  <Phone className="w-3 h-3 text-slate-400" />
+                  <Phone className="w-3 h-3 text-slate-400 shrink-0" />
                   +91 {receipt.phone}
                 </p>
               </div>
             </div>
 
-            <div className="text-right">
+            <div className="text-right shrink-0">
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 font-mono font-bold text-xs border border-teal-200">
                 {receipt.patientId}
               </span>
@@ -219,18 +224,18 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
 
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100">
-              <span className="text-slate-400 font-medium block">Attending Physician</span>
-              <p className="font-bold text-slate-800 mt-0.5 flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                {attendingDoctor}
+              <span className="text-slate-400 font-medium block">Assigned Doctor</span>
+              <p className="font-bold text-slate-800 mt-0.5 flex items-center gap-1 break-words">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>{attendingDoctor}</span>
               </p>
             </div>
 
             <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100">
               <span className="text-slate-400 font-medium block">Consultation Date</span>
               <p className="font-bold text-slate-800 mt-0.5 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-teal-600" />
-                {visitDateFormatted}
+                <Calendar className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                <span>{visitDateFormatted}</span>
               </p>
             </div>
 
@@ -238,7 +243,7 @@ export const PatientReceiptPage: React.FC<PatientReceiptPageProps> = ({ token })
             {visit?.accompanyingPerson?.name && (
               <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100 col-span-2">
                 <span className="text-slate-400 font-medium block">Person Accompanying Patient</span>
-                <p className="font-bold text-slate-800 mt-0.5">
+                <p className="font-bold text-slate-800 mt-0.5 break-words">
                   {visit.accompanyingPerson.name} ({visit.accompanyingPerson.relation}) • Mobile: {visit.accompanyingPerson.phone || 'N/A'}
                 </p>
               </div>

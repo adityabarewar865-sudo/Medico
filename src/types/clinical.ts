@@ -322,7 +322,7 @@ export interface PatientRecord {
   visits: PatientCaseEncounter[];
 }
 
-export type UserRole = 'patient' | 'reception' | 'doctor';
+export type UserRole = 'patient' | 'reception' | 'doctor' | 'admin';
 
 export interface AuthUser {
   role: UserRole;

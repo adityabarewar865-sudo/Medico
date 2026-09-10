@@ -1,5 +1,476 @@
 [
   {
+    "patientId": "P10034",
+    "fullName": "Ramesh Kumar",
+    "age": 45,
+    "gender": "male",
+    "phone": "",
+    "address": "District Catchment Area",
+    "emergencyContact": "",
+    "registeredAt": "2026-09-10T05:22:34.672Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_1789017754652",
+        "patientId": "P10034",
+        "visitId": "V001",
+        "visitDate": "2026-09-10",
+        "opdToken": "AYUSH-OPD-795",
+        "opdRoom": "Room 7 (Ayurvedic OPD & Panchakarma)",
+        "specialty": "Ayurvedic Medicine / Kayachikitsa",
+        "hospitalName": "District Hospital",
+        "hospitalAddress": "Hospital Complex, Main Road, Civil Lines",
+        "knownAllergies": {
+          "hasAllergy": "no",
+          "details": ""
+        },
+        "consultationType": "wellness",
+        "systemOfMedicine": "ayurveda",
+        "ayushHistory": {
+          "isAyushMode": true,
+          "modeType": "wellness",
+          "dashavidhaPariksha": {
+            "prakriti": "Vata-Pitta (Active, lean, variable appetite, prefers warmth)",
+            "vikriti": "Pitta-Vata (Current digestive acidity, restlessness, sleep delay)",
+            "sara": "Madhyama Sara (Moderate tissue quality, steady vitality)",
+            "samhanana": "Susamhita (Well-compacted, symmetrical bone and muscle build)",
+            "pramana": "Pramana-yukta (Proportionate body dimensions and height)",
+            "satmya": "Oka-Satmya (Well-adapted to home-cooked wholesome foods)",
+            "sattva": "Madhyama Sattva (Moderate mental resilience and calm focus)",
+            "aharaShakti": "Samagni (Balanced digestive capacity, steady hunger)",
+            "vyayamaShakti": "Madhyama Shakti (Moderate physical stamina, walking/yoga)",
+            "vaya": "Madhyama Vaya (Adult, productive age group 20-60 yrs)"
+          },
+          "dashavidha": {
+            "prakriti": "Vata-Pitta (Active, lean, variable appetite, prefers warmth)",
+            "vikriti": "Pitta-Vata (Current digestive acidity, restlessness, sleep delay)",
+            "sara": "Madhyama Sara (Moderate tissue quality, steady vitality)",
+            "samhanana": "Susamhita (Well-compacted, symmetrical bone and muscle build)",
+            "pramana": "Pramana-yukta (Proportionate body dimensions and height)",
+            "satmya": "Oka-Satmya (Well-adapted to home-cooked wholesome foods)",
+            "sattva": "Madhyama Sattva (Moderate mental resilience and calm focus)",
+            "aharaShakti": "Samagni (Balanced digestive capacity, steady hunger)",
+            "vyayamaShakti": "Madhyama Shakti (Moderate physical stamina, walking/yoga)",
+            "vaya": "Madhyama Vaya (Adult, productive age group 20-60 yrs)"
+          },
+          "ahara": {
+            "usualDiet": "Vegetarian (Wholesome balanced vegetarian meals)",
+            "mealTiming": "Regular 2-3 times daily (Breakfast, Lunch, Light Dinner)",
+            "foodPreferences": "Sweet & Sour (Madhura-Amla), moderately spiced",
+            "appetite": "Normal, consistent appetite",
+            "digestiveConcerns": "None / Occasional mild gas after heavy meals",
+            "waterIntake": "2 to 2.5 litres daily, normal/warm water",
+            "dietaryHabits": "Occasional tea/coffee, home-cooked food preferred"
+          },
+          "vihara": {
+            "dailyRoutine": "Early riser (6:00 AM), structured daily routine",
+            "sleepPattern": "Sound 7 hours night sleep, restful awakenings",
+            "physicalActivity": "Moderate daily walking and active housework",
+            "exercise": "Daily 20-30 min brisk walk or yogasanas",
+            "workLifestyle": "Desk work with moderate screen exposure",
+            "restRelaxation": "Adequate relaxation, leisure reading / prayer",
+            "otherHabits": "No smoking, no alcohol, limited caffeine"
+          },
+          "wellnessNotes": "Preventive wellness and holistic lifestyle rejuvenation assessment."
+        },
+        "createdAt": "2026-09-10T05:22:34.652Z",
+        "demographics": {
+          "id": "pat_1789017629703",
+          "fullName": "Ramesh Kumar",
+          "age": 45,
+          "gender": "male",
+          "phone": "",
+          "abha": {
+            "abhaNumber": "",
+            "abhaAddress": "",
+            "status": "pending",
+            "kycStatus": "SELF_DECLARED"
+          },
+          "preferredLanguage": "en"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-10T05:22:34.652Z",
+          "method": "biometric_touch",
+          "languageUsed": "en",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "Chest Pain / Heaviness",
+          "description": "Patient reported acute symptoms",
+          "onsetDuration": "7/10 severity",
+          "voiceInputTranscript": ""
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "pain_severity_scale",
+            "questionText": "Pain / Discomfort Intensity (1-10)",
+            "answerText": "7 / 10 (Severe)",
+            "answerValue": 7,
+            "category": "severity",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [],
+        "triagePriority": "urgent",
+        "triageRationale": "Chest pain presentation requires triage ECG exclusion.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: Ramesh Kumar, 45Y/MALE)",
+          "historyOfPresentIllness": "45-year-old male presented to the Ayurvedic Wellness OPD with primary complaint/focus of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Allergy Status: No known allergies reported.\n\n[AYUSH HISTORY - AYURVEDIC ASSESSMENT]\n• Dashavidha Pariksha:\n  - Prakriti (Body Constitution): Vata-Pitta (Active, lean, variable appetite, prefers warmth)\n  - Vikriti (Current Imbalance): Pitta-Vata (Current digestive acidity, restlessness, sleep delay)\n  - Sara (Tissue Quality): Madhyama Sara (Moderate tissue quality, steady vitality)\n  - Samhanana (Body Compactness): Susamhita (Well-compacted, symmetrical bone and muscle build)\n  - Pramana (Body Measurements): Pramana-yukta (Proportionate body dimensions and height)\n  - Satmya (Suitability/Adaptation): Oka-Satmya (Well-adapted to home-cooked wholesome foods)\n  - Sattva (Mental Strength): Madhyama Sattva (Moderate mental resilience and calm focus)\n  - Ahara Shakti (Digestive Capacity): Samagni (Balanced digestive capacity, steady hunger)\n  - Vyayama Shakti (Exercise Capacity): Madhyama Shakti (Moderate physical stamina, walking/yoga)\n  - Vaya (Age Assessment): Madhyama Vaya (Adult, productive age group 20-60 yrs)\n• Ahara Assessment (Diet): Usual Diet: Vegetarian (Wholesome balanced vegetarian meals); Timings: Regular 2-3 times daily (Breakfast, Lunch, Light Dinner); Appetite: Normal, consistent appetite; Water: 2 to 2.5 litres daily, normal/warm water; Tastes: Sweet & Sour (Madhura-Amla), moderately spiced; Digestive Concerns: None / Occasional mild gas after heavy meals.\n• Vihara Assessment (Lifestyle): Routine: Early riser (6:00 AM), structured daily routine; Sleep: Sound 7 hours night sleep, restful awakenings; Exercise: Daily 20-30 min brisk walk or yogasanas; Work/Lifestyle: Desk work with moderate screen exposure; Relaxation: Adequate relaxation, leisure reading / prayer.\n• Ayurvedic Wellness Notes: Preventive wellness and holistic lifestyle rejuvenation assessment. Review of prior medical documentation identified: No documented prior chronic morbidities.",
+          "pastMedicalHistory": [
+            "None explicitly documented in uploaded records"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "No Known Drug / Food Allergies (NKDA)",
+              "reaction": "Patient reports no known allergies",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+          "vitals": {
+            "bp": "120/80",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "doctorReview": {
+          "verified": false,
+          "status": "pending"
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10034-AYUSH-OPD-795"
+      }
+    ],
+    "abha": {
+      "abhaNumber": "91-8884-4957-10034",
+      "abhaAddress": "ramesh.kumarp10034@abdm",
+      "status": "pending",
+      "kycStatus": "SELF_DECLARED"
+    }
+  },
+  {
+    "patientId": "P10033",
+    "fullName": "Ramesh Kumar",
+    "age": 45,
+    "gender": "male",
+    "phone": "",
+    "address": "District Catchment Area",
+    "emergencyContact": "",
+    "registeredAt": "2026-09-10T05:12:31.804Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_1789017151777",
+        "patientId": "P10033",
+        "visitId": "V001",
+        "visitDate": "2026-09-10",
+        "opdToken": "AYUSH-OPD-289",
+        "opdRoom": "Room 7 (Ayurvedic OPD & Panchakarma)",
+        "specialty": "Ayurvedic Medicine / Kayachikitsa",
+        "hospitalName": "District Hospital",
+        "hospitalAddress": "Hospital Complex, Main Road, Civil Lines",
+        "knownAllergies": {
+          "hasAllergy": "no",
+          "details": ""
+        },
+        "consultationType": "wellness",
+        "systemOfMedicine": "ayurveda",
+        "ayushHistory": {
+          "isAyushMode": true,
+          "modeType": "wellness",
+          "dashavidhaPariksha": {
+            "prakriti": "Vata-Pitta (Active, lean, variable appetite, prefers warmth)",
+            "vikriti": "Pitta-Vata (Current digestive acidity, restlessness, sleep delay)",
+            "sara": "Madhyama Sara (Moderate tissue quality, steady vitality)",
+            "samhanana": "Susamhita (Well-compacted, symmetrical bone and muscle build)",
+            "pramana": "Pramana-yukta (Proportionate body dimensions and height)",
+            "satmya": "Oka-Satmya (Well-adapted to home-cooked wholesome foods)",
+            "sattva": "Madhyama Sattva (Moderate mental resilience and calm focus)",
+            "aharaShakti": "Samagni (Balanced digestive capacity, steady hunger)",
+            "vyayamaShakti": "Madhyama Shakti (Moderate physical stamina, walking/yoga)",
+            "vaya": "Madhyama Vaya (Adult, productive age group 20-60 yrs)"
+          },
+          "dashavidha": {
+            "prakriti": "Vata-Pitta (Active, lean, variable appetite, prefers warmth)",
+            "vikriti": "Pitta-Vata (Current digestive acidity, restlessness, sleep delay)",
+            "sara": "Madhyama Sara (Moderate tissue quality, steady vitality)",
+            "samhanana": "Susamhita (Well-compacted, symmetrical bone and muscle build)",
+            "pramana": "Pramana-yukta (Proportionate body dimensions and height)",
+            "satmya": "Oka-Satmya (Well-adapted to home-cooked wholesome foods)",
+            "sattva": "Madhyama Sattva (Moderate mental resilience and calm focus)",
+            "aharaShakti": "Samagni (Balanced digestive capacity, steady hunger)",
+            "vyayamaShakti": "Madhyama Shakti (Moderate physical stamina, walking/yoga)",
+            "vaya": "Madhyama Vaya (Adult, productive age group 20-60 yrs)"
+          },
+          "ahara": {
+            "usualDiet": "Vegetarian (Wholesome balanced vegetarian meals)",
+            "mealTiming": "Regular 2-3 times daily (Breakfast, Lunch, Light Dinner)",
+            "foodPreferences": "Sweet & Sour (Madhura-Amla), moderately spiced",
+            "appetite": "Normal, consistent appetite",
+            "digestiveConcerns": "None / Occasional mild gas after heavy meals",
+            "waterIntake": "2 to 2.5 litres daily, normal/warm water",
+            "dietaryHabits": "Occasional tea/coffee, home-cooked food preferred"
+          },
+          "vihara": {
+            "dailyRoutine": "Early riser (6:00 AM), structured daily routine",
+            "sleepPattern": "Sound 7 hours night sleep, restful awakenings",
+            "physicalActivity": "Moderate daily walking and active housework",
+            "exercise": "Daily 20-30 min brisk walk or yogasanas",
+            "workLifestyle": "Desk work with moderate screen exposure",
+            "restRelaxation": "Adequate relaxation, leisure reading / prayer",
+            "otherHabits": "No smoking, no alcohol, limited caffeine"
+          },
+          "wellnessNotes": "Preventive wellness and holistic lifestyle rejuvenation assessment."
+        },
+        "createdAt": "2026-09-10T05:12:31.777Z",
+        "demographics": {
+          "id": "pat_1789017071739",
+          "fullName": "Ramesh Kumar",
+          "age": 45,
+          "gender": "male",
+          "phone": "",
+          "abha": {
+            "abhaNumber": "",
+            "abhaAddress": "",
+            "status": "pending",
+            "kycStatus": "SELF_DECLARED"
+          },
+          "preferredLanguage": "en"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-10T05:12:31.777Z",
+          "method": "biometric_touch",
+          "languageUsed": "en",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "Chest Pain / Heaviness",
+          "description": "Patient reported acute symptoms",
+          "onsetDuration": "7/10 severity",
+          "voiceInputTranscript": ""
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "pain_severity_scale",
+            "questionText": "Pain / Discomfort Intensity (1-10)",
+            "answerText": "7 / 10 (Severe)",
+            "answerValue": 7,
+            "category": "severity",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [],
+        "triagePriority": "urgent",
+        "triageRationale": "Chest pain presentation requires triage ECG exclusion.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: Ramesh Kumar, 45Y/MALE)",
+          "historyOfPresentIllness": "45-year-old male presented to the Ayurvedic Wellness OPD with primary complaint/focus of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Allergy Status: No known allergies reported.\n\n[AYUSH HISTORY - AYURVEDIC ASSESSMENT]\n• Dashavidha Pariksha:\n  - Prakriti (Body Constitution): Vata-Pitta (Active, lean, variable appetite, prefers warmth)\n  - Vikriti (Current Imbalance): Pitta-Vata (Current digestive acidity, restlessness, sleep delay)\n  - Sara (Tissue Quality): Madhyama Sara (Moderate tissue quality, steady vitality)\n  - Samhanana (Body Compactness): Susamhita (Well-compacted, symmetrical bone and muscle build)\n  - Pramana (Body Measurements): Pramana-yukta (Proportionate body dimensions and height)\n  - Satmya (Suitability/Adaptation): Oka-Satmya (Well-adapted to home-cooked wholesome foods)\n  - Sattva (Mental Strength): Madhyama Sattva (Moderate mental resilience and calm focus)\n  - Ahara Shakti (Digestive Capacity): Samagni (Balanced digestive capacity, steady hunger)\n  - Vyayama Shakti (Exercise Capacity): Madhyama Shakti (Moderate physical stamina, walking/yoga)\n  - Vaya (Age Assessment): Madhyama Vaya (Adult, productive age group 20-60 yrs)\n• Ahara Assessment (Diet): Usual Diet: Vegetarian (Wholesome balanced vegetarian meals); Timings: Regular 2-3 times daily (Breakfast, Lunch, Light Dinner); Appetite: Normal, consistent appetite; Water: 2 to 2.5 litres daily, normal/warm water; Tastes: Sweet & Sour (Madhura-Amla), moderately spiced; Digestive Concerns: None / Occasional mild gas after heavy meals.\n• Vihara Assessment (Lifestyle): Routine: Early riser (6:00 AM), structured daily routine; Sleep: Sound 7 hours night sleep, restful awakenings; Exercise: Daily 20-30 min brisk walk or yogasanas; Work/Lifestyle: Desk work with moderate screen exposure; Relaxation: Adequate relaxation, leisure reading / prayer.\n• Ayurvedic Wellness Notes: Preventive wellness and holistic lifestyle rejuvenation assessment. Review of prior medical documentation identified: No documented prior chronic morbidities.",
+          "pastMedicalHistory": [
+            "None explicitly documented in uploaded records"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "No Known Drug / Food Allergies (NKDA)",
+              "reaction": "Patient reports no known allergies",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+          "vitals": {
+            "bp": "120/80",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "doctorReview": {
+          "verified": false,
+          "status": "pending"
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10033-AYUSH-OPD-289"
+      }
+    ],
+    "abha": {
+      "abhaNumber": "91-2914-6297-10033",
+      "abhaAddress": "ramesh.kumarp10033@abdm",
+      "status": "pending",
+      "kycStatus": "SELF_DECLARED"
+    }
+  },
+  {
+    "patientId": "P10032",
+    "fullName": "Ramesh Kumar",
+    "age": 45,
+    "gender": "male",
+    "phone": "",
+    "address": "District Catchment Area",
+    "emergencyContact": "",
+    "registeredAt": "2026-09-10T04:54:20.058Z",
+    "totalVisits": 1,
+    "visits": [
+      {
+        "id": "enc_1789016059409",
+        "patientId": "P10032",
+        "visitId": "V001",
+        "visitDate": "2026-09-10",
+        "opdToken": "AYUSH-OPD-752",
+        "opdRoom": "Room 7 (Ayurvedic OPD & Panchakarma)",
+        "specialty": "Ayurvedic Medicine / Kayachikitsa",
+        "hospitalName": "District Hospital",
+        "hospitalAddress": "Hospital Complex, Main Road, Civil Lines",
+        "knownAllergies": {
+          "hasAllergy": "no",
+          "details": ""
+        },
+        "consultationType": "wellness",
+        "systemOfMedicine": "ayurveda",
+        "ayushHistory": {
+          "isAyushMode": true,
+          "modeType": "wellness",
+          "dashavidhaPariksha": {
+            "prakriti": "Vata-Pitta (Active, lean, variable appetite, prefers warmth)",
+            "vikriti": "Pitta-Vata (Current digestive acidity, restlessness, sleep delay)",
+            "sara": "Madhyama Sara (Moderate tissue quality, steady vitality)",
+            "samhanana": "Susamhita (Well-compacted, symmetrical bone and muscle build)",
+            "pramana": "Pramana-yukta (Proportionate body dimensions and height)",
+            "satmya": "Oka-Satmya (Well-adapted to home-cooked wholesome foods)",
+            "sattva": "Madhyama Sattva (Moderate mental resilience and calm focus)",
+            "aharaShakti": "Samagni (Balanced digestive capacity, steady hunger)",
+            "vyayamaShakti": "Madhyama Shakti (Moderate physical stamina, walking/yoga)",
+            "vaya": "Madhyama Vaya (Adult, productive age group 20-60 yrs)"
+          },
+          "dashavidha": {
+            "prakriti": "Vata-Pitta (Active, lean, variable appetite, prefers warmth)",
+            "vikriti": "Pitta-Vata (Current digestive acidity, restlessness, sleep delay)",
+            "sara": "Madhyama Sara (Moderate tissue quality, steady vitality)",
+            "samhanana": "Susamhita (Well-compacted, symmetrical bone and muscle build)",
+            "pramana": "Pramana-yukta (Proportionate body dimensions and height)",
+            "satmya": "Oka-Satmya (Well-adapted to home-cooked wholesome foods)",
+            "sattva": "Madhyama Sattva (Moderate mental resilience and calm focus)",
+            "aharaShakti": "Samagni (Balanced digestive capacity, steady hunger)",
+            "vyayamaShakti": "Madhyama Shakti (Moderate physical stamina, walking/yoga)",
+            "vaya": "Madhyama Vaya (Adult, productive age group 20-60 yrs)"
+          },
+          "ahara": {
+            "usualDiet": "Vegetarian (Wholesome balanced vegetarian meals)",
+            "mealTiming": "Regular 2-3 times daily (Breakfast, Lunch, Light Dinner)",
+            "foodPreferences": "Sweet & Sour (Madhura-Amla), moderately spiced",
+            "appetite": "Normal, consistent appetite",
+            "digestiveConcerns": "None / Occasional mild gas after heavy meals",
+            "waterIntake": "2 to 2.5 litres daily, normal/warm water",
+            "dietaryHabits": "Occasional tea/coffee, home-cooked food preferred"
+          },
+          "vihara": {
+            "dailyRoutine": "Early riser (6:00 AM), structured daily routine",
+            "sleepPattern": "Sound 7 hours night sleep, restful awakenings",
+            "physicalActivity": "Moderate daily walking and active housework",
+            "exercise": "Daily 20-30 min brisk walk or yogasanas",
+            "workLifestyle": "Desk work with moderate screen exposure",
+            "restRelaxation": "Adequate relaxation, leisure reading / prayer",
+            "otherHabits": "No smoking, no alcohol, limited caffeine"
+          },
+          "wellnessNotes": "Preventive wellness and holistic lifestyle rejuvenation assessment."
+        },
+        "createdAt": "2026-09-10T04:54:19.409Z",
+        "demographics": {
+          "id": "pat_1789015876467",
+          "fullName": "Ramesh Kumar",
+          "age": 45,
+          "gender": "male",
+          "phone": "",
+          "abha": {
+            "abhaNumber": "",
+            "abhaAddress": "",
+            "status": "pending",
+            "kycStatus": "SELF_DECLARED"
+          },
+          "preferredLanguage": "en"
+        },
+        "consent": {
+          "granted": true,
+          "timestamp": "2026-09-10T04:54:19.409Z",
+          "method": "biometric_touch",
+          "languageUsed": "en",
+          "abdmLinkConsent": true
+        },
+        "chiefComplaint": {
+          "id": "chest_pain",
+          "title": "Chest Pain / Heaviness",
+          "description": "Patient reported acute symptoms",
+          "onsetDuration": "7/10 severity",
+          "voiceInputTranscript": ""
+        },
+        "adaptiveAnswers": [
+          {
+            "questionId": "pain_severity_scale",
+            "questionText": "Pain / Discomfort Intensity (1-10)",
+            "answerText": "7 / 10 (Severe)",
+            "answerValue": 7,
+            "category": "severity",
+            "isRedFlagIndicator": false
+          }
+        ],
+        "documents": [],
+        "timeline": [],
+        "triagePriority": "urgent",
+        "triageRationale": "Chest pain presentation requires triage ECG exclusion.",
+        "redFlags": [],
+        "clinicalSummary": {
+          "chiefComplaintFormatted": "Chest Pain / Angina (Patient ID: Ramesh Kumar, 45Y/MALE)",
+          "historyOfPresentIllness": "45-year-old male presented to the Ayurvedic Wellness OPD with primary complaint/focus of Chest Pain / Angina. Clinical evaluation details elicited via adaptive voice/touch intake: Pain / Discomfort Intensity (1-10): 7 / 10 (Severe). Allergy Status: No known allergies reported.\n\n[AYUSH HISTORY - AYURVEDIC ASSESSMENT]\n• Dashavidha Pariksha:\n  - Prakriti (Body Constitution): Vata-Pitta (Active, lean, variable appetite, prefers warmth)\n  - Vikriti (Current Imbalance): Pitta-Vata (Current digestive acidity, restlessness, sleep delay)\n  - Sara (Tissue Quality): Madhyama Sara (Moderate tissue quality, steady vitality)\n  - Samhanana (Body Compactness): Susamhita (Well-compacted, symmetrical bone and muscle build)\n  - Pramana (Body Measurements): Pramana-yukta (Proportionate body dimensions and height)\n  - Satmya (Suitability/Adaptation): Oka-Satmya (Well-adapted to home-cooked wholesome foods)\n  - Sattva (Mental Strength): Madhyama Sattva (Moderate mental resilience and calm focus)\n  - Ahara Shakti (Digestive Capacity): Samagni (Balanced digestive capacity, steady hunger)\n  - Vyayama Shakti (Exercise Capacity): Madhyama Shakti (Moderate physical stamina, walking/yoga)\n  - Vaya (Age Assessment): Madhyama Vaya (Adult, productive age group 20-60 yrs)\n• Ahara Assessment (Diet): Usual Diet: Vegetarian (Wholesome balanced vegetarian meals); Timings: Regular 2-3 times daily (Breakfast, Lunch, Light Dinner); Appetite: Normal, consistent appetite; Water: 2 to 2.5 litres daily, normal/warm water; Tastes: Sweet & Sour (Madhura-Amla), moderately spiced; Digestive Concerns: None / Occasional mild gas after heavy meals.\n• Vihara Assessment (Lifestyle): Routine: Early riser (6:00 AM), structured daily routine; Sleep: Sound 7 hours night sleep, restful awakenings; Exercise: Daily 20-30 min brisk walk or yogasanas; Work/Lifestyle: Desk work with moderate screen exposure; Relaxation: Adequate relaxation, leisure reading / prayer.\n• Ayurvedic Wellness Notes: Preventive wellness and holistic lifestyle rejuvenation assessment. Review of prior medical documentation identified: No documented prior chronic morbidities.",
+          "pastMedicalHistory": [
+            "None explicitly documented in uploaded records"
+          ],
+          "activeMedications": [],
+          "allergies": [
+            {
+              "allergen": "No Known Drug / Food Allergies (NKDA)",
+              "reaction": "Patient reports no known allergies",
+              "severity": "mild"
+            }
+          ],
+          "investigationsSummary": "No previous diagnostic reports uploaded. Advise baseline investigations as indicated.",
+          "vitals": {
+            "bp": "120/80",
+            "pulse": "76",
+            "spo2": "98",
+            "temp": "98.6",
+            "rr": "18"
+          }
+        },
+        "doctorReview": {
+          "verified": false,
+          "status": "pending"
+        },
+        "savedToHis": false,
+        "abdmCareContextLinked": true,
+        "abdmCareContextRef": "CARE-CTX-P10032-AYUSH-OPD-752"
+      }
+    ],
+    "abha": {
+      "abhaNumber": "91-1233-8922-10032",
+      "abhaAddress": "ramesh.kumarp10032@abdm",
+      "status": "pending",
+      "kycStatus": "SELF_DECLARED"
+    }
+  },
+  {
     "patientId": "P10031",
     "fullName": "Ramesh Kumar",
     "age": 45,
@@ -534,7 +1005,10 @@
             "Seasonal allergic rhinitis",
             "Past acute bronchitis (July 2026, resolved)"
           ],
-          "activeMedications": [],
+          "activeMedications": [
+            "Naproxen 250 mg - Twice daily SOS (1-0-1) (3 days)",
+            "Tab Pantoprazole 40 mg - Once daily morning (1-0-0) (5 days)"
+          ],
           "allergies": [
             {
               "allergen": "Penicillin",
@@ -553,7 +1027,7 @@
         },
         "medicines": [
           {
-            "id": "med_rs_v2_1",
+            "id": "rx_P10025_V002_0",
             "visitId": "V002",
             "patientId": "P10025",
             "name": "Naproxen",
@@ -565,7 +1039,7 @@
             "doctor": "Dr. S. K. Verma, MD"
           },
           {
-            "id": "med_rs_v2_2",
+            "id": "rx_P10025_V002_1",
             "visitId": "V002",
             "patientId": "P10025",
             "name": "Tab Pantoprazole",
@@ -578,8 +1052,8 @@
           }
         ],
         "doctorReview": {
-          "verified": false,
-          "status": "pending",
+          "verified": true,
+          "status": "verified",
           "doctorNotes": "",
           "differentialDiagnosis": [
             "Tension-Type Headache",
@@ -602,11 +1076,18 @@
               "duration": "5 days",
               "instructions": "Take empty stomach before breakfast"
             }
-          ]
+          ],
+          "verifiedBy": "Dr. S. K. Verma, MD",
+          "verifiedAt": "2026-09-10T05:14:47.005Z",
+          "doctorAdvice": "• Drink 2.5L warm fluids daily. Maintain hydration.\n• Take prescribed medications strictly after meals.\n• Adequate bed rest for 48 hours. Avoid cold/spicy diet.\n• Immediate Return Warning: If chest pain, breathlessness, or persistent high fever occurs, report to Emergency."
         },
-        "savedToHis": false,
+        "savedToHis": true,
         "abdmCareContextLinked": true,
-        "abdmCareContextRef": "CARE-CTX-P10025-V002"
+        "abdmCareContextRef": "CARE-CTX-P10025-V002",
+        "excelStoredAt": "2026-09-10T05:14:47.066Z",
+        "hisSyncTimestamp": "2026-09-10T05:14:47.038Z",
+        "receiptToken": "eb14e62b169c580f0aeefa1fec8a6ccc8362d31e914f8780",
+        "receiptUrl": "http://localhost:5173/receipt/eb14e62b169c580f0aeefa1fec8a6ccc8362d31e914f8780"
       },
       {
         "id": "enc_rahul_v1",
